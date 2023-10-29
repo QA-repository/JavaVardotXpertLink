@@ -37,8 +37,13 @@ public class APICaller extends TestBases {
         if (!Requestheaders.isEmpty()) {
             for (int count = 1; count < Requestheaders.size(); count += 2) {
                 Path = Path + Requestheaders.get(count - 1) + "=" + Requestheaders.get(count) + "&";
+                System.out.println("count "+Path);
+
             }
+            System.out.println("Final path"+Path);
+
         }
+
         System.out.println("Testing Started for: " + URL + Path);
         response = request.headers("user-agent", "Application").auth().basic("unicc", "5NJjoVm-RV8u9Qun4hnt").given().when().get(Path);
 
@@ -185,7 +190,7 @@ input=input.replace(":", "\"");
         RestAssured.baseURI = PageURL;
         RequestSpecification request = RestAssured.given();
         Response response;
-
+System.out.println(CR.Getcookie());
         response = request.headers("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36").cookie(CR.Getcookie()).auth().basic("unicc", "5NJjoVm-RV8u9Qun4hnt").given().when().get(PageURL);
         Document doc = Jsoup.parse(response.getBody().asString());
         Element inputElement = doc.select(cssQuery).first();

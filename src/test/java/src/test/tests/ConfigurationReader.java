@@ -33,28 +33,53 @@ public class ConfigurationReader {
 
     public String Getcookie() {
         String Run_ENV = properties.getProperty("Run_ENV");
+        String Project_Name = properties.getProperty("Project_Name");
 
-        if (Run_ENV.equalsIgnoreCase("DEV"))
+        if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("UNHCR")))
             return properties.getProperty("DEV_cookie");
-        else if (Run_ENV.equalsIgnoreCase("STG"))
+        else if (Run_ENV.equalsIgnoreCase("STG")&&Project_Name.equalsIgnoreCase(("UNHCR")))
             return properties.getProperty("STG_cookie");
-        else if (Run_ENV.equalsIgnoreCase("Live global"))
+        else if (Run_ENV.equalsIgnoreCase("Live global")&&Project_Name.equalsIgnoreCase(("UNHCR")))
             return properties.getProperty("Live_cookie");
+
+
+        if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("ISG")))
+            return properties.getProperty("ISG_DEVCookie");
+        else if (Run_ENV.equalsIgnoreCase("STG")&&Project_Name.equalsIgnoreCase(("ISG")))
+            return properties.getProperty("ISG_STGCookie");
+        else if (Run_ENV.equalsIgnoreCase("Live global")&&Project_Name.equalsIgnoreCase(("ISG")))
+            return properties.getProperty("ISG_LiveCookie");
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
     }
     public String GetRun_ENV() {
         String Run_ENV = properties.getProperty("Run_ENV");
+        String Project_Name = properties.getProperty("Project_Name");
 
-        if (Run_ENV.equalsIgnoreCase("DEV")){
-            return properties.getProperty("DEV_Link");
+        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("ISG"))){
+            return properties.getProperty("ISG_Dev");
 
         }
-        else if (Run_ENV.equalsIgnoreCase("STG"))
+        if (Run_ENV.equalsIgnoreCase("STG")&&(Project_Name.equalsIgnoreCase("ISG"))){
+
+        }
+        if (Run_ENV.equalsIgnoreCase("LIVE")&&(Project_Name.equalsIgnoreCase("ISG"))){
+
+        }
+        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("UNHCR"))){
+            return properties.getProperty("DEV_Link");
+
+        }   if (Run_ENV.equalsIgnoreCase("STG")&&(Project_Name.equalsIgnoreCase("UNHCR"))){
             return properties.getProperty("STG_Link");
-        else if (Run_ENV.equalsIgnoreCase("Live global"))
+
+        }   if (Run_ENV.equalsIgnoreCase("Live_Global")&&(Project_Name.equalsIgnoreCase("UNHCR"))){
             return properties.getProperty("Live_Global_Link");
+
+        }
+
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
     }
+
+
     public String GetAPPLICATION_NAME() {
         String APPLICATION_NAME = properties.getProperty("APPLICATION_NAME");
 
@@ -86,6 +111,20 @@ public class ConfigurationReader {
             return NewsSearchPath;
 
         else throw new RuntimeException("News_Search_Path not specified in the API Configuration.properties file.");
+    }
+    public String GetCreateUserPath() {
+        String CreateUserPath = properties.getProperty("CreateUserPath");
+        if (CreateUserPath != null)
+            return CreateUserPath;
+
+        else throw new RuntimeException("CreateUserPath not specified in the API Configuration.properties file.");
+    }
+    public String GETISG_DevLink() {
+        String ISG_Dev = properties.getProperty("ISG_Dev");
+        if (ISG_Dev != null)
+            return ISG_Dev;
+
+        else throw new RuntimeException("ISG_Dev not specified in the API Configuration.properties file.");
     }
     public String Content_Page() {
         String Content_Page = properties.getProperty("Content_Page");

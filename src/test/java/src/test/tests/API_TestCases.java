@@ -14,16 +14,45 @@ import java.util.Map;
 
 public class API_TestCases extends TestBases {
     static ConfigurationReader CR=new ConfigurationReader();
+
+    @Test
+    public void ISG_Create_New_User() throws Exception {
+        Map<String, String> RequestBody = new LinkedHashMap<>();
+
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GETISG_DevLink() +CR.GetCreateUserPath(),"input[name=form_token]"));
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETISG_DevLink() +CR.GetCreateUserPath(),"input[name=form_build_id]"));
+        RequestBody.put("mail", TestBases.generateRandomString(12)+"@vardot.com");
+        RequestBody.put("name", TestBases.generateRandomString(8));
+        RequestBody.put("pass[pass1]", "Vardot@123");
+        RequestBody.put("pass[pass2]", "Vardot@123");
+        RequestBody.put("status", "1");
+        RequestBody.put("roles[editor]", "editor");
+        RequestBody.put("roles[hr_admin]", "hr_admin");
+        RequestBody.put("roles[content_admin]", "content_admin");
+        RequestBody.put("roles[site_admin]", "site_admin");
+        RequestBody.put("form_id", "user_register_form");
+        RequestBody.put("antibot_key", "lkbr5Ra-GtUD3vHWMeslxWu0azZr3V2paXoawPnU-CU");
+        RequestBody.put("path[0][alias]", "");
+        RequestBody.put("op", "Create new account");
+        RequestBody.put("changed", "1691304919");
+        APICaller.ContentCreationAPI(CR.GETISG_DevLink()+ CR.GetCreateUserPath(),RequestBody,CR.Getcookie());
+
+    }
     @Test
     public void Site_Main_Search() throws Exception {
         List<String> RequestHeader= new ArrayList<>();
         List<String> Response=new ArrayList<>();
 
         RequestHeader.add(0,"rows");
-        RequestHeader.add(1,"100");
-       Response=APICaller.Public_GetAPI_Caller(CR.GetRun_ENV(),CR.GetMainSearchPath(),RequestHeader).getBody().jsonPath().getList("response.docs.id");;
+        RequestHeader.add(1,"6000");
+
+        RequestHeader.add(2,"e1");
+        RequestHeader.add(3,"1");
+
+       Response=APICaller.Public_GetAPI_Caller(CR.GetRun_ENV(),CR.GetMainSearchPath(),RequestHeader).getBody().jsonPath().getList("response.docs.id");
         APICaller.GeneralResponseValidator(Response);
     }
+
 
     @Test
     public void News_Search() throws Exception {
@@ -49,7 +78,7 @@ public class API_TestCases extends TestBases {
         RequestHeader.add(17,"facet.field");
         RequestHeader.add(18,"ds_created");
         RequestHeader.add(19,"rows");
-        RequestHeader.add(20,"5");
+        RequestHeader.add(20,"5000");
         RequestHeader.add(21,"facet.limit");
         RequestHeader.add(22,"-1");
         RequestHeader.add(23,"start");
