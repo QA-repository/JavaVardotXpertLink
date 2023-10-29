@@ -43,7 +43,6 @@ List<String> a=new ArrayList<>();
 		for (int count = 0; count < cookie.size()-1; count += 2) {
 			a.add(cookie.get(count));
 			a.add(cookie.get(count+1));
-			System.out.println(a);
 
 			driver.manage().addCookie(new Cookie(cookie.get(count)+"=", cookie.get(count+1)));
 

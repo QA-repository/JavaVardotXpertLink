@@ -37,10 +37,8 @@ public class APICaller extends TestBases {
         if (!Requestheaders.isEmpty()) {
             for (int count = 1; count < Requestheaders.size(); count += 2) {
                 Path = Path + Requestheaders.get(count - 1) + "=" + Requestheaders.get(count) + "&";
-                System.out.println("count "+Path);
 
             }
-            System.out.println("Final path"+Path);
 
         }
 
@@ -149,7 +147,6 @@ public class APICaller extends TestBases {
 
     }
 public static void GeneralResponseValidator(List<String> Response_List) throws Exception {
-        System.out.println(Response_List);
     PrintDuplicateLog(Response_List);
         if(findDuplicates(Response_List).isEmpty()){
             PrintDuplicateLog(Response_List);
