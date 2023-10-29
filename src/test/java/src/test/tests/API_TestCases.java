@@ -15,7 +15,7 @@ import java.util.Map;
 public class API_TestCases extends TestBases {
     static ConfigurationReader CR=new ConfigurationReader();
 
-    @Test
+    @Test(groups = { "Sanity" })
     public void ISG_Create_New_User() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
 
@@ -38,7 +38,7 @@ public class API_TestCases extends TestBases {
         APICaller.ContentCreationAPI(CR.GETISG_DevLink()+ CR.GetCreateUserPath(),RequestBody,CR.Getcookie());
 
     }
-    @Test
+    @Test(groups = { "Sanity" })
     public void Site_Main_Search() throws Exception {
         List<String> RequestHeader= new ArrayList<>();
         List<String> Response=new ArrayList<>();
@@ -54,7 +54,7 @@ public class API_TestCases extends TestBases {
     }
 
 
-    @Test
+    @Test(groups = { "Sanity" })
     public void News_Search() throws Exception {
         List<String> RequestHeader= new ArrayList<>();
         List<String> Response;
