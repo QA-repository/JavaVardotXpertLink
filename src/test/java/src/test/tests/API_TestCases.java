@@ -39,6 +39,27 @@ public class API_TestCases extends TestBases {
 
     }
     @Test(groups = { "Sanity" })
+    public void Refworld_Create_New_User() throws Exception {
+        Map<String, String> RequestBody = new LinkedHashMap<>();
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() +CR.GetCreateUserPath(),"input[name=form_token]"));
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() +CR.GetCreateUserPath(),"input[name=form_build_id]"));
+        RequestBody.put("mail", TestBases.generateRandomString(12)+"@vardot.com");
+        RequestBody.put("name", TestBases.generateRandomString(8));
+        RequestBody.put("pass[pass1]", "Vardot@123");
+        RequestBody.put("pass[pass2]", "Vardot@123");
+        RequestBody.put("status", "1");
+        RequestBody.put("roles[editor]", "editor");
+        RequestBody.put("roles[content_admin]", "content_admin");
+        RequestBody.put("roles[site_admin]", "site_admin");
+        RequestBody.put("form_id", "user_register_form");
+        RequestBody.put("antibot_key", "BDDFx5Rwh8bN1jP3jKvCVzSRdBaF7dCzA4xmnQrKGXk");
+        RequestBody.put("path[0][alias]", "");
+        RequestBody.put("op", "Create new account");
+        RequestBody.put("changed", "1691304919");
+        APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetCreateUserPath(),RequestBody,CR.Getcookie());
+
+    }
+    @Test(groups = { "Sanity" })
     public void Site_Main_Search() throws Exception {
         List<String> RequestHeader= new ArrayList<>();
         List<String> Response=new ArrayList<>();

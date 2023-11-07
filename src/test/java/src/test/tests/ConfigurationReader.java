@@ -39,6 +39,8 @@ public class ConfigurationReader {
             return properties.getProperty("DEV_cookie");
         else if (Run_ENV.equalsIgnoreCase("STG")&&Project_Name.equalsIgnoreCase(("UNHCR")))
             return properties.getProperty("STG_cookie");
+        else if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("Refworld")))
+            return properties.getProperty("Refworld_DEVCookie_rup_ga");
         else if (Run_ENV.equalsIgnoreCase("Live global")&&Project_Name.equalsIgnoreCase(("UNHCR")))
             return properties.getProperty("Live_cookie");
 
@@ -74,6 +76,9 @@ public class ConfigurationReader {
         }   if (Run_ENV.equalsIgnoreCase("Live_Global")&&(Project_Name.equalsIgnoreCase("UNHCR"))){
             return properties.getProperty("Live_Global_Link");
 
+        }
+        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("Refworld"))){
+            return properties.getProperty("Refworld_DEV");
         }
 
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");

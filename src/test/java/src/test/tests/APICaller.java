@@ -188,14 +188,16 @@ input=input.replace(":", "\"");
         RequestSpecification request = RestAssured.given();
         Response response;
 System.out.println(CR.Getcookie());
-        response = request.headers("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36").cookie(CR.Getcookie()).auth().basic("unicc", "5NJjoVm-RV8u9Qun4hnt").given().when().get(PageURL);
+        response = request.headers("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36").cookie(CR.Getcookie()).auth().basic("unicc", "5NJjoVm-RV8u9Qun4hnt").given().header("cookie",CR.Getcookie()).when().get(PageURL);
+        System.out.println("#################"+response.getStatusCode());
         Document doc = Jsoup.parse(response.getBody().asString());
         Element inputElement = doc.select(cssQuery).first();
+        System.out.println(PageURL);
             if (inputElement != null) {
-
+                System.out.println("@@@@@@@Found");
                 return inputElement.attr("value");
             } else {
-
+                System.out.println("@@@@@@@NotFound");
                 return null; // Handle the case where the input element is not found
             }
         }
