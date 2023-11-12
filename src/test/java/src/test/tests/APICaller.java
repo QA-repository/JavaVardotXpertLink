@@ -117,7 +117,7 @@ System.out.println(URL+cookie);
         String responseBody = response.body();
         System.out.println("Status Code: " + statusCode);
         Assert.assertTrue(CheckContentCreationResponseCode(statusCode));
-      NodeWriter(responseBody,Nodetype);
+   //   NodeWriter(responseBody,Nodetype);
 
     }
     public static void NodeWriter(String responseBody, String nodetype) throws GeneralSecurityException, IOException {

@@ -39,8 +39,6 @@ public class ConfigurationReader {
             return properties.getProperty("DEV_cookie");
         else if (Run_ENV.equalsIgnoreCase("STG")&&Project_Name.equalsIgnoreCase(("UNHCR")))
             return properties.getProperty("STG_cookie");
-        else if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("Refworld")))
-            return properties.getProperty("Refworld_DEVCookie_rup_ga");
         else if (Run_ENV.equalsIgnoreCase("Live global")&&Project_Name.equalsIgnoreCase(("UNHCR")))
             return properties.getProperty("Live_cookie");
 
@@ -87,9 +85,6 @@ public class ConfigurationReader {
             return properties.getProperty("Live_Global_Link");
 
         }
-        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("Refworld"))){
-            return properties.getProperty("Refworld_DEV");
-        }
 
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
     }
@@ -104,14 +99,6 @@ public class ConfigurationReader {
         else throw new RuntimeException("APPLICATION_NAME not specified in the API Configuration.properties file.");
     }
 
-    public String GetISG_SearchPath() {
-        String ISG_SearchPath = properties.getProperty("ISG_SearchPath");
-
-        if (ISG_SearchPath!= null)
-            return properties.getProperty("ISG_SearchPath");
-
-        else throw new RuntimeException("ISG_SearchPath not specified in the API Configuration.properties file.");
-    }
     public String GetSPREADSHEET_ID() {
         String SPREADSHEET_ID = properties.getProperty("SPREADSHEET_ID");
 

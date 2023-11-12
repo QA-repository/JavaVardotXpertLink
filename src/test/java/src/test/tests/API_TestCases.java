@@ -14,6 +14,26 @@ import java.util.Map;
 
 public class API_TestCases extends TestBases {
     static ConfigurationReader CR=new ConfigurationReader();
+    @Test(priority = 2,groups = { "Sanity" })
+    public void EHB_Add_Remote_Video() throws Exception {
+        LinkedHashMap<String, String> RequestBody = new LinkedHashMap<>();
+        RequestBody.put("name[0][value]", TestBases.generateRandomString(12));
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() +CR.GetEHB_Add_RemoteVideoPath(),"input[name=form_token]"));
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() +CR.GetEHB_Add_RemoteVideoPath(),"input[name=form_build_id]"));
+        RequestBody.put("form_id", "media_remote_video_add_form");
+        RequestBody.put("field_media_oembed_video[0][value]", "https://www.youtube.com/watch?v=Z4XxrLBL_CI");
+        RequestBody.put("field_media_cover_image[0][fids]", "");
+        RequestBody.put("field_media_cover_image[0][focal_point]", "50,50");
+        RequestBody.put("field_caption[0][value]", TestBases.generateRandomString(10));
+        RequestBody.put("field_caption[0][format]", "basic_html");
+        RequestBody.put("field_copyright[0][value]", TestBases.generateRandomString(5));
+        RequestBody.put("field_media_in_library[value]", "1");
+        RequestBody.put("status[value]", "1");
+        RequestBody.put("advanced__active_tab", "edit-revision-information");
+        RequestBody.put("op", "Save");
+        APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetEHB_Add_RemoteVideoPath(),RequestBody,CR.Getcookie());
+
+    }
 
     @Test(groups = { "Sanity" })
     public void ISG_Create_New_User() throws Exception {
@@ -36,14 +56,7 @@ public class API_TestCases extends TestBases {
         RequestBody.put("op", "Create new account");
         APICaller.ContentCreationAPI(CR.GETISG_DevLink() + CR.GetCreateUserPath(), RequestBody, CR.Getcookie());
     }
-    @Test()
-    public void ISG_Search() throws Exception {
-        List<String> RequestHeader= new ArrayList<>();
-        RequestHeader.add(0,"keywords");
-        RequestHeader.add(1,"testing");
-        APICaller.Public_GetAPI_Caller(CR.GETISG_DevLink(),CR.GetISG_SearchPath(),RequestHeader);
 
-    }
     @Test(groups = { "Sanity" })
     public void Refworld_Create_New_User() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
