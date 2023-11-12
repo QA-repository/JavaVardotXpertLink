@@ -19,9 +19,9 @@ public class API_TestCases extends TestBases {
     public void ISG_Create_New_User() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
 
-        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GETISG_DevLink() +CR.GetCreateUserPath(),"input[name=form_token]"));
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETISG_DevLink() +CR.GetCreateUserPath(),"input[name=form_build_id]"));
-        RequestBody.put("mail", TestBases.generateRandomString(12)+"@vardot.com");
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GETISG_DevLink() + CR.GetCreateUserPath(), "input[name=form_token]"));
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETISG_DevLink() + CR.GetCreateUserPath(), "input[name=form_build_id]"));
+        RequestBody.put("mail", TestBases.generateRandomString(12) + "@vardot.com");
         RequestBody.put("name", TestBases.generateRandomString(8));
         RequestBody.put("pass[pass1]", "Vardot@123");
         RequestBody.put("pass[pass2]", "Vardot@123");
@@ -34,8 +34,14 @@ public class API_TestCases extends TestBases {
         RequestBody.put("antibot_key", "lkbr5Ra-GtUD3vHWMeslxWu0azZr3V2paXoawPnU-CU");
         RequestBody.put("path[0][alias]", "");
         RequestBody.put("op", "Create new account");
-        RequestBody.put("changed", "1691304919");
-        APICaller.ContentCreationAPI(CR.GETISG_DevLink()+ CR.GetCreateUserPath(),RequestBody,CR.Getcookie());
+        APICaller.ContentCreationAPI(CR.GETISG_DevLink() + CR.GetCreateUserPath(), RequestBody, CR.Getcookie());
+    }
+    @Test()
+    public void ISG_Search() throws Exception {
+        List<String> RequestHeader= new ArrayList<>();
+        RequestHeader.add(0,"keywords");
+        RequestHeader.add(1,"testing");
+        APICaller.Public_GetAPI_Caller(CR.GETISG_DevLink(),CR.GetISG_SearchPath(),RequestHeader);
 
     }
     @Test(groups = { "Sanity" })

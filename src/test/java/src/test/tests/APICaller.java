@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.Assert;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
@@ -36,7 +37,7 @@ public class APICaller extends TestBases {
         Response response;
         if (!Requestheaders.isEmpty()) {
             for (int count = 1; count < Requestheaders.size(); count += 2) {
-                Path = Path + Requestheaders.get(count - 1) + "=" + Requestheaders.get(count) + "&";
+                Path = Path +"?"+ Requestheaders.get(count - 1) + "=" + Requestheaders.get(count) + "&";
 
             }
 
@@ -47,6 +48,7 @@ public class APICaller extends TestBases {
 
 
         System.out.println("Status code: " + response.getStatusCode());
+        System.out.println("response:  " + response.getBody().asString());
 
         return response;
     }
@@ -78,6 +80,9 @@ public class APICaller extends TestBases {
 
     public static void ContentCreationAPI(String URL, Map<String, String> RequestBody, String cookie) throws Exception {
     String Nodetype = "";
+System.out.println(URL+cookie);
+        System.out.println(RequestBody);
+
         StringBuilder postData = new StringBuilder();
         for (Map.Entry<String, String> entry : RequestBody.entrySet()) {
             if (postData.length() != 0) postData.append('&');
@@ -107,11 +112,12 @@ public class APICaller extends TestBases {
                 .build();
         CompletableFuture<HttpResponse<String>> responseFuture = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
         HttpResponse<String> response = responseFuture.get();
+        System.out.println(response.headers());
         int statusCode = response.statusCode();
         String responseBody = response.body();
         System.out.println("Status Code: " + statusCode);
         Assert.assertTrue(CheckContentCreationResponseCode(statusCode));
-        NodeWriter(responseBody,Nodetype);
+      NodeWriter(responseBody,Nodetype);
 
     }
     public static void NodeWriter(String responseBody, String nodetype) throws GeneralSecurityException, IOException {

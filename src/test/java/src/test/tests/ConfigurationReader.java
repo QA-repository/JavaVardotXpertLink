@@ -51,6 +51,11 @@ public class ConfigurationReader {
             return properties.getProperty("ISG_STGCookie");
         else if (Run_ENV.equalsIgnoreCase("Live global")&&Project_Name.equalsIgnoreCase(("ISG")))
             return properties.getProperty("ISG_LiveCookie");
+
+
+        if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("EHB")))
+            return properties.getProperty("EHB_DEV_Cookie");
+
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
     }
     public String GetRun_ENV() {
@@ -67,6 +72,11 @@ public class ConfigurationReader {
         if (Run_ENV.equalsIgnoreCase("LIVE")&&(Project_Name.equalsIgnoreCase("ISG"))){
 
         }
+        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("EHB"))){
+            return properties.getProperty("EHB_DEV_URL");
+
+        }
+
         if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("UNHCR"))){
             return properties.getProperty("DEV_Link");
 
@@ -94,6 +104,14 @@ public class ConfigurationReader {
         else throw new RuntimeException("APPLICATION_NAME not specified in the API Configuration.properties file.");
     }
 
+    public String GetISG_SearchPath() {
+        String ISG_SearchPath = properties.getProperty("ISG_SearchPath");
+
+        if (ISG_SearchPath!= null)
+            return properties.getProperty("ISG_SearchPath");
+
+        else throw new RuntimeException("ISG_SearchPath not specified in the API Configuration.properties file.");
+    }
     public String GetSPREADSHEET_ID() {
         String SPREADSHEET_ID = properties.getProperty("SPREADSHEET_ID");
 
@@ -144,6 +162,13 @@ public class ConfigurationReader {
             return CreatePublicationPath;
 
         else throw new RuntimeException("CreatePublicationPath not specified in the API Configuration.properties file.");
+    }
+    public String GetEHB_Add_RemoteVideoPath() {
+        String EHB_Add_RemoteVideo = properties.getProperty("EHB_Add_RemoteVideo");
+        if (EHB_Add_RemoteVideo != null)
+            return EHB_Add_RemoteVideo;
+
+        else throw new RuntimeException("EHB_Add_Remote Video not specified in the API Configuration.properties file.");
     }
     public String GetCreateNewsPath() {
         String CreatePublicationPath = properties.getProperty("CreateNewsPath");
