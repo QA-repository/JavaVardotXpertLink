@@ -32,6 +32,7 @@ public class APICaller extends TestBases {
     static ConfigurationReader CR = new ConfigurationReader();
 
     public static Response Public_GetAPI_Caller(String URL, String Path, List<String> Requestheaders) throws Exception {
+      try{
         RestAssured.baseURI = URL;
         RequestSpecification request = RestAssured.given();
         Response response;
@@ -50,10 +51,14 @@ public class APICaller extends TestBases {
         System.out.println("Status code: " + response.getStatusCode());
         System.out.println("response:  " + response.getBody().asString());
 
-        return response;
+        return response;}
+      catch (Exception E) {
+          throw new RuntimeException("There is a failure in Public_GetAPI_Caller Method, Please check it");
+      }
     }
 
     public static Response Private_GetAPI_Caller(String URL, String Path, List<String> Requestheaders) throws Exception {
+      try{
         RestAssured.baseURI = URL;
         RequestSpecification request = RestAssured.given();
         Response response;
@@ -68,7 +73,10 @@ public class APICaller extends TestBases {
         response = request.headers("user-agent", "Application").auth().basic("unicc", "5NJjoVm-RV8u9Qun4hnt").given().cookie(CR.Getcookie()).when().get(Path);
         System.out.println("Status code: " + response.getStatusCode());
 
-        return response;
+        return response;}
+      catch (Exception E) {
+          throw new RuntimeException("There is a failure in Private_GetAPI_Caller Method, Please check it");
+      }
     }
 
     private static <unknown> Set<unknown> findDuplicates(List<unknown> list) {
@@ -79,47 +87,51 @@ public class APICaller extends TestBases {
     }
 
     public static void ContentCreationAPI(String URL, Map<String, String> RequestBody, String cookie) throws Exception {
-    String Nodetype = "";
-System.out.println(URL+cookie);
-        System.out.println(RequestBody);
+   try {
+       String Nodetype = "";
+       System.out.println(URL + cookie);
+       System.out.println(RequestBody);
 
-        StringBuilder postData = new StringBuilder();
-        for (Map.Entry<String, String> entry : RequestBody.entrySet()) {
-            if (postData.length() != 0) postData.append('&');
-            postData.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8.toString()));
-            postData.append('=');
-            postData.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
-        if(entry.getValue().contains("node_"))
-            Nodetype=entry.getValue();
-        }
-        CookieManager cookieManager = new CookieManager();
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_NONE);
-        HttpClient httpClient = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER)
-                .cookieHandler(cookieManager)
-                .authenticator(new Authenticator() {
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("unicc", "5NJjoVm-RV8u9Qun4hnt".toCharArray());
-                    }
-                })
-                .build();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(URL))
-                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .header("Cookie",cookie )
-                .POST(HttpRequest.BodyPublishers.ofString(postData.toString()))
-                .build();
-        CompletableFuture<HttpResponse<String>> responseFuture = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
-        HttpResponse<String> response = responseFuture.get();
-        System.out.println(response.headers());
-        int statusCode = response.statusCode();
-        String responseBody = response.body();
-        System.out.println("Status Code: " + statusCode);
-        Assert.assertTrue(CheckContentCreationResponseCode(statusCode));
-   //   NodeWriter(responseBody,Nodetype);
+       StringBuilder postData = new StringBuilder();
+       for (Map.Entry<String, String> entry : RequestBody.entrySet()) {
+           if (postData.length() != 0) postData.append('&');
+           postData.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8.toString()));
+           postData.append('=');
+           postData.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
+           if (entry.getValue().contains("node_"))
+               Nodetype = entry.getValue();
+       }
+       CookieManager cookieManager = new CookieManager();
+       cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_NONE);
+       HttpClient httpClient = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER)
+               .cookieHandler(cookieManager)
+               .authenticator(new Authenticator() {
+                   @Override
+                   protected PasswordAuthentication getPasswordAuthentication() {
+                       return new PasswordAuthentication("unicc", "5NJjoVm-RV8u9Qun4hnt".toCharArray());
+                   }
+               })
+               .build();
+       HttpRequest request = HttpRequest.newBuilder()
+               .uri(URI.create(URL))
+               .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
+               .header("Content-Type", "application/x-www-form-urlencoded")
+               .header("Cookie", cookie)
+               .POST(HttpRequest.BodyPublishers.ofString(postData.toString()))
+               .build();
+       CompletableFuture<HttpResponse<String>> responseFuture = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+       HttpResponse<String> response = responseFuture.get();
+       System.out.println(response.headers());
+       int statusCode = response.statusCode();
+       String responseBody = response.body();
+       System.out.println("Status Code: " + statusCode);
+       Assert.assertTrue(CheckContentCreationResponseCode(statusCode));
+       //   NodeWriter(responseBody,Nodetype);
 
-    }
+   }
+   catch (Exception E) {
+       throw new RuntimeException("There is a failure in ContentCreationAPI Method, Please check it");
+   }}
     public static void NodeWriter(String responseBody, String nodetype) throws GeneralSecurityException, IOException {
         GoogleSheetsHelper GSH=new GoogleSheetsHelper();
         List<Object> data =new ArrayList<>();
@@ -190,6 +202,7 @@ input=input.replace(":", "\"");
     }
 
     public static String PrepareFormData(String PageURL,String cssQuery) {
+
         RestAssured.baseURI = PageURL;
         RequestSpecification request = RestAssured.given();
         Response response;
@@ -200,17 +213,17 @@ System.out.println(CR.Getcookie());
         Element inputElement = doc.select(cssQuery).first();
         System.out.println(PageURL);
             if (inputElement != null) {
-                System.out.println("@@@@@@@Found");
                 return inputElement.attr("value");
             } else {
-                System.out.println("@@@@@@@NotFound");
-                return null; // Handle the case where the input element is not found
+                throw new RuntimeException("The "+ cssQuery +"returns  null, Please Check the PrepareFormData Method");
+                // Handle the case where the input element is not found
             }
         }
 
 
         public static void Content_Deleter(String URL,String Path,String Cookie,Map<String, String> RequestBody) throws ExecutionException, InterruptedException, IOException, GeneralSecurityException {
-            StringBuilder postData = new StringBuilder();
+
+         try{   StringBuilder postData = new StringBuilder();
 
             for (Map.Entry<String, String> entry : RequestBody.entrySet()) {
                 if (postData.length() != 0) postData.append('&');
@@ -248,7 +261,10 @@ GoogleSheetsHelper GSH= new GoogleSheetsHelper();
             data.add("");
             data.add("");
 GSH.deleteDataInLastRow(data);
-
+         }
+         catch (Exception E) {
+             throw new RuntimeException("There is a failure in Content_Deleter Method, Please check it");
+         }
     }
 
 
