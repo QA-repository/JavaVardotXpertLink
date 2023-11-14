@@ -13,9 +13,9 @@ public class HtmlContent {
 
     public static void main(String[] args) {
         try {
-            File file2 = new File("C:/Users/Vardot QA/Desktop/staging.html");
+            File file1 = new File("C:/Users/Vardot QA/Desktop/staging.html");
 
-            File file1= new File("C:/Users/Vardot QA/Desktop/dev.html");
+            File file2= new File("C:/Users/Vardot QA/Desktop/dev.html");
 
             Set<String> labels1 = extractLabels(file1);
             Set<String> labels2 = extractLabels(file2);

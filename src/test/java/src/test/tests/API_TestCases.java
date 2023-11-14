@@ -34,7 +34,20 @@ public class API_TestCases extends TestBases {
         APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetEHB_Add_RemoteVideoPath(),RequestBody,CR.Getcookie());
 
     }
+    @Test(groups = { "Sanity" })
+    public void EHB_Main_Search() throws Exception {
+        List<String> RequestHeader= new ArrayList<>();
+       String Response="";
 
+        RequestHeader.add(0,"search");
+        RequestHeader.add(1,"UNHCR");
+
+        RequestHeader.add(2,"sort_by");
+        RequestHeader.add(3,"search_api_relevance");
+
+        Response= String.valueOf(APICaller.Public_GetAPI_Caller(CR.GetRun_ENV(),CR.GetEHB_SearchAPI(),RequestHeader).getBody().jsonPath());
+
+    }
     @Test(groups = { "Sanity" })
     public void ISG_Create_New_User() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();

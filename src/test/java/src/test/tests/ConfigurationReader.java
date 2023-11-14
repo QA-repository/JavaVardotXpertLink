@@ -114,6 +114,13 @@ public class ConfigurationReader {
 
         else throw new RuntimeException("Main_Search_Path not specified in the API Configuration.properties file.");
     }
+    public String GetEHB_SearchAPI() {
+        String EHB_SearchAPI = properties.getProperty("EHB_SearchAPI");
+        if (EHB_SearchAPI != null)
+            return EHB_SearchAPI;
+
+        else throw new RuntimeException("EHB_SearchAPI not specified in the API Configuration.properties file.");
+    }
 
     public String GetNewsSearchPath() {
         String NewsSearchPath = properties.getProperty("News_Search_Path");
