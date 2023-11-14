@@ -14,6 +14,43 @@ import java.util.Map;
 
 public class API_TestCases extends TestBases {
     static ConfigurationReader CR=new ConfigurationReader();
+    @Test()
+    public void Check_User_Ability_To_Create_EHBLP() throws Exception {
+        Map<String, String> RequestBody = new LinkedHashMap<>();
+
+        RequestBody.put("changed", "1699961719");
+        RequestBody.put("langcode[0][value]", "en");
+        RequestBody.put("form_build_id", "form-HQZfRsko6CVSP2jEy5UmHaxVmq1dOP3XoFWyySv0_-c");
+        RequestBody.put("form_token", "vxlRJQnQrsY_iRZJgWU6nyfpxClQ2AtM_CAST-lvJXI");
+        RequestBody.put("form_id", "node_landing_page_lb_form");
+        RequestBody.put("ajax_responsive_preview", "");
+        RequestBody.put("title[0][value]", "Testing");
+        RequestBody.put("field_highlight_text[0][value]", "");
+        RequestBody.put("body[0][value]", "");
+        RequestBody.put("body[0][format]", "full_html");
+        RequestBody.put("field_metatag_description[0][value]", "");
+        RequestBody.put("field_layout_style", "bar");
+        RequestBody.put("field_background_color", "white-smoke-bg");
+        RequestBody.put("field_description_header[0][value]", "");
+        RequestBody.put("field_media[media_library_selection]", "");
+        RequestBody.put("field_video_button_text[0][value]", "");
+        RequestBody.put("field_pre_title[0][value]", "");
+        RequestBody.put("field_links[0][uri]", "");
+        RequestBody.put("field_links[0][title]", "");
+        RequestBody.put("field_links[0][options][attributes][class][0]", "btn btn-primary");
+        RequestBody.put("field_links[0][options][attributes][class][1]", "button-text-center");
+        RequestBody.put("field_links[0][_weight]", "0");
+        RequestBody.put("field_links[1][uri]", "");
+        RequestBody.put("field_links[1][title]", "");
+        RequestBody.put("field_links[1][options][attributes][class][0]", "btn btn-primary");
+        RequestBody.put("field_links[1][options][attributes][class][1]", "button-text-center");
+        RequestBody.put("field_links[1][_weight]", "1");
+        RequestBody.put("field_align", "_none");
+        RequestBody.put("group_tabs[group_tabs__active_tab]", "edit-group-media-header");
+        RequestBody.put("field_yoast_seo[0][yoast_seo][focus_keyword]", "");
+        RequestBody.put("field_yoast_seo[0][yoast_seo][status]", "0");
+        RequestBody.put("revision_log[0][value]", "");
+    }
     @Test(priority = 2,groups = { "Sanity" })
     public void EHB_Add_Remote_Video() throws Exception {
         LinkedHashMap<String, String> RequestBody = new LinkedHashMap<>();
@@ -47,6 +84,27 @@ public class API_TestCases extends TestBases {
 
         Response= String.valueOf(APICaller.Public_GetAPI_Caller(CR.GetRun_ENV(),CR.GetEHB_SearchAPI(),RequestHeader).getBody().jsonPath());
 
+    }
+    @Test(groups = { "Sanity" })
+    public void EHB_Create_New_User() throws Exception {
+        Map<String, String> RequestBody = new LinkedHashMap<>();
+
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GETISG_DevLink() + CR.GetCreateUserPath(), "input[name=form_token]"));
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETISG_DevLink() + CR.GetCreateUserPath(), "input[name=form_build_id]"));
+        RequestBody.put("mail", TestBases.generateRandomString(12) + "@vardot.com");
+        RequestBody.put("name", TestBases.generateRandomString(8));
+        RequestBody.put("pass[pass1]", "Vardot@123");
+        RequestBody.put("pass[pass2]", "Vardot@123");
+        RequestBody.put("status", "1");
+        RequestBody.put("roles[editor]", "editor");
+        RequestBody.put("roles[hr_admin]", "hr_admin");
+        RequestBody.put("roles[content_admin]", "content_admin");
+        RequestBody.put("roles[site_admin]", "site_admin");
+        RequestBody.put("form_id", "user_register_form");
+        RequestBody.put("antibot_key", "lkbr5Ra-GtUD3vHWMeslxWu0azZr3V2paXoawPnU-CU");
+        RequestBody.put("path[0][alias]", "");
+        RequestBody.put("op", "Create new account");
+        APICaller.ContentCreationAPI(CR.GETISG_DevLink() + CR.GetCreateUserPath(), RequestBody, CR.Getcookie());
     }
     @Test(groups = { "Sanity" })
     public void ISG_Create_New_User() throws Exception {
