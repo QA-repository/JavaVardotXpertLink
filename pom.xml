@@ -46,6 +46,15 @@
           <artifactId>webdrivermanager</artifactId>
           <version>5.5.3</version>
       </dependency>
+      <!-- https://mvnrepository.com/artifact/com.optimaize.languagedetector/language-detector -->
+
+      <!-- https://mvnrepository.com/artifact/com.optimaize.languagedetector/language-detector -->
+      <dependency>
+          <groupId>com.optimaize.languagedetector</groupId>
+          <artifactId>language-detector</artifactId>
+          <version>0.6</version>
+      </dependency>
+
       <dependency>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>
