@@ -14,30 +14,146 @@ import java.util.Map;
 
 public class API_TestCases extends TestBases {
     static ConfigurationReader CR=new ConfigurationReader();
+//Forget My password test method
+    @Test
+public void SDG6_Forget_Password () throws Exception {
+    Map<String, String> requestBody = new LinkedHashMap<>(); // Create linked hashmap to store request body this hashmap will have be divided inti 2 columns key and value
+    requestBody.put("name", "y.altantawi@vardot.com"); //To store the email in the name value to take the value we can add requestBody.get
+    requestBody.put("form_build_id", "form-_gVtKKa8cI_8mvtuzvlAZuB3ZYwcpLkt7iFRG7IpGhE");
+    requestBody.put("form_id" , "user_pass");
+    requestBody.put( "antibot_key", "AXVxuYfZE3EiqKejTLcWK8tU3KkoPjijGMH7_bhKJUc");
+    requestBody.put("honeypot_time" , "YecggmGzs6AWkU8_-OflY_y0VIc9bfcm09WNyuLI8WA");
+    requestBody.put("op" , "Submit");
+    requestBody.put("url", ""); // we take them from the network / inspect element
+// Call the API only take the values to create the test case in the content creation
+    APICaller.ContentCreationAPI(CR.GETSDG6_DevLink()+ CR.GetForgetMyPasswordPath(),requestBody,CR.Getcookie()); // Take the request and the cookie and URL and path
+}
 
-    @Test(groups = { "Sanity" })
-    public void ISG_Create_New_User() throws Exception {
+
+@Test
+public void SDG6_Create_New_Term() throws Exception{ // add a new term
+    Map<String, String> requestBody = new LinkedHashMap<>();
+    requestBody.put("form_token", APICaller.PrepareFormData(CR.GETSDG6_DevLink() +CR.GetCreateNewTermPath(),"input[name=form_token]"));
+    requestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETSDG6_DevLink() +CR.GetCreateNewTermPath(),"input[name=form_build_id]"));
+    requestBody.put("name[0][value]","This is a name" );
+    requestBody.put ("form_id:","taxonomy_term_category_form");
+    requestBody.put("field_display_name[0][value]:","");
+    requestBody.put("description[0][value] ","<p>This is a description</p>");
+    requestBody.put("description[0][format]","full_html");
+    requestBody.put("path[0][alias] ","");
+    requestBody.put("status[value]","1");
+    requestBody.put("parent[]","0");
+    requestBody.put("weight","0");
+    requestBody.put("op","Save");
+    APICaller.ContentCreationAPI(CR.GETSDG6_DevLink()+ CR.GetCreateNewTermPath(),requestBody,CR.Getcookie());
+
+}
+
+
+
+@Test
+public void SDG6_Create_New_Menu() throws Exception{
+    Map<String, String> requestBody = new LinkedHashMap<>();
+    requestBody.put("form_token", APICaller.PrepareFormData(CR.GETSDG6_DevLink() +CR.GetCreateNewMenuPath(),"input[name=form_token]"));
+    requestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETSDG6_DevLink() +CR.GetCreateNewMenuPath(),"input[name=form_build_id]"));
+    requestBody.put("title[0][value]","This is a title");
+    requestBody.put("link[0][uri]","<front>");
+    requestBody.put("link[0][options][attributes][target]","");
+    requestBody.put("link[0][options][attributes][rel]","");
+    requestBody.put("link[0][options][attributes][class]","");
+    requestBody.put("enabled[value]","1");
+    requestBody.put("description[0][value]","");
+    requestBody.put("form_id","menu_link_content_menu_link_content_form");
+    requestBody.put("menu_parent","main:");
+    requestBody.put("weight[0][value]","0");
+    requestBody.put("op","Save");
+    APICaller.ContentCreationAPI(CR.GETSDG6_DevLink()  + CR.GetCreateNewMenuPath(), requestBody, CR.Getcookie());
+
+
+
+}
+
+    @Test(priority = 2,groups = { "Sanity" },invocationCount=2,dependsOnMethods={"SDG6_Create_New_Menu"})
+    public void Check_User_Ability_To_Delete_Menu() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
+        RequestBody.put("confirm", "1");
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETSDG6_DevLink() + CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_build_id]"));
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GETSDG6_DevLink() + CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_token]"));
+        String Formid=GoogleSheetsHelper.GetNodeID()
+                .replace("[", "").replace("]", "").replaceAll("[0-9]", "").replace(",", "");
+        RequestBody.put("form_id",GoogleSheetsHelper.prepareNode_For_deletion(Formid) );
+        RequestBody.put("op", "Delete");
+        APICaller.Content_Deleter(CR.GetRun_ENV(), CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), CR.Getcookie(), RequestBody);
+    }
+    @Test(groups = { "Sanity" })
+    public void SDG6_Create_New_User() throws Exception {
+        Map<String, String> requestBody = new LinkedHashMap<>();
+        requestBody.put("form_token", APICaller.PrepareFormData(CR.GETSDG6_DevLink() + CR.GetCreateUserPath(), "input[name=form_token]"));
+        requestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETSDG6_DevLink()  + CR.GetCreateUserPath(), "input[name=form_build_id]"));
+        requestBody.put("mail", "y.altantawi+51454@vardot.com");
+        requestBody.put("name", "y.altantawi98148");
+        requestBody.put("pass[pass1]", "Vardot@123");
+        requestBody.put("pass[pass2]", "Vardot@123");
+        requestBody.put("status", "1");
+        requestBody.put("roles[editor]", "editor");
+        requestBody.put("roles[content_admin]", "content_admin");
+        requestBody.put("roles[site_admin]", "site_admin");
+        requestBody.put("form_id", "user_register_form");
+        requestBody.put("antibot_key", "dy7sCmJE9dinEC0p-a5e4MpJLBdH-AdLIMtaPZemhNo");
+        requestBody.put("path[0][alias]", "");
+        requestBody.put("op", "Create new account");
+        APICaller.ContentCreationAPI(CR.GETSDG6_DevLink()  + CR.GetCreateUserPath(), requestBody, CR.Getcookie());
+    }
+    @Test
+    public void Check_User_Ability_To_Create_Country() throws Exception {
+        Map<String, String> requestBody = new LinkedHashMap<>();
+        requestBody.put("form_token", APICaller.PrepareFormData(CR.GETSDG6_DevLink() + CR.GetCreateCountryPath(), "input[name=form_token]"));
+        requestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETSDG6_DevLink()  + CR.GetCreateCountryPath(), "input[name=form_build_id]"));
+        requestBody.put("changed", "1700300450");
+        requestBody.put("title[0][value]", " This is a title");
+        requestBody.put("body[0][summary]","");
+        requestBody.put("body[0][value]","<p>Body</p>");
+        requestBody.put("body[0][format]","full_html");
+        requestBody.put("field_airtable_code[0][value]","shra1pbAvRx1Ibv3u");
+        requestBody.put("field_category[0][5][5-children][35][35]","35");
+        requestBody.put("group_tabs[group_tabs__active_tab]","edit-group-details");
+        requestBody.put("form_id","node_country_form");
+        requestBody.put("ajax_responsive_preview","");
+        requestBody.put("revision_log[0][value]","");
+        requestBody.put("simple_sitemap[default][index]","1");
+        requestBody.put("simple_sitemap[default][priority]","0.5");
+        requestBody.put("simple_sitemap[default][changefreq]","daily");
+        requestBody.put("simple_sitemap[default][include_images]","0");
+        requestBody.put("path[0][pathauto]","1");
+        requestBody.put("moderation_state[0][state]","draft");
+        requestBody.put("op","Save");
+        APICaller.ContentCreationAPI(CR.GETSDG6_DevLink()+ CR.GetCreateCountryPath(),requestBody,CR.Getcookie());
 
-        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GETISG_DevLink() +CR.GetCreateUserPath(),"input[name=form_token]"));
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETISG_DevLink() +CR.GetCreateUserPath(),"input[name=form_build_id]"));
-        RequestBody.put("mail", TestBases.generateRandomString(12)+"@vardot.com");
-        RequestBody.put("name", TestBases.generateRandomString(8));
-        RequestBody.put("pass[pass1]", "Vardot@123");
-        RequestBody.put("pass[pass2]", "Vardot@123");
-        RequestBody.put("status", "1");
-        RequestBody.put("roles[editor]", "editor");
-        RequestBody.put("roles[hr_admin]", "hr_admin");
-        RequestBody.put("roles[content_admin]", "content_admin");
-        RequestBody.put("roles[site_admin]", "site_admin");
-        RequestBody.put("form_id", "user_register_form");
-        RequestBody.put("antibot_key", "lkbr5Ra-GtUD3vHWMeslxWu0azZr3V2paXoawPnU-CU");
-        RequestBody.put("path[0][alias]", "");
-        RequestBody.put("op", "Create new account");
-        RequestBody.put("changed", "1691304919");
-        APICaller.ContentCreationAPI(CR.GETISG_DevLink()+ CR.GetCreateUserPath(),RequestBody,CR.Getcookie());
 
     }
+//    @Test(groups = { "Sanity" })
+//    public void ISG_Create_New_User() throws Exception {
+//        Map<String, String> RequestBody = new LinkedHashMap<>();
+//
+//        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GETISG_DevLink() +CR.GetCreateUserPath(),"input[name=form_token]"));
+//        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETISG_DevLink() +CR.GetCreateUserPath(),"input[name=form_build_id]"));
+//        RequestBody.put("mail", TestBases.generateRandomString(12)+"@vardot.com");
+//        RequestBody.put("name", TestBases.generateRandomString(8));
+//        RequestBody.put("pass[pass1]", "Vardot@123");
+//        RequestBody.put("pass[pass2]", "Vardot@123");
+//        RequestBody.put("status", "1");
+//        RequestBody.put("roles[editor]", "editor");
+//        RequestBody.put("roles[hr_admin]", "hr_admin");
+//        RequestBody.put("roles[content_admin]", "content_admin");
+//        RequestBody.put("roles[site_admin]", "site_admin");
+//        RequestBody.put("form_id", "user_register_form");
+//        RequestBody.put("antibot_key", "lkbr5Ra-GtUD3vHWMeslxWu0azZr3V2paXoawPnU-CU");
+//        RequestBody.put("path[0][alias]", "");
+//        RequestBody.put("op", "Create new account");
+//        RequestBody.put("changed", "1691304919");
+//        APICaller.ContentCreationAPI(CR.GETISG_DevLink()+ CR.GetCreateUserPath(),RequestBody,CR.Getcookie());
+
+//    }
     @Test(groups = { "Sanity" })
     public void Site_Main_Search() throws Exception {
         List<String> RequestHeader= new ArrayList<>();
@@ -54,56 +170,56 @@ public class API_TestCases extends TestBases {
     }
 
 
-    @Test(groups = { "Sanity" })
-    public void News_Search() throws Exception {
-        List<String> RequestHeader= new ArrayList<>();
-        List<String> Response;
-        RequestHeader.add(0,"q");
-        RequestHeader.add(1,"*jordan:*");
-        RequestHeader.add(2,"fq");
-        RequestHeader.add(3,"ss_type:(\"news\")");
-        RequestHeader.add(4,"fq");
-        RequestHeader.add(5,"ss_search_api_language:en");
-        RequestHeader.add(6,"fq");
-        RequestHeader.add(7,"sm_site_name:(\"Global site\")");
-        RequestHeader.add(8,"facet.field");
-        RequestHeader.add(9,"sm_site_name");
-        RequestHeader.add(10,"facet.field");
-        RequestHeader.add(11,"ss_news_category");
-        RequestHeader.add(12,"facet.field");
-        RequestHeader.add(13,"ss_type");
-        RequestHeader.add(14,"sm_name_1");
-        RequestHeader.add(15,"sm_region");
-        RequestHeader.add(16,"sm_countries");
-        RequestHeader.add(17,"facet.field");
-        RequestHeader.add(18,"ds_created");
-        RequestHeader.add(19,"rows");
-        RequestHeader.add(20,"5000");
-        RequestHeader.add(21,"facet.limit");
-        RequestHeader.add(22,"-1");
-        RequestHeader.add(23,"start");
-        RequestHeader.add(24,"0");
-        RequestHeader.add(25,"facet");
-        RequestHeader.add(26,"on");
-        RequestHeader.add(27,"hl");
-        RequestHeader.add(28,"on");
-        RequestHeader.add(29,"hl.fl");
-        RequestHeader.add(30,"tm_X3b_en_rendered_item");
-        RequestHeader.add(31,"hl.usePhraseHighlighter");
-        RequestHeader.add(32,"true");
-        RequestHeader.add(33,"wt");
-        RequestHeader.add(34,"json");
-        Response= APICaller.Public_GetAPI_Caller(CR.GetRun_ENV(),CR.GetNewsSearchPath(),RequestHeader).getBody().jsonPath().getList("response.docs.id");
-        APICaller.GeneralResponseValidator(Response);
+//    @Test(groups = { "Sanity" })
+//    public void News_Search() throws Exception {
+//        List<String> RequestHeader= new ArrayList<>();
+//        List<String> Response;
+//        RequestHeader.add(0,"q");
+//        RequestHeader.add(1,"*jordan:*");
+//        RequestHeader.add(2,"fq");
+//        RequestHeader.add(3,"ss_type:(\"news\")");
+//        RequestHeader.add(4,"fq");
+//        RequestHeader.add(5,"ss_search_api_language:en");
+//        RequestHeader.add(6,"fq");
+//        RequestHeader.add(7,"sm_site_name:(\"Global site\")");
+//        RequestHeader.add(8,"facet.field");
+//        RequestHeader.add(9,"sm_site_name");
+//        RequestHeader.add(10,"facet.field");
+//        RequestHeader.add(11,"ss_news_category");
+//        RequestHeader.add(12,"facet.field");
+//        RequestHeader.add(13,"ss_type");
+//        RequestHeader.add(14,"sm_name_1");
+//        RequestHeader.add(15,"sm_region");
+//        RequestHeader.add(16,"sm_countries");
+//        RequestHeader.add(17,"facet.field");
+//        RequestHeader.add(18,"ds_created");
+//        RequestHeader.add(19,"rows");
+//        RequestHeader.add(20,"5000");
+//        RequestHeader.add(21,"facet.limit");
+//        RequestHeader.add(22,"-1");
+//        RequestHeader.add(23,"start");
+//        RequestHeader.add(24,"0");
+//        RequestHeader.add(25,"facet");
+//        RequestHeader.add(26,"on");
+//        RequestHeader.add(27,"hl");
+//        RequestHeader.add(28,"on");
+//        RequestHeader.add(29,"hl.fl");
+//        RequestHeader.add(30,"tm_X3b_en_rendered_item");
+//        RequestHeader.add(31,"hl.usePhraseHighlighter");
+//        RequestHeader.add(32,"true");
+//        RequestHeader.add(33,"wt");
+//        RequestHeader.add(34,"json");
+//        Response= APICaller.Public_GetAPI_Caller(CR.GetRun_ENV(),CR.GetNewsSearchPath(),RequestHeader).getBody().jsonPath().getList("response.docs.id");
+//        APICaller.GeneralResponseValidator(Response);
+//
+//    }
 
-    }
-
-    @Test(priority = 2,groups = { "Sanity" },invocationCount=2,dependsOnMethods={"Check_User_Ability_To_Create_News","Check_User_Ability_To_Create_Publication"})
+    @Test(priority = 2,groups = { "Sanity" },invocationCount=2,dependsOnMethods={"Check_User_Ability_To_Create_Country"})
     public void Check_User_Ability_To_Delete_Content() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
         RequestBody.put("confirm", "1");
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_build_id]"));
-        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_token]"));
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETSDG6_DevLink() + CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_build_id]"));
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GETSDG6_DevLink() + CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_token]"));
         String Formid=GoogleSheetsHelper.GetNodeID()
                 .replace("[", "").replace("]", "").replaceAll("[0-9]", "").replace(",", "");
         RequestBody.put("form_id",GoogleSheetsHelper.prepareNode_For_deletion(Formid) );
@@ -419,6 +535,13 @@ public class API_TestCases extends TestBases {
         APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetCreateNewsPath(),RequestBody,CR.Getcookie());
 
     }
+//@Test
+//    public void Check_User_Ability_To_Create_News() throws Exception{
+//        Map<String, String> requestBody = new LinkedHashMap<>();
+//        requestBody.put("","");
+//
+//
+//    }
     @Test(priority = 3,groups = { "Sanity" })
     public void Check_User_Ability_To_Create_Event() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
@@ -427,5 +550,5 @@ public class API_TestCases extends TestBases {
         RequestBody.put("langcode[0][value]", "en");
         // to be completed by hamza/ibrahim
     }
- }
 
+}

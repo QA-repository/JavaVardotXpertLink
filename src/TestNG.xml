@@ -9,7 +9,7 @@
       <classes>
           <class name="src.test.tests.API_TestCases">
               <methods>
-  <include name="News_Search" />
+  <include name=""/>
 
  </methods>
 </class>

@@ -8,7 +8,7 @@ import java.util.Properties;
 
 import static java.lang.System.getProperty;
 
-public class ConfigurationReader {
+public class ConfigurationReader { // if I have any value I will call it from here, our kitchen that we prepare anything for it
 
     public static Properties properties;
     public  String propertyFilePath = getProperty("user.dir")+"/configs/API configuration.properties";
@@ -49,31 +49,47 @@ public class ConfigurationReader {
             return properties.getProperty("ISG_STGCookie");
         else if (Run_ENV.equalsIgnoreCase("Live global")&&Project_Name.equalsIgnoreCase(("ISG")))
             return properties.getProperty("ISG_LiveCookie");
+
+        if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("SDG6")))
+            return properties.getProperty("SDG6_DEVCookie");
+        else if (Run_ENV.equalsIgnoreCase("STG")&&Project_Name.equalsIgnoreCase(("SDG6")))
+            return properties.getProperty("SDG6_STGCookie");
+        else if (Run_ENV.equalsIgnoreCase("Live global")&&Project_Name.equalsIgnoreCase(("SDG6")))
+            return properties.getProperty("SDG6_LiveCookie");
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
     }
     public String GetRun_ENV() {
         String Run_ENV = properties.getProperty("Run_ENV");
         String Project_Name = properties.getProperty("Project_Name");
 
-        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("ISG"))){
-            return properties.getProperty("ISG_Dev");
+//        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("ISG"))){
+//            return properties.getProperty("ISG_Dev");
+//
+//        }
+//        if (Run_ENV.equalsIgnoreCase("STG")&&(Project_Name.equalsIgnoreCase("ISG"))){
+//
+//        }
+//        if (Run_ENV.equalsIgnoreCase("LIVE")&&(Project_Name.equalsIgnoreCase("ISG"))){
+//
+//        }
+//        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("UNHCR"))){
+//            return properties.getProperty("DEV_Link");
+//
+//        }   if (Run_ENV.equalsIgnoreCase("STG")&&(Project_Name.equalsIgnoreCase("UNHCR"))){
+//            return properties.getProperty("STG_Link");
+//
+//        }   if (Run_ENV.equalsIgnoreCase("Live_Global")&&(Project_Name.equalsIgnoreCase("UNHCR"))){
+//            return properties.getProperty("Live_Global_Link");
+//
+//        }
+        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("SDG6"))){
+            return properties.getProperty("SDG6_DEV");
 
-        }
-        if (Run_ENV.equalsIgnoreCase("STG")&&(Project_Name.equalsIgnoreCase("ISG"))){
-
-        }
-        if (Run_ENV.equalsIgnoreCase("LIVE")&&(Project_Name.equalsIgnoreCase("ISG"))){
-
-        }
-        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("UNHCR"))){
-            return properties.getProperty("DEV_Link");
-
-        }   if (Run_ENV.equalsIgnoreCase("STG")&&(Project_Name.equalsIgnoreCase("UNHCR"))){
+        }   if (Run_ENV.equalsIgnoreCase("STG")&&(Project_Name.equalsIgnoreCase("SDG6"))){
             return properties.getProperty("STG_Link");
 
-        }   if (Run_ENV.equalsIgnoreCase("Live_Global")&&(Project_Name.equalsIgnoreCase("UNHCR"))){
+        }   if (Run_ENV.equalsIgnoreCase("Live_Global")&&(Project_Name.equalsIgnoreCase("SDG6"))) {
             return properties.getProperty("Live_Global_Link");
-
         }
 
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
@@ -126,6 +142,43 @@ public class ConfigurationReader {
 
         else throw new RuntimeException("ISG_Dev not specified in the API Configuration.properties file.");
     }
+
+    public String GetForgetMyPasswordPath() {
+        String forgetMyPasswordPath = properties.getProperty("ForgetMyPasswordPath");
+        if (forgetMyPasswordPath != null)
+            return forgetMyPasswordPath;
+
+        else throw new RuntimeException("forgetMyPasswordPath not specified in the API Configuration.properties file.");
+    }
+    public String GETSDG6_login() {
+        String LoginPath = properties.getProperty("SDG6_DEV");
+        if (LoginPath != null)
+            return LoginPath;
+        else throw new RuntimeException("loginPath not specified in the API Configuration.properties file.");
+    }
+
+
+    public String GETSDG6_DevLink() {  // To get the SDG6 dev env
+        String SDG6_DEV = properties.getProperty("SDG6_DEV");
+        if (SDG6_DEV != null)
+            return SDG6_DEV;
+
+        else throw new RuntimeException("SDG6_Dev not specified in the API Configuration.properties file.");
+    }
+    public String GetCreateNewMenuPath() {
+        String createNewMenuPath = properties.getProperty("CreateNewMenu");
+        if (createNewMenuPath != null)
+            return createNewMenuPath;
+
+        else throw new RuntimeException("CreateNewMenu not specified in the API Configuration.properties file.");
+    }
+    public String GetCreateNewTermPath() {
+        String createNewTermPath = properties.getProperty("CreateNewTermPath");
+        if (createNewTermPath != null)
+            return createNewTermPath;
+
+        else throw new RuntimeException("CreateNewTermPath not specified in the API Configuration.properties file.");
+    }
     public String Content_Page() {
         String Content_Page = properties.getProperty("Content_Page");
         if (Content_Page != null)
@@ -139,6 +192,13 @@ public class ConfigurationReader {
             return CreatePublicationPath;
 
         else throw new RuntimeException("CreatePublicationPath not specified in the API Configuration.properties file.");
+    }
+    public String GetCreateCountryPath() {
+        String createCountryPath = properties.getProperty("CreateCountryPath");
+        if (createCountryPath != null)
+            return createCountryPath;
+
+        else throw new RuntimeException("CreateCountryPath not specified in the API Configuration.properties file.");
     }
     public String GetCreateNewsPath() {
         String CreatePublicationPath = properties.getProperty("CreateNewsPath");

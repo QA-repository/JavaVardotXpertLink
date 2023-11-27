@@ -123,7 +123,7 @@ public class APICaller extends TestBases {
     }
 
     public static String Extract_Node_ID(String responseBody){
-        Pattern pattern = Pattern.compile("/(\\d+)/");
+            Pattern pattern = Pattern.compile("/(\\d+)/");
 
         // Create a matcher for the input string
         Matcher matcher = pattern.matcher(responseBody);
@@ -187,8 +187,10 @@ input=input.replace(":", "\"");
         RestAssured.baseURI = PageURL;
         RequestSpecification request = RestAssured.given();
         Response response;
-System.out.println(CR.Getcookie());
-        response = request.headers("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36").cookie(CR.Getcookie()).auth().basic("unicc", "5NJjoVm-RV8u9Qun4hnt").given().when().get(PageURL);
+        System.out.println(CR.Getcookie());
+        System.out.println(PageURL);
+        response = request.headers("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36").cookie(CR.Getcookie()).auth().basic("unicc", "5NJjoVm-RV8u9Qun4hnt").given().header("cookie", CR.Getcookie()).when().get(PageURL);
+        System.out.println(response.body().asString());
         Document doc = Jsoup.parse(response.getBody().asString());
         Element inputElement = doc.select(cssQuery).first();
             if (inputElement != null) {
