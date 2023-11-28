@@ -4,6 +4,7 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import org.testng.annotations.Test;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -14,6 +15,82 @@ import java.util.Map;
 
 public class API_TestCases extends TestBases {
     static ConfigurationReader CR=new ConfigurationReader();
+
+    @Test
+    public void Check_User_Ability_To_Create_Country() throws Exception {
+        Map<String, String> requestBody = new LinkedHashMap<>();
+        requestBody.put("form_token", APICaller.PrepareFormData(CR.GETSDG6_DevLink() + CR.GetCreateCountryPath(), "input[name=form_token]"));
+        requestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETSDG6_DevLink()  + CR.GetCreateCountryPath(), "input[name=form_build_id]"));
+        requestBody.put("changed", "1700300450");
+        requestBody.put("title[0][value]", " This is a title");
+        requestBody.put("body[0][summary]","");
+        requestBody.put("body[0][value]","<p>Body</p>");
+        requestBody.put("body[0][format]","full_html");
+        requestBody.put("field_airtable_code[0][value]","shra1pbAvRx1Ibv3u");
+        requestBody.put("field_category[0][5][5-children][35][35]","35");
+        requestBody.put("group_tabs[group_tabs__active_tab]","edit-group-details");
+        requestBody.put("form_id","node_country_form");
+        requestBody.put("ajax_responsive_preview","");
+        requestBody.put("revision_log[0][value]","");
+        requestBody.put("simple_sitemap[default][index]","1");
+        requestBody.put("simple_sitemap[default][priority]","0.5");
+        requestBody.put("simple_sitemap[default][changefreq]","daily");
+        requestBody.put("simple_sitemap[default][include_images]","0");
+        requestBody.put("path[0][pathauto]","1");
+        requestBody.put("moderation_state[0][state]","draft");
+        requestBody.put("op","Save");
+        APICaller.ContentCreationAPI(CR.GETSDG6_DevLink()+ CR.GetCreateCountryPath(),requestBody,CR.Getcookie());
+    }
+    //Forget My password test method
+    @Test
+    public void SDG6_Forget_Password () throws Exception {
+        Map<String, String> requestBody = new LinkedHashMap<>(); // Create linked hashmap to store request body this hashmap will have be divided inti 2 columns key and value
+        requestBody.put("name", "y.altantawi@vardot.com"); //To store the email in the name value to take the value we can add requestBody.get
+        requestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETSDG6_DevLink()  + CR.GetForgetMyPasswordPath(), "input[name=form_build_id]"));
+        requestBody.put("form_id" , "user_pass");
+        requestBody.put( "antibot_key", "AXVxuYfZE3EiqKejTLcWK8tU3KkoPjijGMH7_bhKJUc");
+        requestBody.put("honeypot_time" , "BvbmzZqhdyzcicK_E2KaH1HIv_3eXJLQinoFUtQHsJo");
+        requestBody.put("op" , "Submit");
+        requestBody.put("url", ""); // we take them from the network / inspect element
+// Call the API only take the values to create the test case in the content creation
+        APICaller.ContentCreationAPI(CR.GETSDG6_DevLink()+ CR.GetForgetMyPasswordPath(),requestBody,CR.Getcookie()); // Take the request and the cookie and URL and path
+    }
+
+    @Test()
+    public void Check_User_Ability_to_create_Term() throws Exception {
+        Map<String, String> requestBody = new LinkedHashMap<>();
+        requestBody.put("name[0][value]", "Lorem ipsum");
+        requestBody.put("form_token", APICaller.PrepareFormData(CR.GETSDG6_DevLink() + CR.GetCreateNewTermPath(), "input[name=form_token]"));
+        requestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETSDG6_DevLink() + CR.GetCreateNewTermPath(), "input[name=form_build_id]"));
+        requestBody.put("form_id", "taxonomy_term_category_form");
+        requestBody.put("field_display_name[0][value]", "");
+        requestBody.put("description[0][value]", "");
+        requestBody.put("description[0][format]", "full_html");
+        requestBody.put("path[0][alias]", "");
+        requestBody.put("parent[]", "0");
+        requestBody.put("weight", "0");
+        requestBody.put("op", "Save and go to list");
+        APICaller.ContentCreationAPI(CR.GETSDG6_DevLink()+ CR.GetCreateNewTermPath(),requestBody,CR.Getcookie());
+    }
+
+    @Test()
+    public void Check_User_Ability_to_create_Menu() throws Exception {
+        Map<String, String> requestBody = new LinkedHashMap<>();
+        requestBody.put("form_token", APICaller.PrepareFormData(CR.GETSDG6_DevLink() + CR.GetCreateNewMenuPath(), "input[name=form_token]"));
+        requestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETSDG6_DevLink() + CR.GetCreateNewMenuPath(), "input[name=form_build_id]"));
+        requestBody.put("title[0][value]","This is a title");
+        requestBody.put("link[0][uri]","Cambodia (1073)");
+        requestBody.put("link[0][options][attributes][target]","");
+        requestBody.put("link[0][options][attributes][rel]","");
+        requestBody.put("link[0][options][attributes][class]","");
+        requestBody.put("enabled[value]","1");
+        requestBody.put("description[0][value]","");
+        requestBody.put("form_id","menu_link_content_menu_link_content_form");
+        requestBody.put("menu_parent","main:");
+        requestBody.put("weight[0][value]","0");
+        requestBody.put("op","Save");
+    APICaller.ContentCreationAPI(CR.GETSDG6_DevLink()+ CR.GetCreateNewMenuPath(),requestBody,CR.Getcookie());
+    }
     @Test()
     public void Check_User_Ability_To_Create_EHBLP() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
@@ -209,7 +286,7 @@ public class API_TestCases extends TestBases {
 
     }
 
-    @Test(priority = 2,groups = { "Sanity" },invocationCount=2,dependsOnMethods={"Check_User_Ability_To_Create_News","Check_User_Ability_To_Create_Publication"})
+    @Test(priority = 2,groups = { "Sanity" },invocationCount=2,dependsOnMethods={"Check_User_Ability_To_Create_News","Check_User_Ability_To_Create_Publication","Check_User_Ability_To_Create_Country"})
     public void Check_User_Ability_To_Delete_Content() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
         RequestBody.put("confirm", "1");
@@ -222,101 +299,103 @@ public class API_TestCases extends TestBases {
         APICaller.Content_Deleter(CR.GetRun_ENV(), CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), CR.Getcookie(), RequestBody);
     }
 
-    @Test(priority = 1,groups = { "Sanity" })
-    public void Check_User_Ability_To_Create_Publication() throws Exception {
 
-        Map<String, String> RequestBody = new LinkedHashMap<>();
-        RequestBody.put("changed", "1691304919");
-        RequestBody.put("BLAB LABLA", "1691304919");
 
-        RequestBody.put("langcode[0][value]", "en");
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV()+ CR.GetCreatePublicationPath(),"input[name=form_build_id]"));
-       RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV()+ CR.GetCreatePublicationPath(),"input[name=form_token]"));
-        RequestBody.put("form_id", "node_publication_form");
-        RequestBody.put("ajax_responsive_preview", "");
-        RequestBody.put("title[0][value]", TestBases.generateRandomString(12));
-        RequestBody.put("field_citation[0][value]", "");
-        RequestBody.put("body[0][summary]", TestBases.generateRandomString(8));
-        RequestBody.put("body[0][value]", TestBases.generateRandomString(7));
-        RequestBody.put("body[0][format]", "full_html");
-        RequestBody.put("field_brief[0][value]", "");
-        RequestBody.put("field_date_format", "full-date");
-        RequestBody.put("field_layout_style", "publication-cover");
-        RequestBody.put("field_background_color", "no-bg");
-        RequestBody.put("field_description[0][value]", "");
-        RequestBody.put("field_byline[0][value]", "");
-        RequestBody.put("field_align", "_none");
-        RequestBody.put("field_media[media_library_selection]", "");
-        RequestBody.put("field_file_or_link", "file");
-        RequestBody.put("field_file[media_library_selection]", "");
-        RequestBody.put("field_button_style", "btn btn-secondary");
-        RequestBody.put("field_file_button[0][value]", "View report");
-        RequestBody.put("field_links[0][title]", "");
-        RequestBody.put("field_links[0][uri]", "");
-        RequestBody.put("field_links[0][options][attributes][class]", "");
-        RequestBody.put("field_links[0][_weight]", "0");
-        RequestBody.put("field_links[1][title]", "");
-        RequestBody.put("field_links[1][uri]", "");
-        RequestBody.put("field_links[1][options][attributes][class]", "");
-        RequestBody.put("field_links[1][_weight]", "1");
-        RequestBody.put("field_publication", "101");
-        RequestBody.put("field_event_category", "_none");
-        RequestBody.put("field_countries[0][target_id]", "");
-        RequestBody.put("field_countries[0][_weight]", "0");
-        RequestBody.put("field_tags[0][target_id]", "");
-        RequestBody.put("field_tags[0][_weight]", "0");
-        RequestBody.put("field_categories_list", "3");
-        RequestBody.put("field_related_publication[0][target_id]", "");
-        RequestBody.put("field_related_publication[0][_weight]", "0");
-        RequestBody.put("field_long_title[0][value]", "");
-        RequestBody.put("field_docid[0][value]", "");
-        RequestBody.put("field_relationid[0][value]", "");
-        RequestBody.put("field_cid[0][value]", "");
-        RequestBody.put("field_scid[0][value]", "");
-        RequestBody.put("field_tid[0][value]", "");
-        RequestBody.put("field_permalink[0][value]", "");
-        RequestBody.put("field_reference[0][value]", "");
-        RequestBody.put("field_coa[0][target_id]", "");
-        RequestBody.put("field_coa[0][_weight]", "0");
-        RequestBody.put("field_coi[0][target_id]", "");
-        RequestBody.put("field_coi[0][_weight]", "0");
-        RequestBody.put("field_cot[0][target_id]", "");
-        RequestBody.put("field_cot[0][_weight]", "0");
-        RequestBody.put("field_keywords[0][target_id]", "");
-        RequestBody.put("field_keywords[0][_weight]", "0");
-        RequestBody.put("field_categories[0][target_id]", "");
-        RequestBody.put("field_commentsint[0][value]", "");
-        RequestBody.put("field_commentsext[0][value]", "");
-        RequestBody.put("field_day[0][value]", "");
-        RequestBody.put("field_year[0][value]", "");
-        RequestBody.put("field_month[0][value]", "");
-        RequestBody.put("field_texis_tags[0][value]", "");
-        RequestBody.put("group_tabs[group_tabs__active_tab]", "edit-group-related-info");
-        RequestBody.put("field_yoast_seo[0][yoast_seo][focus_keyword]", "");
-        RequestBody.put("field_yoast_seo[0][yoast_seo][status]", "0");
-        RequestBody.put("field_boosted_keyword[0][value]", "");
-        RequestBody.put("field_boosted_keyword[0][boost]", "1");
-        RequestBody.put("revision_log[0][value]", "");
-        RequestBody.put("created[0][value][date]", "2023-09-12");
-        RequestBody.put("created[0][value][time]", "22:06:10");
-        RequestBody.put("publish_on[0][value][date]", "");
-        RequestBody.put("publish_on[0][value][time]", "");
-        RequestBody.put("unpublish_on[0][value][date]", "");
-        RequestBody.put("unpublish_on[0][value][time]", "");
-        RequestBody.put("field_meta_tags[0][basic][title]", "[node:title] | [site:name]");
-        RequestBody.put("field_meta_tags[0][basic][description]", "[node:field_brief]");
-        RequestBody.put("field_meta_tags[0][basic][abstract]", "[node:field_brief]");
-        RequestBody.put("field_meta_tags[0][basic][keywords]", "");
-        RequestBody.put("simple_sitemap[default][index]", "1");
-        RequestBody.put("simple_sitemap[default][priority]", "0.5");
-        RequestBody.put("simple_sitemap[default][changefreq]", "");
-        RequestBody.put("simple_sitemap[default][include_images]", "0");
-        RequestBody.put("path[0][pathauto]", "1");
-        RequestBody.put("moderation_state[0][state]", "draft");
-        RequestBody.put("op", "Save");
-        APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetCreatePublicationPath(),RequestBody,CR.Getcookie());
-
-    }
+//    @Test(priority = 1,groups = { "Sanity" })
+//    public void Check_User_Ability_To_Create_Publication() throws Exception {
+//
+//        Map<String, String> RequestBody = new LinkedHashMap<>();
+//        RequestBody.put("changed", "1691304919");
+//        RequestBody.put("BLAB LABLA", "1691304919");
+//
+//        RequestBody.put("langcode[0][value]", "en");
+//        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV()+ CR.GetCreatePublicationPath(),"input[name=form_build_id]"));
+//       RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV()+ CR.GetCreatePublicationPath(),"input[name=form_token]"));
+//        RequestBody.put("form_id", "node_publication_form");
+//        RequestBody.put("ajax_responsive_preview", "");
+//        RequestBody.put("title[0][value]", TestBases.generateRandomString(12));
+//        RequestBody.put("field_citation[0][value]", "");
+//        RequestBody.put("body[0][summary]", TestBases.generateRandomString(8));
+//        RequestBody.put("body[0][value]", TestBases.generateRandomString(7));
+//        RequestBody.put("body[0][format]", "full_html");
+//        RequestBody.put("field_brief[0][value]", "");
+//        RequestBody.put("field_date_format", "full-date");
+//        RequestBody.put("field_layout_style", "publication-cover");
+//        RequestBody.put("field_background_color", "no-bg");
+//        RequestBody.put("field_description[0][value]", "");
+//        RequestBody.put("field_byline[0][value]", "");
+//        RequestBody.put("field_align", "_none");
+//        RequestBody.put("field_media[media_library_selection]", "");
+//        RequestBody.put("field_file_or_link", "file");
+//        RequestBody.put("field_file[media_library_selection]", "");
+//        RequestBody.put("field_button_style", "btn btn-secondary");
+//        RequestBody.put("field_file_button[0][value]", "View report");
+//        RequestBody.put("field_links[0][title]", "");
+//        RequestBody.put("field_links[0][uri]", "");
+//        RequestBody.put("field_links[0][options][attributes][class]", "");
+//        RequestBody.put("field_links[0][_weight]", "0");
+//        RequestBody.put("field_links[1][title]", "");
+//        RequestBody.put("field_links[1][uri]", "");
+//        RequestBody.put("field_links[1][options][attributes][class]", "");
+//        RequestBody.put("field_links[1][_weight]", "1");
+//        RequestBody.put("field_publication", "101");
+//        RequestBody.put("field_event_category", "_none");
+//        RequestBody.put("field_countries[0][target_id]", "");
+//        RequestBody.put("field_countries[0][_weight]", "0");
+//        RequestBody.put("field_tags[0][target_id]", "");
+//        RequestBody.put("field_tags[0][_weight]", "0");
+//        RequestBody.put("field_categories_list", "3");
+//        RequestBody.put("field_related_publication[0][target_id]", "");
+//        RequestBody.put("field_related_publication[0][_weight]", "0");
+//        RequestBody.put("field_long_title[0][value]", "");
+//        RequestBody.put("field_docid[0][value]", "");
+//        RequestBody.put("field_relationid[0][value]", "");
+//        RequestBody.put("field_cid[0][value]", "");
+//        RequestBody.put("field_scid[0][value]", "");
+//        RequestBody.put("field_tid[0][value]", "");
+//        RequestBody.put("field_permalink[0][value]", "");
+//        RequestBody.put("field_reference[0][value]", "");
+//        RequestBody.put("field_coa[0][target_id]", "");
+//        RequestBody.put("field_coa[0][_weight]", "0");
+//        RequestBody.put("field_coi[0][target_id]", "");
+//        RequestBody.put("field_coi[0][_weight]", "0");
+//        RequestBody.put("field_cot[0][target_id]", "");
+//        RequestBody.put("field_cot[0][_weight]", "0");
+//        RequestBody.put("field_keywords[0][target_id]", "");
+//        RequestBody.put("field_keywords[0][_weight]", "0");
+//        RequestBody.put("field_categories[0][target_id]", "");
+//        RequestBody.put("field_commentsint[0][value]", "");
+//        RequestBody.put("field_commentsext[0][value]", "");
+//        RequestBody.put("field_day[0][value]", "");
+//        RequestBody.put("field_year[0][value]", "");
+//        RequestBody.put("field_month[0][value]", "");
+//        RequestBody.put("field_texis_tags[0][value]", "");
+//        RequestBody.put("group_tabs[group_tabs__active_tab]", "edit-group-related-info");
+//        RequestBody.put("field_yoast_seo[0][yoast_seo][focus_keyword]", "");
+//        RequestBody.put("field_yoast_seo[0][yoast_seo][status]", "0");
+//        RequestBody.put("field_boosted_keyword[0][value]", "");
+//        RequestBody.put("field_boosted_keyword[0][boost]", "1");
+//        RequestBody.put("revision_log[0][value]", "");
+//        RequestBody.put("created[0][value][date]", "2023-09-12");
+//        RequestBody.put("created[0][value][time]", "22:06:10");
+//        RequestBody.put("publish_on[0][value][date]", "");
+//        RequestBody.put("publish_on[0][value][time]", "");
+//        RequestBody.put("unpublish_on[0][value][date]", "");
+//        RequestBody.put("unpublish_on[0][value][time]", "");
+//        RequestBody.put("field_meta_tags[0][basic][title]", "[node:title] | [site:name]");
+//        RequestBody.put("field_meta_tags[0][basic][description]", "[node:field_brief]");
+//        RequestBody.put("field_meta_tags[0][basic][abstract]", "[node:field_brief]");
+//        RequestBody.put("field_meta_tags[0][basic][keywords]", "");
+//        RequestBody.put("simple_sitemap[default][index]", "1");
+//        RequestBody.put("simple_sitemap[default][priority]", "0.5");
+//        RequestBody.put("simple_sitemap[default][changefreq]", "");
+//        RequestBody.put("simple_sitemap[default][include_images]", "0");
+//        RequestBody.put("path[0][pathauto]", "1");
+//        RequestBody.put("moderation_state[0][state]", "draft");
+//        RequestBody.put("op", "Save");
+//        APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetCreatePublicationPath(),RequestBody,CR.Getcookie());
+//
+//    }
     @Test(priority = 1,groups = { "Sanity" })
     public void Check_User_Ability_To_Create_News() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();

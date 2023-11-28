@@ -54,6 +54,13 @@ public class ConfigurationReader {
         if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("EHB")))
             return properties.getProperty("EHB_DEV_Cookie");
 
+        if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("SDG6")))
+            return properties.getProperty("SDG6_DEVCookie");
+        else if (Run_ENV.equalsIgnoreCase("STG")&&Project_Name.equalsIgnoreCase(("SDG6")))
+            return properties.getProperty("SDG6_STGCookie");
+        else if (Run_ENV.equalsIgnoreCase("Live global")&&Project_Name.equalsIgnoreCase(("SDG6")))
+            return properties.getProperty("SDG6_LiveCookie");
+
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
     }
     public String GetRun_ENV() {
@@ -85,10 +92,58 @@ public class ConfigurationReader {
             return properties.getProperty("Live_Global_Link");
 
         }
-
+        if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("SDG6")))
+            return properties.getProperty("SDG6_DEVCookie");
+        else if (Run_ENV.equalsIgnoreCase("STG")&&Project_Name.equalsIgnoreCase(("SDG6")))
+            return properties.getProperty("SDG6_STGCookie");
+        else if (Run_ENV.equalsIgnoreCase("Live global")&&Project_Name.equalsIgnoreCase(("SDG6")))
+            return properties.getProperty("SDG6_LiveCookie");
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
+
+    }
+    public String GetForgetMyPasswordPath() {
+        String forgetMyPasswordPath = properties.getProperty("ForgetMyPasswordPath");
+        if (forgetMyPasswordPath != null)
+            return forgetMyPasswordPath;
+
+        else throw new RuntimeException("forgetMyPasswordPath not specified in the API Configuration.properties file.");
+    }
+    public String GETSDG6_login() {
+        String LoginPath = properties.getProperty("SDG6_DEV");
+        if (LoginPath != null)
+            return LoginPath;
+        else throw new RuntimeException("loginPath not specified in the API Configuration.properties file.");
     }
 
+
+    public String GETSDG6_DevLink() {  // To get the SDG6 dev env
+        String SDG6_DEV = properties.getProperty("SDG6_DEV");
+        if (SDG6_DEV != null)
+            return SDG6_DEV;
+
+        else throw new RuntimeException("SDG6_Dev not specified in the API Configuration.properties file.");
+    }
+    public String GetCreateNewMenuPath() {
+        String createNewMenuPath = properties.getProperty("CreateNewMenu");
+        if (createNewMenuPath != null)
+            return createNewMenuPath;
+
+        else throw new RuntimeException("CreateNewMenu not specified in the API Configuration.properties file.");
+    }
+    public String GetCreateNewTermPath() {
+        String createNewTermPath = properties.getProperty("CreateNewTermPath");
+        if (createNewTermPath != null)
+            return createNewTermPath;
+
+        else throw new RuntimeException("CreateNewTermPath not specified in the API Configuration.properties file.");
+    }
+    public String GetCreateCountryPath() {
+        String createCountryPath = properties.getProperty("CreateCountryPath");
+        if (createCountryPath != null)
+            return createCountryPath;
+
+        else throw new RuntimeException("CreateCountryPath not specified in the API Configuration.properties file.");
+    }
 
     public String GetAPPLICATION_NAME() {
         String APPLICATION_NAME = properties.getProperty("APPLICATION_NAME");
