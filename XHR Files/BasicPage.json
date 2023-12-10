@@ -1,0 +1,115 @@
+{
+  "params": [
+    {
+      "name": "changed",
+      "value": "1702203403"
+    },
+    {
+      "name": "langcode%5B0%5D%5Bvalue%5D",
+      "value": "en"
+    },
+    {
+      "name": "form_build_id",
+      "value": "form-Ou0G_EWFo7M_7G75m5syRuwECFcfUX0DPxh8fhyuajI"
+    },
+    {
+      "name": "form_token",
+      "value": "jTG3-2B_btd1Ljn7BJpDmKJ5D0uRVJxA4Tby0saLn3k"
+    },
+    {
+      "name": "form_id",
+      "value": "node_page_form"
+    },
+    {
+      "name": "title%5B0%5D%5Bvalue%5D",
+      "value": "title"
+    },
+    {
+      "name": "body%5B0%5D%5Bsummary%5D",
+      "value": ""
+    },
+    {
+      "name": "body%5B0%5D%5Bvalue%5D",
+      "value": ""
+    },
+    {
+      "name": "body%5B0%5D%5Bformat%5D",
+      "value": "full_html"
+    },
+    {
+      "name": "group_wrapper%5Bgroup_wrapper__active_tab%5D",
+      "value": "edit-group-basic-information"
+    },
+    {
+      "name": "field_yoast_seo%5B0%5D%5Byoast_seo%5D%5Bfocus_keyword%5D",
+      "value": ""
+    },
+    {
+      "name": "field_yoast_seo%5B0%5D%5Byoast_seo%5D%5Bstatus%5D",
+      "value": "0"
+    },
+    {
+      "name": "revision_log%5B0%5D%5Bvalue%5D",
+      "value": ""
+    },
+    {
+      "name": "uid%5B0%5D%5Btarget_id%5D",
+      "value": "Ibrahim+QA+%286%29"
+    },
+    {
+      "name": "created%5B0%5D%5Bvalue%5D%5Bdate%5D",
+      "value": "2023-12-10"
+    },
+    {
+      "name": "created%5B0%5D%5Bvalue%5D%5Btime%5D",
+      "value": "13%3A16%3A43"
+    },
+    {
+      "name": "field_meta_tags%5B0%5D%5Bbasic%5D%5Btitle%5D",
+      "value": "%5Bnode%3Atitle%5D+%7C+%5Bsite%3Aname%5D"
+    },
+    {
+      "name": "field_meta_tags%5B0%5D%5Bbasic%5D%5Bdescription%5D",
+      "value": "%5Bnode%3Asummary%5D"
+    },
+    {
+      "name": "field_meta_tags%5B0%5D%5Bbasic%5D%5Babstract%5D",
+      "value": "%5Bnode%3Asummary%5D"
+    },
+    {
+      "name": "field_meta_tags%5B0%5D%5Bbasic%5D%5Bkeywords%5D",
+      "value": ""
+    },
+    {
+      "name": "menu%5Btitle%5D",
+      "value": ""
+    },
+    {
+      "name": "menu%5Bdescription%5D",
+      "value": ""
+    },
+    {
+      "name": "menu%5Bmenu_parent%5D",
+      "value": "main%3A"
+    },
+    {
+      "name": "menu%5Bweight%5D",
+      "value": "0"
+    },
+    {
+      "name": "path%5B0%5D%5Bpathauto%5D",
+      "value": "1"
+    },
+    {
+      "name": "moderation_state%5B0%5D%5Bstate%5D",
+      "value": "published"
+    },
+    {
+      "name": "op",
+      "value": "Save"
+    }
+  ]
+}
+
+
+        
