@@ -9,7 +9,9 @@
       <classes>
           <class name="src.test.tests.API_TestCases">
               <methods>
-  <include name="News_Search" />
+                <include name="ISG_Create_New_User" />
+                  <include name="Create_Basic_Page()" />
+                  <include name="ISG_Search" />
 
  </methods>
 </class>
