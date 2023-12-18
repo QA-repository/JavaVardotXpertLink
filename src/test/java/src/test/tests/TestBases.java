@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,13 +71,22 @@ List<String> a=new ArrayList<>();
 	@BeforeSuite
 	public void setUp() throws IOException {
 		extent = new ExtentReports();
+		LocalDateTime currentDateTime = LocalDateTime.now();
 
-		ExtentSparkReporter sparkReporter = new ExtentSparkReporter("test-output/extent-report" + dateName + ".html");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH_mm_ss");
+
+		String formattedDateTime = currentDateTime.format(formatter);
+		ConfigurationReader CR=new ConfigurationReader();
+		ExtentSparkReporter sparkReporter = new ExtentSparkReporter("test-output/" + CR.GetProjectname()+" Project "+formattedDateTime+".html");
 		sparkReporter.config().setDocumentTitle("Vardot E2E Tool Report");
 		sparkReporter.config().setReportName("Vardot E2E Tool Report");
 		sparkReporter.config().setTheme(Theme.DARK); // You can choose from Theme.STANDARD, Theme.DARK, Theme.VIEW
 		extent.attachReporter(sparkReporter);
 		extent.attachReporter(spark);
+		extent.setSystemInfo("Project", CR.GetProjectname());
+		extent.setSystemInfo("Site link", CR.GetRun_ENV());
+		extent.setSystemInfo("Environment", CR.ProjectEnv());
+
 
 	}
 

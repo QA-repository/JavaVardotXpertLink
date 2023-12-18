@@ -113,7 +113,7 @@ public class APICaller extends TestBases {
         System.out.println("res body: " + responseBody);
 
         // Assert.assertTrue(CheckContentCreationResponseCode(statusCode));
-      //  NodeWriter(responseBody,Nodetype);
+       NodeWriter(responseBody,Nodetype);
 
     }
     public static void NodeWriter(String responseBody, String nodetype) throws GeneralSecurityException, IOException {
@@ -123,6 +123,26 @@ public class APICaller extends TestBases {
         data.add(nodetype);
         GSH.writeDataInNextEmptyRow(data);
     }
+    public static int  TermNodeExtarctor(String A) {
+            String input = A;
+
+
+
+            Pattern pattern = Pattern.compile("edit-terms-tid(\\d+)");
+        int number = 0;
+
+            Matcher matcher = pattern.matcher(input);
+
+            if (matcher.find()) {
+                String numberStr = matcher.group(1);
+                number = Integer.parseInt(numberStr);
+                System.out.println("Extracted number: " + number);
+            } else {
+                System.out.println("No number found in the input string.");
+            }
+
+            return number;
+        }
 
     public static String Extract_Node_ID(String responseBody){
         Pattern pattern = Pattern.compile("/(\\d+)/");
@@ -148,8 +168,11 @@ public class APICaller extends TestBases {
         return  statusCode==303;
 
     }
-public static void GeneralResponseValidator(List<String> Response_List) throws Exception {
-    PrintDuplicateLog(Response_List);
+public static void
+GeneralResponseValidator(List<String> Response_List) throws Exception {
+    Response_List.add("zhxeoo-unhcr-entity:node/:en");
+        PrintDuplicateLog(Response_List);
+
         if(findDuplicates(Response_List).isEmpty()){
             PrintDuplicateLog(Response_List);
 

@@ -52,7 +52,7 @@ List<String> Skipped_Test_CasesList= new ArrayList<>();;
         System.err.println("Test failed: " + result.getMethod().getMethodName());
         Failed_Test_Cases=Failed_Test_Cases+1;
         Failed_Test_CasesList.add(result.getMethod().getMethodName());
-        test.log(Status.PASS, "Test Failed");
+        test.log(Status.FAIL, "Test Failed");
         test.assignCategory(Arrays.toString(result.getMethod().getGroups()));
 
     }
