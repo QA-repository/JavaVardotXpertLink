@@ -185,4 +185,22 @@ public class ConfigurationReader {
 
         else throw new RuntimeException("NodeID not specified in the API Configuration.properties file.");
     }
+
+    public String GetProjectname() {
+        String Project_Name = properties.getProperty("Project_Name");
+        if (Project_Name != null)
+            return Project_Name;
+
+        else throw new RuntimeException("Project_Name not specified in the API Configuration.properties file.");
+
+    }
+
+    public String ProjectEnv() {
+        String Run_ENV = properties.getProperty("Run_ENV");
+        if (Run_ENV != null)
+            return Run_ENV;
+
+        else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
+
+    }
 }
