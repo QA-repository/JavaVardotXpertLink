@@ -1,24 +1,17 @@
 package src.test.tests;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.Properties;
 
 import static java.lang.System.getProperty;
 
 public class ConfigurationReader {
 
     public static Properties properties;
-    public String propertyFilePath = getProperty("user.dir") + "/configs/API configuration.properties";
+    public  String propertyFilePath = getProperty("user.dir")+"/configs/API configuration.properties";
 
 
     public ConfigurationReader() {
@@ -38,61 +31,12 @@ public class ConfigurationReader {
         }
     }
 
-    public Map<String, String> readJsonFile(String filePath) {
-
-
-        Map<String, String> paramMap = null;
-        try {
-            // Read the file as UTF-8 string
-            String content = new String(Files.readAllBytes(Paths.get(filePath)), StandardCharsets.UTF_8);
-
-            // Decode the entire JSON string and extract key-value pairs into a map
-            paramMap = decodeJsonString(content);
-
-            System.out.println("Params: " + paramMap);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Error reading JSON file: " + filePath);
-        }
-        return paramMap;
-
-    }
-
-
-    private static Map<String, String> decodeJsonString(String jsonString) {
-        Map<String, String> paramMap = new HashMap<>();
-
-        try {
-            // Aggressively decode the entire JSON string
-            String decodedString = URLDecoder.decode(jsonString, StandardCharsets.UTF_8.name());
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(decodedString);
-
-            JsonNode paramsNode = jsonNode.get("params");
-
-            for (JsonNode paramNode : paramsNode) {
-                String paramName = paramNode.get("name").asText();
-                String paramValue = paramNode.get("value").asText();
-                paramMap.put(paramName, paramValue);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Handle decoding or parsing errors here
-        }
-
-        return paramMap;
-    }
-
-
-
-        public String Getcookie() {
+    public String Getcookie() {
         String Run_ENV = properties.getProperty("Run_ENV");
         String Project_Name = properties.getProperty("Project_Name");
 
-        if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("ISG")))
-            return properties.getProperty("ISG_DEVCookie");
+        if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("UNHCR")))
+            return properties.getProperty("DEV_cookie");
         else if (Run_ENV.equalsIgnoreCase("STG")&&Project_Name.equalsIgnoreCase(("UNHCR")))
             return properties.getProperty("STG_cookie");
         else if (Run_ENV.equalsIgnoreCase("Live global")&&Project_Name.equalsIgnoreCase(("UNHCR")))
@@ -164,7 +108,7 @@ public class ConfigurationReader {
         else throw new RuntimeException("SPREADSHEET_ID not specified in the API Configuration.properties file.");
     }
     public String GetMainSearchPath() {
-        String Main_Search_Path = properties.getProperty("ISG_Search_Path");
+        String Main_Search_Path = properties.getProperty("Main_Search_Path");
         if (Main_Search_Path != null)
             return Main_Search_Path;
 
@@ -242,40 +186,21 @@ public class ConfigurationReader {
         else throw new RuntimeException("NodeID not specified in the API Configuration.properties file.");
     }
 
+    public String GetProjectname() {
+        String Project_Name = properties.getProperty("Project_Name");
+        if (Project_Name != null)
+            return Project_Name;
 
-    public String ISGFAQAdd() {
-        String Create_FAQ_Path = properties.getProperty("ISG_FAQ_Add");
-        if (Create_FAQ_Path != null)
-            return Create_FAQ_Path;
+        else throw new RuntimeException("Project_Name not specified in the API Configuration.properties file.");
 
-        else throw new RuntimeException("CreateFAQPath not specified in the API Configuration.properties file.");
     }
-    public String ISGImageAdd() {
-        String Add_Image_Path = properties.getProperty("ISG_Image_Add");
-        if (Add_Image_Path != null)
-            return Add_Image_Path;
 
-        else throw new RuntimeException("ISG_Image_Add not specified in the API Configuration.properties file.");
-    }
-    public String ISGLandingPageAdd() {
-        String Add_LandingPage_Path = properties.getProperty("ISG_LandingPage_Add");
-        if (Add_LandingPage_Path != null)
-            return Add_LandingPage_Path;
+    public String ProjectEnv() {
+        String Run_ENV = properties.getProperty("Run_ENV");
+        if (Run_ENV != null)
+            return Run_ENV;
 
-        else throw new RuntimeException("ISG_LandingPage_Add not specified in the API Configuration.properties file.");
-    }
-    public String ISGMainNavAdd() {
-        String Add_MainNav_Path = properties.getProperty("ISG_MainNav_Add");
-        if (Add_MainNav_Path != null)
-            return Add_MainNav_Path;
+        else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
 
-        else throw new RuntimeException("ISG_MainNav_Add not specified in the API Configuration.properties file.");
-    }
-    public String ISGBasicPageAdd() {
-        String Add_BasicPage_Path = properties.getProperty("ISGBasicPagePath");
-        if (Add_BasicPage_Path != null)
-            return Add_BasicPage_Path;
-
-        else throw new RuntimeException("ISG_BasicPage_Add not specified in the API Configuration.properties file.");
     }
 }
