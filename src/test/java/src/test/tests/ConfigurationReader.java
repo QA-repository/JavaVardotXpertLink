@@ -56,6 +56,20 @@ public class ConfigurationReader {
 
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
     }
+    public String GETCEH_DevLink() {
+        String CEH_DEV = properties.getProperty("CEH_DEV");
+        if (CEH_DEV != null)
+            return CEH_DEV;
+
+        else throw new RuntimeException("SDG6_Dev not specified in the API Configuration.properties file.");
+    }
+    public String GetCreateNewMenuPath() {
+        String createNewMenuPath = properties.getProperty("CreateNewMenu");
+        if (createNewMenuPath != null)
+            return createNewMenuPath;
+
+        else throw new RuntimeException("CreateNewMenu not specified in the API Configuration.properties file.");
+    }
     public String GetRun_ENV() {
         String Run_ENV = properties.getProperty("Run_ENV");
         String Project_Name = properties.getProperty("Project_Name");
