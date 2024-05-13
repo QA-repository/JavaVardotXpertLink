@@ -121,6 +121,21 @@ public class ConfigurationReader {
 
         else throw new RuntimeException("EHB_SearchAPI not specified in the API Configuration.properties file.");
     }
+    public String GetContentNodeID(String TranslatedLang) {
+        String Main_Taxonomy = "";
+        if(TranslatedLang.equals("RU"))
+            Main_Taxonomy = properties.getProperty("Translate_RU_Content_Path");
+        else if (TranslatedLang.equals("ES")) {
+            Main_Taxonomy = properties.getProperty("Translate_ES_Content_Path");
+        }
+        else
+            Main_Taxonomy = properties.getProperty(TranslatedLang);
+
+        if (Main_Taxonomy != null)
+            return Main_Taxonomy;
+
+        else throw new RuntimeException("Page not specified in the API Configuration.properties file.");
+    }
 
     public String GetNewsSearchPath() {
         String NewsSearchPath = properties.getProperty("News_Search_Path");
@@ -135,6 +150,27 @@ public class ConfigurationReader {
             return CreateUserPath;
 
         else throw new RuntimeException("CreateUserPath not specified in the API Configuration.properties file.");
+    }
+    public String GetRegisterPath() {
+        String RegisterPath = properties.getProperty("RegisterPath");
+        if (RegisterPath != null)
+            return RegisterPath;
+
+        else throw new RuntimeException("RegisterPath not specified in the API Configuration.properties file.");
+    }
+    public String GetAdminContentPath() {
+        String AdminContentPath = properties.getProperty("AdminContent");
+        if (AdminContentPath != null)
+            return AdminContentPath;
+
+        else throw new RuntimeException("AdminContentPath not specified in the API Configuration.properties file.");
+    }
+    public String GetMenuHearderPath() {
+        String MenuHeaderLink = properties.getProperty("MenuHeaderLink");
+        if (MenuHeaderLink != null)
+            return MenuHeaderLink;
+
+        else throw new RuntimeException("MenuHeaderLink not specified in the API Configuration.properties file.");
     }
     public String GETISG_DevLink() {
         String ISG_Dev = properties.getProperty("ISG_Dev");
@@ -170,6 +206,13 @@ public class ConfigurationReader {
             return CreatePublicationPath;
 
         else throw new RuntimeException("CreateNewsPath not specified in the API Configuration.properties file.");
+    }
+    public String GetCreatePartnerPath() {
+        String CreatePartnerPath = properties.getProperty("CreatePartnerPath");
+        if (CreatePartnerPath != null)
+            return CreatePartnerPath;
+
+        else throw new RuntimeException("CreatePartnerPath not specified in the API Configuration.properties file.");
     }
     public  String DeleteNodePath() {
         String Delete_Content_Path = properties.getProperty("Delete_Content_Path");

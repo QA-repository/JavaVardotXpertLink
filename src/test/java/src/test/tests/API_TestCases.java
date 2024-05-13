@@ -66,9 +66,16 @@ public class API_TestCases extends TestBases {
         for (int i = 0; i < keys.length; i++) {
             requestBody.put(keys[i], values[i]);
         }
+        System.out.println("GetRun_ENV===1>"+CR.GetRun_ENV());
+        System.out.println("GetTaxonomyPath===1>"+CR.GetTaxonomyPath());
+        System.out.println("requestBody===1>"+requestBody);
+        System.out.println("Getcookie===1>"+CR.Getcookie());
         APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetTaxonomyPath(), requestBody, CR.Getcookie());
     }
 
+        System.out.println("NodeID= "+NodeID);
+        System.out.println("RequestBody= "+RequestBody);
+        System.out.println("GetMainTaxonomy= "+CR.GetMainTaxonomy());
     @Test()
     public void Check_User_Ability_To_Create_EHBLP() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
