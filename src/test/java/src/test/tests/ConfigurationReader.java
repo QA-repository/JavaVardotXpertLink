@@ -54,6 +54,10 @@ public class ConfigurationReader {
         if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("EHB")))
             return properties.getProperty("EHB_DEV_Cookie");
 
+
+        if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("CEH")))
+            return properties.getProperty("CEH_DEV_Cookie");
+
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
     }
     public String GETCEH_DevLink() {
@@ -61,7 +65,7 @@ public class ConfigurationReader {
         if (CEH_DEV != null)
             return CEH_DEV;
 
-        else throw new RuntimeException("SDG6_Dev not specified in the API Configuration.properties file.");
+        else throw new RuntimeException("CEH_DEV not specified in the API Configuration.properties file.");
     }
     public String GetCreateNewMenuPath() {
         String createNewMenuPath = properties.getProperty("CreateNewMenu");
@@ -69,10 +73,12 @@ public class ConfigurationReader {
             return createNewMenuPath;
 
         else throw new RuntimeException("CreateNewMenu not specified in the API Configuration.properties file.");
+
     }
     public String GetRun_ENV() {
         String Run_ENV = properties.getProperty("Run_ENV");
         String Project_Name = properties.getProperty("Project_Name");
+
 
         if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("ISG"))){
             return properties.getProperty("ISG_Dev");
@@ -89,6 +95,7 @@ public class ConfigurationReader {
 
         }
 
+
         if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("UNHCR"))){
             return properties.getProperty("DEV_Link");
 
@@ -99,6 +106,10 @@ public class ConfigurationReader {
             return properties.getProperty("Live_Global_Link");
 
         }
+        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("CEH"))){
+            return properties.getProperty("CEH_DEV");
+        }
+
 
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
     }

@@ -17,20 +17,24 @@ public class API_TestCases extends TestBases {
     @Test()
     public void Check_User_Ability_to_create_Menu() throws Exception {
         Map<String, String> requestBody = new LinkedHashMap<>();
-        requestBody.put("form_token", APICaller.PrepareFormData(CR.GETCEH_DevLink() + CR.GetCreateNewMenuPath(), "input[name=form_token]"));
-        requestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETCEH_DevLink() + CR.GetCreateNewMenuPath(), "input[name=form_build_id]"));
-        requestBody.put("title[0][value]","This is a title");
+        requestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetCreateNewMenuPath(), "input[name=form_token]"));
+        requestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetCreateNewMenuPath(), "input[name=form_build_id]"));
+        requestBody.put("title[0][value]","Lorem ipsum Automation");
         requestBody.put("link[0][uri]","<front>");
         requestBody.put("link[0][options][attributes][target]","");
         requestBody.put("link[0][options][attributes][rel]","");
         requestBody.put("link[0][options][attributes][class]","");
         requestBody.put("enabled[value]","1");
         requestBody.put("description[0][value]","");
-        requestBody.put("form_id","menu_link_content_menu_link_content_form");
+        requestBody.put("form_id","menu_link_content_main_form");
         requestBody.put("menu_parent","main:");
+        requestBody.put("simple_sitemap[default][index]", "1");
+        requestBody.put("simple_sitemap[default][priority]", "1.0");
+        requestBody.put("simple_sitemap[default][changefreq]","");
+        requestBody.put("simple_sitemap[default][include_images]", "0");
         requestBody.put("weight[0][value]","0");
         requestBody.put("op","Save");
-        APICaller.ContentCreationAPI(CR.GETCEH_DevLink()+ CR.GetCreateNewMenuPath(),requestBody,CR.Getcookie());
+        APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetCreateNewMenuPath(),requestBody,CR.Getcookie());
     }
     @Test()
     public void Check_User_Ability_To_Create_EHBLP() throws Exception {
