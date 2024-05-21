@@ -75,6 +75,14 @@ public class ConfigurationReader {
         else throw new RuntimeException("CreateNewMenu not specified in the API Configuration.properties file.");
 
     }
+    public String GetEditMenuPath() {
+        String GetEditMenuPath = properties.getProperty("EditMenu");
+        if (GetEditMenuPath != null)
+            return GetEditMenuPath;
+
+        else throw new RuntimeException("EditMenu not specified in the API Configuration.properties file.");
+
+    }
     public String GetRun_ENV() {
         String Run_ENV = properties.getProperty("Run_ENV");
         String Project_Name = properties.getProperty("Project_Name");
