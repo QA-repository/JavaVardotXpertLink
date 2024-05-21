@@ -36,65 +36,60 @@ public class API_TestCases extends TestBases {
                 "op",
         };
         String[] values = {
-
-
+                "YYilAleCAyQulkT14_gpSheFr8cPzya7j9xq_onASBw",
+                "form-Y31pzyRgJLoSOyt5tiIpaFyMCfzJy-kJtmYpllyNmms",
+                "Edit - Automation Menu",
+                "<front>",
+                "",
+                "",
+                "",
+                "1",
+                "",
+                "menu_link_content_main_form",
+                "main:",
+                "1",
+                "1.0",
+                "",
+                "0",
+                "0",
+                "Save"
 
         };
 
 
+        MenuCreator.AddMenuLink(keys, values);
+        MenuCreator.EditMenuLink(keys, values, "211");
 
     }
 
-    @Test()
-    public void Check_User_Ability_to_create_Menu() throws Exception {
+    public void AddMenuLink( String[] keys, String[] values) throws Exception {
+        if (keys.length != values.length) {
+            throw new IllegalArgumentException("Keys and values arrays must have the same length");
+        }
         Map<String, String> requestBody = new LinkedHashMap<>();
-        requestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetCreateNewMenuPath(), "input[name=form_token]"));
-        requestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetCreateNewMenuPath(), "input[name=form_build_id]"));
-        requestBody.put("title[0][value]","Lorem ipsum Automation");
-        requestBody.put("link[0][uri]","<front>");
-        requestBody.put("link[0][options][attributes][target]","");
-        requestBody.put("link[0][options][attributes][rel]","");
-        requestBody.put("link[0][options][attributes][class]","");
-        requestBody.put("enabled[value]","1");
-        requestBody.put("description[0][value]","");
-        requestBody.put("form_id","menu_link_content_main_form");
-        requestBody.put("menu_parent","main:");
-        requestBody.put("simple_sitemap[default][index]", "1");
-        requestBody.put("simple_sitemap[default][priority]", "1.0");
-        requestBody.put("simple_sitemap[default][changefreq]","");
-        requestBody.put("simple_sitemap[default][include_images]", "0");
-        requestBody.put("weight[0][value]","0");
-        requestBody.put("op","Save");
+        for (int i = 0; i < keys.length; i++) {
+            requestBody.put(keys[i], values[i]);
+        }
         APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetCreateNewMenuPath(),requestBody,CR.Getcookie());
     }
-//    @Test ()
-//    public void Check_User_Ability_to_Edit_Menu() throws Exception {
-//        Map<String, String> requestBody = new LinkedHashMap<>();
-//        requestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetEditMenuPath(), "input[name=form_token]"));
-//        requestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetEditMenuPath(), "input[name=form_build_id]"));
-//        requestBody.put("title[0][value]","Lorem ipsum Automation");
-//        requestBody.put("link[0][uri]","<front>");
-//        requestBody.put("link[0][options][attributes][target]","");
-//        requestBody.put("link[0][options][attributes][rel]","");
-//        requestBody.put("link[0][options][attributes][class]","");
-//        requestBody.put("enabled[value]","1");
-//        requestBody.put("description[0][value]","");
-//        requestBody.put("form_id","menu_link_content_main_form");
-//        requestBody.put("menu_parent","main:");
-//        requestBody.put("simple_sitemap[default][index]", "1");
-//        requestBody.put("simple_sitemap[default][priority]", "1.0");
-//        requestBody.put("simple_sitemap[default][changefreq]","");
-//        requestBody.put("simple_sitemap[default][include_images]", "0");
-//        requestBody.put("weight[0][value]","0");
-//        requestBody.put("op","Save");
-//        String var10002 = CR.GetRun_ENV();
-//        requestBody.put("form_build_id", APICaller.PrepareFormData(var10002 + CR.GetEditMenuPath().replace("XXXXX", NodeID), "input[name=form_build_id]"));
-//        var10002 = CR.GetRun_ENV();
-//        requestBody.put("form_token", APICaller.PrepareFormData(var10002 + CR.GetEditMenuPath().replace("XXXXX", NodeID), "input[name=form_token]"));
-//
-//        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetEditMenuPath().replace("XXXXX", NodeID), GetEditMenuPath, CR.Getcookie());
-//        APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetEditMenuPath(),requestBody,CR.Getcookie());
-//    }
+  public void EditMenuLink(String[] keys, String[] values, String NodeID) throws Exception {
+      Map<String, String> RequestBody = new LinkedHashMap();
+      if (keys.length != values.length) {
+          throw new IllegalArgumentException("Keys and values arrays must have the same length");
+      }
+      for (int i = 0; i < keys.length; i++) {
+          RequestBody.put(keys[i], values[i]);
+      }
+      String var10002 = CR.GetRun_ENV();
+      RequestBody.put("form_build_id", APICaller.PrepareFormData(var10002 + CR.GetEditMenuPath().replace("XXXXX", NodeID), "input[name=form_build_id]"));
+      var10002 = CR.GetRun_ENV();
+      RequestBody.put("form_token", APICaller.PrepareFormData(var10002 + CR.GetEditMenuPath().replace("XXXXX", NodeID), "input[name=form_token]"));
+
+      APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetEditMenuPath().replace("XXXXX", NodeID), RequestBody, CR.Getcookie());
+  }
+
+
+
     @Test()
     public void Check_User_Ability_To_Create_EHBLP() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
