@@ -14,6 +14,106 @@ import java.util.Map;
 
 public class API_TestCases extends TestBases {
     static ConfigurationReader CR=new ConfigurationReader();
+
+    public static void main(String[] args) throws Exception {
+        API_TestCases taxonomyCreator = new API_TestCases();
+
+        String[] keys = {
+                "langcode[0][value]",
+                "name[0][value]",
+                "description[0][value]",
+                "description[0][format]",
+                "field_cname[0][value]",
+                "field_search_tooltip[0][value]",
+                "field_cid[0][value]",
+                "group_tabs[group_tabs__active_tab]",
+                "form_build_id",
+                "form_token",
+                "form_id",
+                "parent[]",
+                "weight",
+                "path[0][alias]",
+                "status[value]",
+                "op"
+        };
+        String[] values = {
+                "en",
+                "Automation_Term_Test",
+                "Automation_Description",
+                "full_html",
+                "Automation_Code",
+                "",
+                "",
+                "edit-group-basic-info",
+                APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetTaxonomyPath(), "input[name=form_build_id]"),
+                APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetTaxonomyPath(), "input[name=form_token]"),
+                "taxonomy_term_collection_form",
+                "0",
+                "0",
+                "",
+                "1",
+                "Save"
+        };
+
+        // Call the addTaxonomyTerm method with the keys and values arrays
+        //taxonomyCreator.addTaxonomyTerm(keys, values);
+        //taxonomyCreator.cloneTxonomyTerm ("3688");
+        taxonomyCreator.deleteTaxonomyTerm("3689");
+        //taxonomyCreator.editTxonomyTerm(keys, values, "3688");
+
+    }
+    public void addTaxonomyTerm (String[] keys, String[] values) throws Exception {
+        if (keys.length != values.length) {
+            throw new IllegalArgumentException("Keys and values arrays must have the same length");
+        }
+        Map<String, String> requestBody = new LinkedHashMap<>();
+        for (int i = 0; i < keys.length; i++) {
+            requestBody.put(keys[i], values[i]);
+        }
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetTaxonomyPath(), requestBody, CR.Getcookie());
+    }
+
+    public void cloneTxonomyTerm(String NodeID) throws Exception {
+        Map<String, String> RequestBody = new LinkedHashMap();
+        String var10002 = CR.GetRun_ENV();
+        RequestBody.put("all_translations","1");
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(var10002 + CR.CloneNodePath().replace("XXXXX", NodeID), "input[name=form_build_id]"));
+        var10002 = CR.GetRun_ENV();
+        RequestBody.put("form_token", APICaller.PrepareFormData(var10002 + CR.CloneNodePath().replace("XXXXX", NodeID), "input[name=form_token]"));
+        RequestBody.put("form_id", "entity_clone_form");
+        RequestBody.put("op", "Clone");
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.CloneNodePath().replace("XXXXX", NodeID), RequestBody, CR.Getcookie());
+    }
+
+    public void deleteTaxonomyTerm(String NodeID) throws Exception {
+        List<String> RequestHeader = new ArrayList();
+        Map<String, String> RequestBody = new LinkedHashMap();
+        RequestBody.put("confirm", "1");
+        String var10002 = CR.GetRun_ENV();
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(var10002 + CR.DeleteTaxonomyPath().replace("XXXXX", NodeID.replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_build_id]"));
+        var10002 = CR.GetRun_ENV();
+        RequestBody.put("form_token", APICaller.PrepareFormData(var10002 + CR.DeleteTaxonomyPath().replace("XXXXX", NodeID.replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_token]"));
+        RequestBody.put("form_id", "taxonomy_term_collection_delete_form");
+        RequestBody.put("op", "Delete");
+        APICaller.Content_Deleter(CR.GetRun_ENV(), CR.DeleteTaxonomyPath().replace("XXXXX", NodeID), CR.Getcookie(), RequestBody);
+    }
+    public void editTxonomyTerm(String[] keys, String[] values, String NodeID) throws Exception {
+        Map<String, String> RequestBody = new LinkedHashMap();
+        if (keys.length != values.length) {
+            throw new IllegalArgumentException("Keys and values arrays must have the same length");
+        }
+        for (int i = 0; i < keys.length; i++) {
+            RequestBody.put(keys[i], values[i]);
+        }
+
+        String var10002 = CR.GetRun_ENV();
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(var10002 + CR.EditTaxonomyNodePath().replace("XXXXX", NodeID), "input[name=form_build_id]"));
+        var10002 = CR.GetRun_ENV();
+        RequestBody.put("form_token", APICaller.PrepareFormData(var10002 + CR.EditTaxonomyNodePath().replace("XXXXX", NodeID), "input[name=form_token]"));
+
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.EditTaxonomyNodePath().replace("XXXXX", NodeID), RequestBody, CR.Getcookie());
+    }
+
     public static void main(String[] args) throws Exception {
         API_TestCases MenuCreator = new API_TestCases();
         String[] keys = {
