@@ -39,8 +39,12 @@ public class ConfigurationReader {
             return properties.getProperty("DEV_cookie");
         else if (Run_ENV.equalsIgnoreCase("STG")&&Project_Name.equalsIgnoreCase(("UNHCR")))
             return properties.getProperty("STG_cookie");
+        else if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("Refworld")))
+            return properties.getProperty("Refworld_DEVCookie_rup_ga");
         else if (Run_ENV.equalsIgnoreCase("Live global")&&Project_Name.equalsIgnoreCase(("UNHCR")))
             return properties.getProperty("Live_cookie");
+        else if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("EnlyteSTG")))
+            return properties.getProperty("Enlyte_STG_Cookie");
 
 
         if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("ISG")))
@@ -49,11 +53,6 @@ public class ConfigurationReader {
             return properties.getProperty("ISG_STGCookie");
         else if (Run_ENV.equalsIgnoreCase("Live global")&&Project_Name.equalsIgnoreCase(("ISG")))
             return properties.getProperty("ISG_LiveCookie");
-
-
-        if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("EHB")))
-            return properties.getProperty("EHB_DEV_Cookie");
-
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
     }
     public String GetRun_ENV() {
@@ -84,6 +83,12 @@ public class ConfigurationReader {
         }   if (Run_ENV.equalsIgnoreCase("Live_Global")&&(Project_Name.equalsIgnoreCase("UNHCR"))){
             return properties.getProperty("Live_Global_Link");
 
+        }
+        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("Refworld"))){
+            return properties.getProperty("Refworld_DEV");
+        }
+        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("EnlyteSTG"))){
+            return properties.getProperty("Enlyte_STG");
         }
 
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
@@ -120,6 +125,13 @@ public class ConfigurationReader {
             return EHB_SearchAPI;
 
         else throw new RuntimeException("EHB_SearchAPI not specified in the API Configuration.properties file.");
+    }
+    public String GetMainTaxonomy() {
+        String Main_Taxonomy = properties.getProperty("Main_Taxonomy");
+        if (Main_Taxonomy != null)
+            return Main_Taxonomy;
+
+        else throw new RuntimeException("Main_Taxonomy not specified in the API Configuration.properties file.");
     }
     public String GetContentNodeID(String TranslatedLang) {
         String Main_Taxonomy = "";
@@ -164,6 +176,20 @@ public class ConfigurationReader {
             return AdminContentPath;
 
         else throw new RuntimeException("AdminContentPath not specified in the API Configuration.properties file.");
+    }
+    public String GetTaxonomyPath() {
+        String TaxonomyPath = properties.getProperty("TaxonomyPath");
+        if (TaxonomyPath != null)
+            return TaxonomyPath;
+
+        else throw new RuntimeException("TaxonomyPath not specified in the API Configuration.properties file.");
+    }
+    public String GetTaxonomyVocabularyPath() {
+        String TaxonomyVocabularyPath = properties.getProperty("TaxonomyVocabularyPath");
+        if (TaxonomyVocabularyPath != null)
+            return TaxonomyVocabularyPath;
+
+        else throw new RuntimeException("TaxonomyVocabularyPath not specified in the API Configuration.properties file.");
     }
     public String GetMenuHearderPath() {
         String MenuHeaderLink = properties.getProperty("MenuHeaderLink");
@@ -221,29 +247,32 @@ public class ConfigurationReader {
 
         else throw new RuntimeException("Delete_Content_Path not specified in the API Configuration.properties file.");
     }
+    public  String DeleteTaxonomyPath() {
+        String Delete_Taxonomy_Path = properties.getProperty("Delete_Taxonomy_Path");
+        if (Delete_Taxonomy_Path != null)
+            return Delete_Taxonomy_Path;
+
+        else throw new RuntimeException("Delete_Taxonomy_Path not specified in the API Configuration.properties file.");
+    }
+    public  String CloneNodePath() {
+        String Clone_Taxonomy_Term = properties.getProperty("Clone_Taxonomy_Term");
+        if (Clone_Taxonomy_Term != null)
+            return Clone_Taxonomy_Term;
+
+        else throw new RuntimeException("Clone_Taxonomy_Term not specified in the API Configuration.properties file.");
+    }
+    public  String EditTaxonomyNodePath() {
+        String Edit_Taxonomy_Term = properties.getProperty("Edit_Taxonomy_Term");
+        if (Edit_Taxonomy_Term != null)
+            return Edit_Taxonomy_Term;
+
+        else throw new RuntimeException("Edit_Taxonomy_Term not specified in the API Configuration.properties file.");
+    }
     public   String GetNodeID() {
         String NodeID = properties.getProperty("NodeID");
         if (NodeID != null)
             return NodeID;
 
         else throw new RuntimeException("NodeID not specified in the API Configuration.properties file.");
-    }
-
-    public String GetProjectname() {
-        String Project_Name = properties.getProperty("Project_Name");
-        if (Project_Name != null)
-            return Project_Name;
-
-        else throw new RuntimeException("Project_Name not specified in the API Configuration.properties file.");
-
-    }
-
-    public String ProjectEnv() {
-        String Run_ENV = properties.getProperty("Run_ENV");
-        if (Run_ENV != null)
-            return Run_ENV;
-
-        else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
-
     }
 }
