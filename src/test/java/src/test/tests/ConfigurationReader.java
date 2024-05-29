@@ -83,6 +83,14 @@ public class ConfigurationReader {
         else throw new RuntimeException("EditMenu not specified in the API Configuration.properties file.");
 
     }
+    public String GetDeleteMenuPath() {
+        String GetDeleteMenuPath = properties.getProperty("DeleteMenu");
+        if (GetDeleteMenuPath != null)
+            return GetDeleteMenuPath;
+
+        else throw new RuntimeException("DeleteMenu not specified in the API Configuration.properties file.");
+
+    }
     public String GetRun_ENV() {
         String Run_ENV = properties.getProperty("Run_ENV");
         String Project_Name = properties.getProperty("Project_Name");

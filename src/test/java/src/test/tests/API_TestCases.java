@@ -17,6 +17,7 @@ public class API_TestCases extends TestBases {
     public static void main(String[] args) throws Exception {
         API_TestCases MenuCreator = new API_TestCases();
         String[] keys = {
+
                 "form_token",
                 "form_build_id",
                 "title[0][value]",
@@ -57,8 +58,9 @@ public class API_TestCases extends TestBases {
         };
 
 
-        MenuCreator.AddMenuLink(keys, values);
-        MenuCreator.EditMenuLink(keys, values, "211");
+//        MenuCreator.AddMenuLink(keys, values);
+//        MenuCreator.EditMenuLink(keys, values, "211");
+        MenuCreator.deleteMenuLink("221");
 
     }
 
@@ -87,7 +89,20 @@ public class API_TestCases extends TestBases {
 
       APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetEditMenuPath().replace("XXXXX", NodeID), RequestBody, CR.Getcookie());
   }
-
+    public void deleteMenuLink(String NodeID) throws Exception {
+        List<String> RequestHeader = new ArrayList();
+        Map<String, String> RequestBody = new LinkedHashMap();
+        RequestBody.put("confirm", "1");
+        String var10002 = CR.GetRun_ENV();
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(var10002 + CR.GetDeleteMenuPath().replace("XXXXX", NodeID.replace
+                ("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_build_id]"));
+        var10002 = CR.GetRun_ENV();
+        RequestBody.put("form_token", APICaller.PrepareFormData(var10002 + CR.GetDeleteMenuPath().replace("XXXXX", NodeID.replace
+                ("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_token]"));
+        RequestBody.put("form_id", "menu_link_content_main_delete_form");
+        RequestBody.put("op", "Delete");
+        APICaller.Content_Deleter(CR.GetRun_ENV(), CR.GetDeleteMenuPath().replace("XXXXX", NodeID), CR.Getcookie(), RequestBody);
+    }
 
 
     @Test()
