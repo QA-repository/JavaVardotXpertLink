@@ -95,6 +95,22 @@ public class ConfigurationReader {
         else throw new RuntimeException("DeleteMenu not specified in the API Configuration.properties file.");
 
     }
+    public String GetAddingEntityqueue(){
+        String GetAddingEntityqueue = properties.getProperty("AddingEntityqueue");
+        if (GetAddingEntityqueue != null)
+            return GetAddingEntityqueue;
+
+        else throw new RuntimeException("AddingEntityqueue not specified in the API Configuration.properties file.");
+
+    }
+    public String GetContactUsForm(){
+        String GetContactUsForm = properties.getProperty("ContactUsForm");
+        if (GetContactUsForm != null)
+            return GetContactUsForm;
+
+        else throw new RuntimeException("SubscribeNewsletterForm not specified in the API Configuration.properties file.");
+
+    }
     public String GetRun_ENV() {
         String Run_ENV = properties.getProperty("Run_ENV");
         String Project_Name = properties.getProperty("Project_Name");
@@ -149,6 +165,24 @@ public class ConfigurationReader {
 
         else throw new RuntimeException("APPLICATION_NAME not specified in the API Configuration.properties file.");
     }
+    public String GetProjectname() {
+        String APPLICATION_NAME = properties.getProperty("Project_Name");
+
+        if (APPLICATION_NAME!= null)
+            return properties.getProperty("Project_Name");
+
+        else throw new RuntimeException("Project_Name not specified in the API Configuration.properties file.");
+    }
+    public String ProjectEnv() {
+        String ProjectEnv = properties.getProperty("CEH_DEV");
+
+        if (ProjectEnv!= null)
+            return properties.getProperty("CEH_DEV");
+
+        else throw new RuntimeException("CEH_DEV not specified in the API Configuration.properties file.");
+    }
+
+
 
     public String GetSPREADSHEET_ID() {
         String SPREADSHEET_ID = properties.getProperty("SPREADSHEET_ID");

@@ -26,6 +26,17 @@ public class API_TestCases extends TestBases {
         APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetTaxonomyPath(), requestBody, CR.Getcookie());
     }
 
+    public void addEntityqueue (String[] keys, String[] values) throws Exception {
+        if (keys.length != values.length) {
+            throw new IllegalArgumentException("Keys and values arrays must have the same length");
+        }
+        Map<String, String> requestBody = new LinkedHashMap<>();
+        for (int i = 0; i < keys.length; i++) {
+            requestBody.put(keys[i], values[i]);
+        }
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetAddingEntityqueue(), requestBody, CR.Getcookie());
+    }
+
     public void cloneTxonomyTerm(String NodeID) throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap();
         String var10002 = CR.GetRun_ENV();
@@ -69,54 +80,105 @@ public class API_TestCases extends TestBases {
 
     public static void main(String[] args) throws Exception {
         API_TestCases MenuCreator = new API_TestCases();
+        API_TestCases Entityqueue = new API_TestCases();
+        API_TestCases Webform = new API_TestCases();
         String[] keys = {
-
-                "form_token",
-                "form_build_id",
-                "title[0][value]",
-                "link[0][uri]",
-                "link[0][options][attributes][target]",
-                "link[0][options][attributes][rel]",
-                "link[0][options][attributes][class]",
-                "enabled[value]",
-                "description[0][value]",
-                "form_id",
-                "menu_parent",
-                "simple_sitemap[default][index]",
-                "simple_sitemap[default][priority]",
-                "simple_sitemap[default][changefreq]",
-                "simple_sitemap[default][include_images]",
-                "weight[0][value]",
+                "name",
+                "email",
+                "subject",
+                "message",
                 "op",
+                "form_build_id",
+                "form_token",
+                "form_id",
+
+
+
+//                "form_build_id",
+//                "form_token",
+//                "form_id",
+//                "items[entities][0][delta]",
+//                "items[entities][1][delta]",
+//                "items[entities][2][delta]",
+//                "items[form][3][entity_id]",
+//                "op", Adding Entityqueue keys
+//                "form_token",
+//                "form_build_id",
+//                "title[0][value]",
+//                "link[0][uri]",
+//                "link[0][options][attributes][target]",
+//                "link[0][options][attributes][rel]",
+//                "link[0][options][attributes][class]",
+//                "enabled[value]",
+//                "description[0][value]",
+//                "form_id",
+//                "menu_parent",
+//                "simple_sitemap[default][index]",
+//                "simple_sitemap[default][priority]",
+//                "simple_sitemap[default][changefreq]",
+//                "simple_sitemap[default][include_images]",
+//                "weight[0][value]",
+//                "op", Add menu Keys
+
         };
         String[] values = {
-                "YYilAleCAyQulkT14_gpSheFr8cPzya7j9xq_onASBw",
-                "form-Y31pzyRgJLoSOyt5tiIpaFyMCfzJy-kJtmYpllyNmms",
-                "Edit - Automation Menu",
-                "<front>",
-                "",
-                "",
-                "",
-                "1",
-                "",
-                "menu_link_content_main_form",
-                "main:",
-                "1",
-                "1.0",
-                "",
-                "0",
-                "0",
-                "Save"
+                "Automation",
+                "y.altantawi+1@vardot.com",
+                "Lorem ipsum dolor",
+                "This is a message",
+                "Send message",
+                "form-Q2YcIcqSFvSks7o1wXry6KYtZeU-nME8U8IaMC71mZk",
+                "9nnla7QmFKOWchqQymrWLUwkiG5cVHmQO9Ktq6m9I_s",
+                "webform_submission_contact_node_1411_add_form",
+
+
+
+//                "form-m4IFhcZf5TsHHGQaQW-S_ma7zEzY_400bl9jf8jz0Zo",
+//                "IlNOr48cO9oChfZFJf9VXY0sJ2PsQLG0CtYahpLUSN0",
+//                "entity_subqueue_homepage_resource_edit_form",
+//                "0",
+//                "1",
+//                "2",
+//                "Towards a pollution-free planet: background report (140)",
+//                "Save", Adding Entityqueue Values
+//                "YYilAleCAyQulkT14_gpSheFr8cPzya7j9xq_onASBw",
+//                "form-Y31pzyRgJLoSOyt5tiIpaFyMCfzJy-kJtmYpllyNmms",
+//                "Edit - Automation Menu",
+//                "<front>",
+//                "",
+//                "",
+//                "",
+//                "1",
+//                "",
+//                "menu_link_content_main_form",
+//                "main:",
+//                "1",
+//                "1.0",
+//                "",
+//                "0",
+//                "0",
+//                "Save" add menu values
+
 
         };
 
 
 //        MenuCreator.AddMenuLink(keys, values);
 //        MenuCreator.EditMenuLink(keys, values, "211");
-        MenuCreator.deleteMenuLink("221");
-
+//        MenuCreator.deleteMenuLink("221");
+//        Entityqueue.addEntityqueue(keys, values);
+        Webform.NewSubmission(keys,values);
     }
-
+    public void NewSubmission( String[] keys, String[] values) throws Exception {
+        if (keys.length != values.length) {
+            throw new IllegalArgumentException("Keys and values arrays must have the same length");
+        }
+        Map<String, String> requestBody = new LinkedHashMap<>();
+        for (int i = 0; i < keys.length; i++) {
+            requestBody.put(keys[i], values[i]);
+        }
+        APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetContactUsForm(),requestBody,CR.Getcookie());
+    }
     public void AddMenuLink( String[] keys, String[] values) throws Exception {
         if (keys.length != values.length) {
             throw new IllegalArgumentException("Keys and values arrays must have the same length");
