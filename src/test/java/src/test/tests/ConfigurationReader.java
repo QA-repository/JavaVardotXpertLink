@@ -1,9 +1,16 @@
 package src.test.tests;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import static java.lang.System.getProperty;
@@ -30,6 +37,27 @@ public class ConfigurationReader {
             throw new RuntimeException("Configuration.properties not found at " + propertyFilePath);
         }
     }
+    public Map<String, String> readJsonFile(String filePath) {
+        try {
+            byte[] jsonData = Files.readAllBytes(Paths.get(filePath));
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(jsonData);
+
+            Map<String, String> paramMap = new HashMap<>();
+            JsonNode paramsNode = jsonNode.get("params");
+
+            for (JsonNode paramNode : paramsNode) {
+                String paramName = paramNode.get("name").asText();
+                String paramValue = paramNode.get("value").asText();
+                paramMap.put(paramName, paramValue);
+            }
+
+            return paramMap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error reading JSON file: " + filePath);
+        }
+    }
 
     public String Getcookie() {
         String Run_ENV = properties.getProperty("Run_ENV");
@@ -45,6 +73,8 @@ public class ConfigurationReader {
             return properties.getProperty("Live_cookie");
         else if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("EnlyteSTG")))
             return properties.getProperty("Enlyte_STG_Cookie");
+        else if (Run_ENV.equalsIgnoreCase("STG")&&Project_Name.equalsIgnoreCase(("Donations")))
+            return properties.getProperty("DON_STGCookie");
 
 
         if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("ISG")))
@@ -89,6 +119,9 @@ public class ConfigurationReader {
         }
         if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("EnlyteSTG"))){
             return properties.getProperty("Enlyte_STG");
+        }
+        if (Run_ENV.equalsIgnoreCase("STG")&&(Project_Name.equalsIgnoreCase("Donations"))){
+            return properties.getProperty("Donation_STG");
         }
 
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");

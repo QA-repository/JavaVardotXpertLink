@@ -1,0 +1,385 @@
+{
+
+  "params": [
+    {
+      "name": "stores",
+      "value": "2"
+    },
+    {
+      "name": "field_campaign_name[0][value]",
+      "value": "API TEST 2028"
+    },
+    {
+      "name": "field_campaign_id[0][value]",
+      "value": "INENNAPI24"
+    },
+    {
+      "name": "path[0][alias]",
+      "value": "/api24"
+    },
+    {
+      "name": "title[0][value]",
+      "value": "test"
+    },
+    {
+      "name": "body[0][summary]",
+      "value": ""
+    },
+    {
+      "name": "body[0][value]",
+      "value": "<p>test body</p>\r\n"
+    },
+    {
+      "name": "body[0][format]",
+      "value": "full_html"
+    },
+    {
+      "name": "field_campaign_tags[target_id][textfield]",
+      "value": ""
+    },
+    {
+      "name": "field_campaign_tags[target_id][value_field]",
+      "value": "\"\"conflict\"\""
+    },
+    {
+      "name": "field_group[target_id][textfield]",
+      "value": ""
+    },
+    {
+      "name": "field_one_off_payment_gateways[target_id][textfield]",
+      "value": ""
+    },
+    {
+      "name": "field_one_off_payment_gateways[target_id][value_field]",
+      "value": "\"\"Stripe | INT Test\"\" \"\"FinHub PayPal Checkout\"\" \"\"Pledges\"\" \"\"INT Hub | Stripe SEPA STG\"\""
+    },
+    {
+      "name": "field_regular_payment_gateways[target_id][textfield]",
+      "value": ""
+    },
+    {
+      "name": "field_regular_payment_gateways[target_id][value_field]",
+      "value": "\"\"Stripe | INT Test\"\" \"\"FinHub PayPal Checkout\"\" \"\"INT Hub | Stripe SEPA STG\"\""
+    },
+    {
+      "name": "field_wallets",
+      "value": "1"
+    },
+    {
+      "name": "field_wallet_gateway",
+      "value": "worldpay_direct_wallets"
+    },
+    {
+      "name": "field_available_wallets[googlepay]",
+      "value": "googlepay"
+    },
+    {
+      "name": "field_available_wallets[applepay]",
+      "value": "applepay"
+    },
+    {
+      "name": "field_override_source_settings[value]",
+      "value": "1"
+    },
+    {
+      "name": "field_lead_source[0][value]",
+      "value": "Door to door"
+    },
+    {
+      "name": "field_sub_source[0][value]",
+      "value": "Voxens"
+    },
+    {
+      "name": "field_media[media_library_selection]",
+      "value": ""
+    },
+    {
+      "name": "field_overlay_text[0][value]",
+      "value": ""
+    },
+    {
+      "name": "field_overlay_text[0][format]",
+      "value": "full_html"
+    },
+    {
+      "name": "field_seo_media[media_library_selection]",
+      "value": ""
+    },
+    {
+      "name": "field_override_pi_form[value]",
+      "value": "1"
+    },
+    {
+      "name": "field_enable_loqate_on_address[value]",
+      "value": "1"
+    },
+    {
+      "name": "field_pi_form_message[0][value]",
+      "value": "<p><span style=\"font-size:12px;\"><u><strong>Your privacy</strong></u></span><br />\r\n<span style=\"font-size:10px;\">By submitting this form, you acknowledge you are aware that your data will be used in line with our <a href=\"http://www.unhcr.org/privacy-policy.html\" target=\"_blank\">Privacy Policy</a>. You have the right to withdraw your consent at any time by <a href=\"mailto:donors@unhcr.org\">contacting us</a>. If you are coming form the country listed here, by donating, you agree that your data will be shared with the local UNCHR entity.&nbsp;</span></p>\r\n"
+    },
+    {
+      "name": "field_pi_form_message[0][format]",
+      "value": "full_html"
+    },
+    {
+      "name": "field_pi_form[0][table][personal_title][label]",
+      "value": "Title"
+    },
+    {
+      "name": "field_pi_form[0][table][personal_title][visible]",
+      "value": "1"
+    },
+    {
+      "name": "field_pi_form[0][table][personal_title][weight]",
+      "value": "0"
+    },
+    {
+      "name": "field_pi_form[0][table][first_name][label]",
+      "value": "First Name"
+    },
+    {
+      "name": "field_pi_form[0][table][first_name][required]",
+      "value": "1"
+    },
+    {
+      "name": "field_pi_form[0][table][first_name][visible]",
+      "value": "1"
+    },
+    {
+      "name": "field_pi_form[0][table][first_name][weight]",
+      "value": "1"
+    },
+    {
+      "name": "field_pi_form[0][table][last_name][label]",
+      "value": "Last Name"
+    },
+    {
+      "name": "field_pi_form[0][table][last_name][required]",
+      "value": "1"
+    },
+    {
+      "name": "field_pi_form[0][table][last_name][visible]",
+      "value": "1"
+    },
+    {
+      "name": "field_pi_form[0][table][last_name][weight]",
+      "value": "2"
+    },
+    {
+      "name": "field_pi_form[0][table][email][label]",
+      "value": "Email"
+    },
+    {
+      "name": "field_pi_form[0][table][email][weight]",
+      "value": "3"
+    },
+    {
+      "name": "field_pi_form[0][table][phone_number][label]",
+      "value": "Phone Number"
+    },
+    {
+      "name": "field_pi_form[0][table][phone_number][visible]",
+      "value": "1"
+    },
+    {
+      "name": "field_pi_form[0][table][phone_number][weight]",
+      "value": "4"
+    },
+    {
+      "name": "field_pi_form[0][table][date_of_birth][label]",
+      "value": "Date of birth"
+    },
+    {
+      "name": "field_pi_form[0][table][date_of_birth][visible]",
+      "value": "1"
+    },
+    {
+      "name": "field_pi_form[0][table][date_of_birth][weight]",
+      "value": "5"
+    },
+    {
+      "name": "field_pi_form[0][table][gender][label]",
+      "value": "Gender"
+    },
+    {
+      "name": "field_pi_form[0][table][gender][visible]",
+      "value": "1"
+    },
+    {
+      "name": "field_pi_form[0][table][gender][weight]",
+      "value": "6"
+    },
+    {
+      "name": "field_pi_form[0][table][cpr_number][label]",
+      "value": "CPR Number"
+    },
+    {
+      "name": "field_pi_form[0][table][cpr_number][weight]",
+      "value": "7"
+    },
+    {
+      "name": "field_pi_form[0][table][communication_trigger][label]",
+      "value": "How did you hear about us?"
+    },
+    {
+      "name": "field_pi_form[0][table][communication_trigger][weight]",
+      "value": "8"
+    },
+    {
+      "name": "field_pi_form[0][table][address][label]",
+      "value": "Address"
+    },
+    {
+      "name": "field_pi_form[0][table][address][visible]",
+      "value": "1"
+    },
+    {
+      "name": "field_pi_form[0][table][address][weight]",
+      "value": "9"
+    },
+    {
+      "name": "field_pi_form[0][table][email_opt_in][label]",
+      "value": "Yes, keep me informed about the impact of my donation and UNHCR's work. If you already receive our newsletter and wish to continue receiving it."
+    },
+    {
+      "name": "field_pi_form[0][table][email_opt_in][visible]",
+      "value": "1"
+    },
+    {
+      "name": "field_pi_form[0][table][email_opt_in][weight]",
+      "value": "10"
+    },
+    {
+      "name": "field_pi_form[0][table][sms_opt_in][label]",
+      "value": "SMS Consent"
+    },
+    {
+      "name": "field_pi_form[0][table][sms_opt_in][weight]",
+      "value": "11"
+    },
+    {
+      "name": "field_pi_form[0][table][mail_opt_in][label]",
+      "value": "Mail Consent"
+    },
+    {
+      "name": "field_pi_form[0][table][mail_opt_in][weight]",
+      "value": "12"
+    },
+    {
+      "name": "field_pi_form[0][table][phone_opt_in][label]",
+      "value": "Phone Consent"
+    },
+    {
+      "name": "field_pi_form[0][table][phone_opt_in][weight]",
+      "value": "13"
+    },
+    {
+      "name": "field_pi_form[0][table][organization][label]",
+      "value": ""
+    },
+    {
+      "name": "field_pi_form[0][table][organization][weight]",
+      "value": "30"
+    },
+    {
+      "name": "field_pi_form[0][table][cnpj][label]",
+      "value": ""
+    },
+    {
+      "name": "field_pi_form[0][table][cnpj][weight]",
+      "value": "30"
+    },
+    {
+      "name": "field_pi_form[0][table][country][label]",
+      "value": ""
+    },
+    {
+      "name": "field_pi_form[0][table][country][visible]",
+      "value": "1"
+    },
+    {
+      "name": "field_pi_form[0][table][country][weight]",
+      "value": "30"
+    },
+    {
+      "name": "field_pi_form[0][table][cpf][label]",
+      "value": ""
+    },
+    {
+      "name": "field_pi_form[0][table][cpf][weight]",
+      "value": "30"
+    },
+    {
+      "name": "field_titles[miss]",
+      "value": "miss"
+    },
+    {
+      "name": "field_titles[ms]",
+      "value": "ms"
+    },
+    {
+      "name": "field_titles[mrs]",
+      "value": "mrs"
+    },
+    {
+      "name": "field_titles[mr]",
+      "value": "mr"
+    },
+    {
+      "name": "field_header_logo[0][fids]",
+      "value": ""
+    },
+    {
+      "name": "field_footer_logo[0][fids]",
+      "value": ""
+    },
+    {
+      "name": "field_logo_link[0][uri]",
+      "value": ""
+    },
+    {
+      "name": "group_tabs[group_tabs__active_tab]",
+      "value": "edit-group-basic-information"
+    },
+    {
+      "name": "changed",
+      "value": "34536345745745"
+    },
+    {
+      "name": "form_build_id",
+      "value": "form-lYQLHbOEA8eKcBj4Q9Viq7S9ly4hheI77VTbkXwYGf8"
+    },
+    {
+      "name": "form_token",
+      "value": "aPPQiDQI25JjVinU89U8nnMLe0jNLwDxTFkPIeeTfn4"
+    },
+    {
+      "name": "form_id",
+      "value": "commerce_product_campaign_edit_form"
+    },
+    {
+      "name": "layout_selection",
+      "value": "1_column_finhub_layout"
+    },
+    {
+      "name": "uid[0][target_id]",
+      "value": "Hamzeh (20423)"
+    },
+    {
+      "name": "created[0][value][date]",
+      "value": "2024-06-12"
+    },
+    {
+      "name": "created[0][value][time]",
+      "value": "14:39:27"
+    },
+    {
+      "name": "status[value]",
+      "value": "1"
+    },
+    {
+      "name": "op",
+      "value": "Save"
+    }
+  ]
+}

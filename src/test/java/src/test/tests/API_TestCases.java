@@ -114,6 +114,72 @@ public class API_TestCases extends TestBases {
         APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.EditTaxonomyNodePath().replace("XXXXX", NodeID), RequestBody, CR.Getcookie());
     }
 
+    @Test(priority = 1,groups = { "Sanity" })
+    public void createCampFinhub() throws Exception {
+        // Use ConfigurationReader to read JSON file and get parameters
+        String jsonFilePath = "XHR Files/para.json";
+        Map<String, String> paramsMap = CR.readJsonFile(jsonFilePath);
+
+
+        // Build RequestBody map
+        Map<String, String> RequestBody = new LinkedHashMap<>();
+        for (Map.Entry<String, String> entry : paramsMap.entrySet()) {
+
+            if ("form_build_id".equals(entry.getKey())){
+
+                RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV()+CR.properties.getProperty("Create_Market"),"input[name=form_build_id]"));
+                System.out.println("build_id");
+
+            }
+
+            if ("form_token".equals(entry.getKey())){
+
+                RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV()+CR.properties.getProperty("Create_Market"),"input[name=form_token]"));
+                System.out.println("form_token");
+
+            }else
+
+                RequestBody.put(entry.getKey(), entry.getValue());
+
+
+        }
+        APICaller.ContentCreationAPI(CR.GetRun_ENV()+CR.properties.getProperty("Create_Market"),RequestBody,CR.Getcookie());
+
+    }
+
+    @Test(priority = 1,groups = { "Sanity" })
+    public void editCampFinhub() throws Exception {
+        // Use ConfigurationReader to read JSON file and get parameters
+        String jsonFilePath = "XHR Files/editcamp.json";
+        Map<String, String> paramsMap = CR.readJsonFile(jsonFilePath);
+
+
+        // Build RequestBody map
+        Map<String, String> RequestBody = new LinkedHashMap<>();
+        for (Map.Entry<String, String> entry : paramsMap.entrySet()) {
+
+            if ("form_build_id".equals(entry.getKey())){
+
+                RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV()+CR.properties.getProperty("Edit_Camp"),"input[name=form_build_id]"));
+                System.out.println("build_id");
+
+            }
+
+            if ("form_token".equals(entry.getKey())){
+
+                RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV()+CR.properties.getProperty("Edit_Camp"),"input[name=form_token]"));
+                System.out.println("form_token");
+
+            }else
+
+                RequestBody.put(entry.getKey(), entry.getValue());
+
+
+        }
+        APICaller.ContentCreationAPI(CR.GetRun_ENV()+CR.properties.getProperty("Edit_Camp"),RequestBody,CR.Getcookie());
+
+    }
+
     @Test()
     public void Check_User_Ability_To_Create_EHBLP() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();

@@ -112,8 +112,8 @@ public class APICaller extends TestBases {
         System.out.println("Status Code: " + statusCode);
         System.out.println("res body: " + responseBody);
 
-        // Assert.assertTrue(CheckContentCreationResponseCode(statusCode));
-       NodeWriter(responseBody,Nodetype);
+        Assert.assertTrue(CheckContentCreationResponseCode(statusCode));
+       //NodeWriter(responseBody,Nodetype);
 
     }
     public static void NodeWriter(String responseBody, String nodetype) throws GeneralSecurityException, IOException {
@@ -212,12 +212,14 @@ input=input.replace(":", "\"");
         RestAssured.baseURI = PageURL;
         RequestSpecification request = RestAssured.given();
         Response response;
-System.out.println(CR.Getcookie());
-        response = request.headers("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36").cookie(CR.Getcookie()).auth().basic("unicc", "5NJjoVm-RV8u9Qun4hnt").given().when().get(PageURL);
+        System.out.println(CR.Getcookie());
+        response = request.headers("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
+                .cookie(CR.Getcookie()).auth().basic("unicc", "5NJjoVm-RV8u9Qun4hnt").given().header("cookie",CR.Getcookie()).when().get(PageURL);
         Document doc = Jsoup.parse(response.getBody().asString());
         Element inputElement = doc.select(cssQuery).first();
             if (inputElement != null) {
-System.out.println("@@@Found");
+                System.out.println("@@@Found");
+                System.out.println(inputElement.attr("value"));
                 return inputElement.attr("value");
             } else {
                 System.out.println("@@@ Not Found");
