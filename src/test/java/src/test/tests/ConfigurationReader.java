@@ -95,6 +95,14 @@ public class ConfigurationReader {
         else throw new RuntimeException("DeleteMenu not specified in the API Configuration.properties file.");
 
     }
+    public String GetMenuTranslatePath(){
+        String GetMenuTranslatePath = properties.getProperty("Translate_Menu_Path");
+        if (GetMenuTranslatePath != null)
+            return GetMenuTranslatePath;
+
+        else throw new RuntimeException("Translate_Menu_Path not specified in the API Configuration.properties file.");
+
+    }
     public String GetAddingEntityqueue(){
         String GetAddingEntityqueue = properties.getProperty("AddingEntityqueue");
         if (GetAddingEntityqueue != null)
@@ -213,6 +221,7 @@ public class ConfigurationReader {
 
         else throw new RuntimeException("Main_Taxonomy not specified in the API Configuration.properties file.");
     }
+
     public String GetContentNodeID(String TranslatedLang) {
         String Main_Taxonomy = "";
         if(TranslatedLang.equals("RU"))
