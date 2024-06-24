@@ -43,8 +43,6 @@ public class ConfigurationReader {
             return properties.getProperty("Refworld_DEVCookie_rup_ga");
         else if (Run_ENV.equalsIgnoreCase("Live global")&&Project_Name.equalsIgnoreCase(("UNHCR")))
             return properties.getProperty("Live_cookie");
-        else if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("EnlyteSTG")))
-            return properties.getProperty("Enlyte_STG_Cookie");
 
 
         if (Run_ENV.equalsIgnoreCase("DEV")&&Project_Name.equalsIgnoreCase(("ISG")))
@@ -86,9 +84,6 @@ public class ConfigurationReader {
         }
         if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("Refworld"))){
             return properties.getProperty("Refworld_DEV");
-        }
-        if (Run_ENV.equalsIgnoreCase("DEV")&&(Project_Name.equalsIgnoreCase("EnlyteSTG"))){
-            return properties.getProperty("Enlyte_STG");
         }
 
         else throw new RuntimeException("Run_ENV not specified in the API Configuration.properties file.");
@@ -184,12 +179,12 @@ public class ConfigurationReader {
 
         else throw new RuntimeException("TaxonomyPath not specified in the API Configuration.properties file.");
     }
-    public String GetTaxonomyVocabularyPath() {
-        String TaxonomyVocabularyPath = properties.getProperty("TaxonomyVocabularyPath");
-        if (TaxonomyVocabularyPath != null)
-            return TaxonomyVocabularyPath;
+    public String GetVocabularyTaxonomyPath() {
+        String VocabularyTaxonomyPath = properties.getProperty("VocabularyTaxonomyPath");
+        if (VocabularyTaxonomyPath != null)
+            return VocabularyTaxonomyPath;
 
-        else throw new RuntimeException("TaxonomyVocabularyPath not specified in the API Configuration.properties file.");
+        else throw new RuntimeException("VocabularyTaxonomyPath not specified in the API Configuration.properties file.");
     }
     public String GetMenuHearderPath() {
         String MenuHeaderLink = properties.getProperty("MenuHeaderLink");
@@ -254,6 +249,13 @@ public class ConfigurationReader {
 
         else throw new RuntimeException("Delete_Taxonomy_Path not specified in the API Configuration.properties file.");
     }
+    public  String DeleteVocabularyTaxonomyPath() {
+        String Delete_Vocabulary_Taxonomy_Path = properties.getProperty("Delete_Vocabulary_Taxonomy_Path");
+        if (Delete_Vocabulary_Taxonomy_Path != null)
+            return Delete_Vocabulary_Taxonomy_Path;
+
+        else throw new RuntimeException("Delete_Vocabulary_Taxonomy_Path not specified in the API Configuration.properties file.");
+    }
     public  String CloneNodePath() {
         String Clone_Taxonomy_Term = properties.getProperty("Clone_Taxonomy_Term");
         if (Clone_Taxonomy_Term != null)
@@ -261,12 +263,26 @@ public class ConfigurationReader {
 
         else throw new RuntimeException("Clone_Taxonomy_Term not specified in the API Configuration.properties file.");
     }
+    public  String CloneVocabularyNodePath() {
+        String Clone_Taxonomy_Vocabulary = properties.getProperty("Clone_Taxonomy_Vocabulary");
+        if (Clone_Taxonomy_Vocabulary != null)
+            return Clone_Taxonomy_Vocabulary;
+
+        else throw new RuntimeException("Clone_Taxonomy_Vocabulary not specified in the API Configuration.properties file.");
+    }
     public  String EditTaxonomyNodePath() {
         String Edit_Taxonomy_Term = properties.getProperty("Edit_Taxonomy_Term");
         if (Edit_Taxonomy_Term != null)
             return Edit_Taxonomy_Term;
 
         else throw new RuntimeException("Edit_Taxonomy_Term not specified in the API Configuration.properties file.");
+    }
+    public  String EditVocabularyTaxonomyTerm() {
+        String EditVocabularyTaxonomyTerm = properties.getProperty("EditVocabularyTaxonomyTerm");
+        if (EditVocabularyTaxonomyTerm != null)
+            return EditVocabularyTaxonomyTerm;
+
+        else throw new RuntimeException("EditVocabularyTaxonomyTerm not specified in the API Configuration.properties file.");
     }
     public   String GetNodeID() {
         String NodeID = properties.getProperty("NodeID");
