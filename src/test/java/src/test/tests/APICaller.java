@@ -212,22 +212,25 @@ input=input.replace(":", "\"");
         RestAssured.baseURI = PageURL;
         RequestSpecification request = RestAssured.given();
         Response response;
-System.out.println(CR.Getcookie());
-        response = request.headers("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36").cookie(CR.Getcookie()).auth().basic("unicc", "5NJjoVm-RV8u9Qun4hnt").given().when().get(PageURL);
+
+        response = request.headers("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36").cookie(CR.Getcookie()).auth().basic("", "").given().when().get(PageURL);
+        //System.out.println("getBody===="+response.getBody().asString());
         Document doc = Jsoup.parse(response.getBody().asString());
+        //System.out.println("response===="+response.getStatusCode());
         Element inputElement = doc.select(cssQuery).first();
-            if (inputElement != null) {
-System.out.println("@@@Found");
-                return inputElement.attr("value");
-            } else {
-                System.out.println("@@@ Not Found");
+        if (inputElement != null) {
+            System.out.println("@@@Found");
+            return inputElement.attr("value");
+        } else {
+            System.out.println("@@@ Not Found");
 
-                return null; // Handle the case where the input element is not found
-            }
+            return null; // Handle the case where the input element is not found
         }
+    }
 
 
-        public static void Content_Deleter(String URL,String Path,String Cookie,Map<String, String> RequestBody) throws ExecutionException, InterruptedException, IOException, GeneralSecurityException {
+
+    public static void Content_Deleter(String URL,String Path,String Cookie,Map<String, String> RequestBody) throws ExecutionException, InterruptedException, IOException, GeneralSecurityException {
             StringBuilder postData = new StringBuilder();
 
             for (Map.Entry<String, String> entry : RequestBody.entrySet()) {

@@ -184,12 +184,32 @@ public class ConfigurationReader {
 
         else throw new RuntimeException("TaxonomyPath not specified in the API Configuration.properties file.");
     }
-    public String GetTaxonomyVocabularyPath() {
-        String TaxonomyVocabularyPath = properties.getProperty("TaxonomyVocabularyPath");
-        if (TaxonomyVocabularyPath != null)
-            return TaxonomyVocabularyPath;
+    public String GetVocabularyTaxonomyPath() {
+        String VocabularyTaxonomyPath = properties.getProperty("VocabularyTaxonomyPath");
+        if (VocabularyTaxonomyPath != null)
+            return VocabularyTaxonomyPath;
+        else throw new RuntimeException("VocabularyTaxonomyPath not specified in the API Configuration.properties file.");
+    }
+    public  String DeleteVocabularyTaxonomyPath() {
+        String Delete_Vocabulary_Taxonomy_Path = properties.getProperty("Delete_Vocabulary_Taxonomy_Path");
+        if (Delete_Vocabulary_Taxonomy_Path != null)
+            return Delete_Vocabulary_Taxonomy_Path;
 
-        else throw new RuntimeException("TaxonomyVocabularyPath not specified in the API Configuration.properties file.");
+        else throw new RuntimeException("Delete_Vocabulary_Taxonomy_Path not specified in the API Configuration.properties file.");
+    }
+    public  String CloneVocabularyNodePath() {
+        String Clone_Taxonomy_Vocabulary = properties.getProperty("Clone_Taxonomy_Vocabulary");
+        if (Clone_Taxonomy_Vocabulary != null)
+            return Clone_Taxonomy_Vocabulary;
+
+        else throw new RuntimeException("Clone_Taxonomy_Vocabulary not specified in the API Configuration.properties file.");
+    }
+    public  String EditVocabularyTaxonomyTerm() {
+        String EditVocabularyTaxonomyTerm = properties.getProperty("EditVocabularyTaxonomyTerm");
+        if (EditVocabularyTaxonomyTerm != null)
+            return EditVocabularyTaxonomyTerm;
+
+        else throw new RuntimeException("EditVocabularyTaxonomyTerm not specified in the API Configuration.properties file.");
     }
     public String GetMenuHearderPath() {
         String MenuHeaderLink = properties.getProperty("MenuHeaderLink");

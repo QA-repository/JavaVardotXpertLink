@@ -16,7 +16,7 @@ public class API_TestCases extends TestBases {
     static ConfigurationReader CR=new ConfigurationReader();
 
     public static void main(String[] args) throws Exception {
-        API_TestCases taxonomyCreator = new API_TestCases();
+        API_TestCases taxonomyObj = new API_TestCases();
 
         String[] keys = {
                 "langcode[0][value]",
@@ -32,16 +32,22 @@ public class API_TestCases extends TestBases {
                 "form_id",
                 "parent[]",
                 "weight",
+                "rh_is_bundle",
+                "rh_entity_type",
+                "rh_action",
+                "rh_redirect",
+                "rh_redirect_response",
+                "rh_redirect_fallback_action",
                 "path[0][alias]",
                 "status[value]",
                 "op"
         };
         String[] values = {
                 "en",
-                "Automation_Term_Test",
-                "Automation_Description",
+                "Automation_name_term",
+                "<p>Automation_name_description</p>",
                 "full_html",
-                "Automation_Code",
+                "",
                 "",
                 "",
                 "edit-group-basic-info",
@@ -51,18 +57,117 @@ public class API_TestCases extends TestBases {
                 "0",
                 "0",
                 "",
+                "taxonomy_term",
+                "bundle_default",
+                "",
+                "301",
+                "bundle_default",
+                "",
+                "1",
+                "Save"
+        };
+        String[] keysVocabulary = {
+                "name",
+                "vid",
+                "description",
+                "langcode",
+                "default_language[langcode]",
+                "form_build_id",
+                "form_token",
+                "form_id",
+                "rh_is_bundle",
+                "rh_entity_type",
+                "rh_override",
+                "rh_action",
+                "rh_redirect ",
+                "rh_redirect_response",
+                "rh_redirect_fallback_action",
+                "scheduler_publish_past_date",
+                "simple_sitemap[default][index]",
+                "simple_sitemap[default][priority]",
+                "simple_sitemap[default][changefreq]",
+                "simple_sitemap[default][include_images]",
+                "scheduler_fields_display_mode",
+                "scheduler_expand_fieldset",
+                "scheduler_show_message_after_update",
+                "op"
+        };
+        String[] valuesVocabulary = {
+                "Automation_name_term_Vocabulary",
+                "automation_name_term_vocabulary",
+                "Automation_name_description",
+                "en",
+                "site_default",
+                APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetVocabularyTaxonomyPath(), "input[name=form_build_id]"),
+                APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetVocabularyTaxonomyPath(), "input[name=form_token]"),
+                "taxonomy_vocabulary_form",
+                "",
+                "taxonomy_vocabulary",
+                "1",
+                "display_page",
+                "",
+                "301",
+                "access_denied",
+                "error",
+                "0",
+                "0.5",
+                "",
+                "0",
+                "vertical_tab",
+                "when_required",
                 "1",
                 "Save"
         };
 
-        // Call the addTaxonomyTerm method with the keys and values arrays
-        //taxonomyCreator.addTaxonomyTerm(keys, values);
-        //taxonomyCreator.cloneTxonomyTerm ("3688");
-        taxonomyCreator.deleteTaxonomyTerm("3689");
-        //taxonomyCreator.editTxonomyTerm(keys, values, "3688");
+        // Call the addAndEditTaxonomyTermAndVocabulary method with the keys and values arrays
+        //Add a term under collection taxonomy
+        //taxonomyObj.addAndEditTaxonomyTermAndVocabulary(keys, values, CR.GetTaxonomyPath());
 
+        //Add a new vocabulary
+        //taxonomyObj.addAndEditTaxonomyTermAndVocabulary(keysVocabulary, valuesVocabulary, CR.GetVocabularyTaxonomyPath());
+
+        //To clone any term under taxonomy
+        //taxonomyObj.cloneTaxonomyTerm ("3704", CR.CloneNodePath());
+
+        //To delete terms under taxonomy
+        //taxonomyObj.deleteTaxonomyTerm("3707","taxonomy_term_collection_delete_form", CR.DeleteTaxonomyPath());
+
+        //To delete vocabulary under taxonomy
+        String vocabularyToDelete = "automation_name_term_vocabulary";
+        //taxonomyObj.deleteTaxonomyTerm("automation_name_term_vocabulary","taxonomy_vocabulary_confirm_delete", CR.DeleteVocabularyTaxonomyPath().replace("XXXXX", vocabularyToDelete));
+
+        //Edit a term under collection taxonomy
+        String nodeIdToEdit = "3707";
+        //taxonomyObj.addAndEditTaxonomyTermAndVocabulary(keys, values, CR.EditTaxonomyNodePath().replace("XXXXX", nodeIdToEdit));
+
+        //Edit a vocabulary taxonomy
+        String vocabularyToEdit = "automation_name_term_vocabulary";
+        //taxonomyObj.addAndEditTaxonomyTermAndVocabulary(keysVocabulary, valuesVocabulary, CR.EditVocabularyTaxonomyTerm().replace("XXXXX", vocabularyToEdit));
+
+
+        //Clone Taxonomy Vocabulary (collection)
+        String vocabularyToClone = "automation_name_term_vocabulary";
+        String[] keysCloneVocabulary = {
+                "label",
+                "id",
+                "form_build_id",
+                "form_token",
+                "form_id",
+                "op"
+        };
+        String[] valuesCloneVocabulary = {
+                "clone_automation_vocabulary",
+                "clone_automation_vocabulary",
+                APICaller.PrepareFormData(CR.GetRun_ENV() + CR.CloneVocabularyNodePath().replace("XXXXX", vocabularyToClone), "input[name=form_build_id]"),
+                APICaller.PrepareFormData(CR.GetRun_ENV() + CR.CloneVocabularyNodePath().replace("XXXXX", vocabularyToClone), "input[name=form_token]"),
+                "entity_clone_form",
+                "Clone"
+        };
+
+        //taxonomyObj.addTaxonomyTermAndVocabulary(keysCloneVocabulary, valuesCloneVocabulary, CR.CloneVocabularyNodePath().replace("XXXXX", vocabularyToClone));
     }
-    public void addTaxonomyTerm (String[] keys, String[] values) throws Exception {
+    //This method can be used for both Add and Edit taxonomy term or vocabulary
+    public void addAndEditTaxonomyTermAndVocabulary (String[] keys, String[] values, String path) throws Exception {
         if (keys.length != values.length) {
             throw new IllegalArgumentException("Keys and values arrays must have the same length");
         }
@@ -70,48 +175,30 @@ public class API_TestCases extends TestBases {
         for (int i = 0; i < keys.length; i++) {
             requestBody.put(keys[i], values[i]);
         }
-        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetTaxonomyPath(), requestBody, CR.Getcookie());
+
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + path, requestBody, CR.Getcookie());
     }
 
-    public void cloneTxonomyTerm(String NodeID) throws Exception {
+    public void cloneTaxonomyTerm(String NodeID, String path) throws Exception {
+
         Map<String, String> RequestBody = new LinkedHashMap();
-        String var10002 = CR.GetRun_ENV();
         RequestBody.put("all_translations","1");
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(var10002 + CR.CloneNodePath().replace("XXXXX", NodeID), "input[name=form_build_id]"));
-        var10002 = CR.GetRun_ENV();
-        RequestBody.put("form_token", APICaller.PrepareFormData(var10002 + CR.CloneNodePath().replace("XXXXX", NodeID), "input[name=form_token]"));
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + path.replace("XXXXX", NodeID), "input[name=form_build_id]"));
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + path.replace("XXXXX", NodeID), "input[name=form_token]"));
         RequestBody.put("form_id", "entity_clone_form");
         RequestBody.put("op", "Clone");
-        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.CloneNodePath().replace("XXXXX", NodeID), RequestBody, CR.Getcookie());
+
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + path.replace("XXXXX", NodeID), RequestBody, CR.Getcookie());
     }
 
-    public void deleteTaxonomyTerm(String NodeID) throws Exception {
-        List<String> RequestHeader = new ArrayList();
+    public void deleteTaxonomyTerm(String NodeID, String formID ,String path) throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap();
         RequestBody.put("confirm", "1");
-        String var10002 = CR.GetRun_ENV();
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(var10002 + CR.DeleteTaxonomyPath().replace("XXXXX", NodeID.replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_build_id]"));
-        var10002 = CR.GetRun_ENV();
-        RequestBody.put("form_token", APICaller.PrepareFormData(var10002 + CR.DeleteTaxonomyPath().replace("XXXXX", NodeID.replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_token]"));
-        RequestBody.put("form_id", "taxonomy_term_collection_delete_form");
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + path.replace("XXXXX", NodeID), "input[name=form_build_id]"));
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + path.replace("XXXXX", NodeID), "input[name=form_token]"));
+        RequestBody.put("form_id", formID);
         RequestBody.put("op", "Delete");
-        APICaller.Content_Deleter(CR.GetRun_ENV(), CR.DeleteTaxonomyPath().replace("XXXXX", NodeID), CR.Getcookie(), RequestBody);
-    }
-    public void editTxonomyTerm(String[] keys, String[] values, String NodeID) throws Exception {
-        Map<String, String> RequestBody = new LinkedHashMap();
-        if (keys.length != values.length) {
-            throw new IllegalArgumentException("Keys and values arrays must have the same length");
-        }
-        for (int i = 0; i < keys.length; i++) {
-            RequestBody.put(keys[i], values[i]);
-        }
-
-        String var10002 = CR.GetRun_ENV();
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(var10002 + CR.EditTaxonomyNodePath().replace("XXXXX", NodeID), "input[name=form_build_id]"));
-        var10002 = CR.GetRun_ENV();
-        RequestBody.put("form_token", APICaller.PrepareFormData(var10002 + CR.EditTaxonomyNodePath().replace("XXXXX", NodeID), "input[name=form_token]"));
-
-        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.EditTaxonomyNodePath().replace("XXXXX", NodeID), RequestBody, CR.Getcookie());
+        APICaller.Content_Deleter(CR.GetRun_ENV(), path.replace("XXXXX", NodeID), CR.Getcookie(), RequestBody);
     }
 
     @Test()
