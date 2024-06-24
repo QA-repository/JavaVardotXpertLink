@@ -82,23 +82,24 @@ public class API_TestCases extends TestBases {
         API_TestCases MenuCreator = new API_TestCases();
         API_TestCases Entityqueue = new API_TestCases();
         API_TestCases Webform = new API_TestCases();
+        API_TestCases Content = new API_TestCases();
 
         String[] keys = {
-                "title[0][value]",
-                "link[0][uri]",
-                "link[0][options][attributes][target]",
-                "link[0][options][attributes][rel]",
-                "link[0][options][attributes][class]",
-                "description[0][value]",
-                "form_build_id",
-                "form_token",
-                "form_id",
-                "menu_parent",
-                "content_translation[status]",
-                "content_translation[uid]",
-                "content_translation[created]",
-                "weight[0][value]",
-                "op"
+//                "title[0][value]",
+//                "link[0][uri]",
+//                "link[0][options][attributes][target]",
+//                "link[0][options][attributes][rel]",
+//                "link[0][options][attributes][class]",
+//                "description[0][value]",
+//                "form_build_id",
+//                "form_token",
+//                "form_id",
+//                "menu_parent",
+//                "content_translation[status]",
+//                "content_translation[uid]",
+//                "content_translation[created]",
+//                "weight[0][value]",
+//                "op"
 
 
 //                "name",
@@ -134,22 +135,21 @@ public class API_TestCases extends TestBases {
 
         };
         String[] values = {
-
-                "SimpleTest AR",
-                "Job Vacancy Available Positions (61)",
-                "" ,
-                "" ,
-                "" ,
-                "" ,
-                APICaller.PrepareFormData(CR.GetRun_ENV() +CR.GetMenuTranslatePath(),"input[name=form_build_id]"),
-                APICaller.PrepareFormData(CR.GetRun_ENV() +CR.GetMenuTranslatePath(),"input[name=form_token]"),
-                "menu_link_content_main_form",
-                "main:",
-                "1",
-                "Site Admin (2)",
-                "",
-                "0",
-                "Save",
+//                "SimpleTest AR",
+//                "Job Vacancy Available Positions (61)",
+//                "" ,
+//                "" ,
+//                "" ,
+//                "" ,
+//                APICaller.PrepareFormData(CR.GetRun_ENV() +CR.GetMenuTranslatePath(),"input[name=form_build_id]"),
+//                APICaller.PrepareFormData(CR.GetRun_ENV() +CR.GetMenuTranslatePath(),"input[name=form_token]"),
+//                "menu_link_content_main_form",
+//                "main:",
+//                "1",
+//                "Site Admin (2)",
+//                "",
+//                "0",
+//                "Save",
 //                "Automation",
 //                "y.altantawi+1@vardot.com",
 //                "Lorem ipsum dolor",
@@ -188,9 +188,11 @@ public class API_TestCases extends TestBases {
 //        MenuCreator.AddMenuLink(keys, values);
 //        MenuCreator.EditMenuLink(keys, values, "211");
 //        MenuCreator.deleteMenuLink("221");
-        MenuCreator.TranslateMenuLink(keys, values, "178");
+//        MenuCreator.TranslateMenuLink(keys, values, "178");
 //        Entityqueue.addEntityqueue(keys, values);
 //        Webform.NewSubmission(keys,values);
+        Content.cloneNode( "64");
+
     }
     public void NewSubmission( String[] keys, String[] values) throws Exception {
         if (keys.length != values.length) {
@@ -241,6 +243,24 @@ public class API_TestCases extends TestBases {
         RequestBody.put("form_token", APICaller.PrepareFormData(var10002 + CR.GetMenuTranslatePath().replace("XXXXX", NodeID), "input[name=form_token]"));
 
         APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetMenuTranslatePath().replace("XXXXX", NodeID), RequestBody, CR.Getcookie());
+    }
+
+    public void cloneNode(String NodeID) throws Exception {
+        Map<String, String> RequestBody = new LinkedHashMap();
+        System.out.println("NodeID= "+NodeID);
+        String var10002 = CR.GetRun_ENV();
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(var10002 + CR.CloneNodePagePath().replace("XXXXX", NodeID), "input[name=form_build_id]"));
+//        var10002 = CR.GetRun_ENV();
+        RequestBody.put("form_token", APICaller.PrepareFormData(var10002 + CR.CloneNodePagePath().replace("XXXXX", NodeID), "input[name=form_token]"));
+        RequestBody.put("form_id", "entity_clone_form");
+        RequestBody.put("recursive[node.varbase_heroslider_media.field_media_single][references][47][target_entity_type_id]","media");
+        RequestBody.put("recursive[node.varbase_heroslider_media.field_media_single][references][47][target_bundle]", "video");
+        RequestBody.put("recursive[node.varbase_heroslider_media.field_media_single][references][47][children][recursive][media.video.field_media_video_file][references][3021][target_entity_type_id]","file");
+        RequestBody.put("recursive[node.varbase_heroslider_media.field_media_single][references][47][children][recursive][media.video.field_media_video_file][references][3021][target_bundle]","file");
+        RequestBody.put("op", "Clone");
+        System.out.println("RequestBody= "+RequestBody);
+        System.out.println("GetClonePath= "+CR.CloneNodePagePath());
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.CloneNodePagePath().replace("XXXXX", NodeID), RequestBody, CR.Getcookie());
     }
     public void deleteMenuLink(String NodeID) throws Exception {
         List<String> RequestHeader = new ArrayList();

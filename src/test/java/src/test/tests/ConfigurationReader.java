@@ -350,6 +350,13 @@ public class ConfigurationReader {
 
         else throw new RuntimeException("Clone_Taxonomy_Term not specified in the API Configuration.properties file.");
     }
+    public  String CloneNodePagePath() {
+        String CloneNodePath = properties.getProperty("CloneNodePath");
+        if (CloneNodePath != null)
+            return CloneNodePath;
+
+        else throw new RuntimeException("CloneNodePath not specified in the API Configuration.properties file.");
+    }
     public  String EditTaxonomyNodePath() {
         String Edit_Taxonomy_Term = properties.getProperty("Edit_Taxonomy_Term");
         if (Edit_Taxonomy_Term != null)
