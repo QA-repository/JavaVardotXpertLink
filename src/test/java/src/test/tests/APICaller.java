@@ -43,7 +43,7 @@ public class APICaller extends TestBases {
         }
 
         System.out.println("Testing Started for: " + URL + Path);
-        response = request.headers("user-agent", "Application").auth().basic("unicc", "5NJjoVm-RV8u9Qun4hnt").given().when().get(Path);
+        response = request.headers("user-agent", "Application").auth().basic("", "").given().when().get(Path);
 
 
         System.out.println("Status code: " + response.getStatusCode());
@@ -63,7 +63,7 @@ public class APICaller extends TestBases {
 
         System.out.println("Testing Started for: " + URL + Path);
 
-        response = request.headers("user-agent", "Application").auth().basic("unicc", "5NJjoVm-RV8u9Qun4hnt").given().cookie(CR.Getcookie()).when().get(Path);
+        response = request.headers("user-agent", "Application").auth().basic("", "").given().cookie(CR.Getcookie()).when().get(Path);
         System.out.println("Status code: " + response.getStatusCode());
 
         return response;
@@ -94,7 +94,7 @@ public class APICaller extends TestBases {
                 .authenticator(new Authenticator() {
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("unicc", "5NJjoVm-RV8u9Qun4hnt".toCharArray());
+                        return new PasswordAuthentication("", "".toCharArray());
                     }
                 })
                 .build();
@@ -110,7 +110,7 @@ public class APICaller extends TestBases {
         int statusCode = response.statusCode();
         String responseBody = response.body();
         System.out.println("Status Code: " + statusCode);
-        System.out.println("res body: " + responseBody);
+        //System.out.println("res body: " + responseBody);
 
         // Assert.assertTrue(CheckContentCreationResponseCode(statusCode));
        NodeWriter(responseBody,Nodetype);
@@ -246,7 +246,7 @@ input=input.replace(":", "\"");
                     .authenticator(new Authenticator() {
                         @Override
                         protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication("unicc", "5NJjoVm-RV8u9Qun4hnt".toCharArray());
+                            return new PasswordAuthentication("", "".toCharArray());
                         }
                     })
                     .build();
