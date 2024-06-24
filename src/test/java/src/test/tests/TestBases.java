@@ -3,6 +3,7 @@ package src.test.tests;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.observer.ExtentObserver;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -71,23 +72,12 @@ List<String> a=new ArrayList<>();
 	@BeforeSuite
 	public void setUp() throws IOException {
 		extent = new ExtentReports();
-		LocalDateTime currentDateTime = LocalDateTime.now();
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH_mm_ss");
-
-		String formattedDateTime = currentDateTime.format(formatter);
-		ConfigurationReader CR=new ConfigurationReader();
-		ExtentSparkReporter sparkReporter = new ExtentSparkReporter("test-output/" + CR.GetProjectname()+" Project "+formattedDateTime+".html");
+		ExtentSparkReporter sparkReporter = new ExtentSparkReporter("test-output/extent-report" + dateName + ".html");
 		sparkReporter.config().setDocumentTitle("Vardot E2E Tool Report");
 		sparkReporter.config().setReportName("Vardot E2E Tool Report");
-		sparkReporter.config().setTheme(Theme.DARK); // You can choose from Theme.STANDARD, Theme.DARK, Theme.VIEW
-		extent.attachReporter(sparkReporter);
-		extent.attachReporter(spark);
-		extent.setSystemInfo("Project", CR.GetProjectname());
-		extent.setSystemInfo("Site link", CR.GetRun_ENV());
-		extent.setSystemInfo("Environment", CR.ProjectEnv());
-
-
+		sparkReporter.config().setTheme(Theme.DARK);
+		extent.attachReporter(new ExtentObserver[]{sparkReporter});
+		extent.attachReporter(new ExtentObserver[]{spark});
 	}
 
 	@AfterSuite
