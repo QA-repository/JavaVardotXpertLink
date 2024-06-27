@@ -4,6 +4,7 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -179,6 +180,39 @@ public class API_TestCases extends TestBases {
         APICaller.ContentCreationAPI(CR.GetRun_ENV()+CR.properties.getProperty("Edit_Camp"),RequestBody,CR.Getcookie());
 
     }
+    @Test()
+    public void addMedia() throws Exception {
+
+        // Use ConfigurationReader to read JSON file and get parameters
+        String jsonFilePath = "XHR Files/imageuploadform.json";
+        Map<String, String> paramsMap = CR.readJsonFile(jsonFilePath);
+
+        // Build RequestBody map
+        Map<String, String> RequestBody = new LinkedHashMap<>();
+        String imageUrl = "https://donate-stg.dev-site.online/br/en/media/add/image?element_parents=field_media_image/widget/0&ajax_form=1&_wrapper_format=drupal_ajax";
+        File fileToUpload = new File("Uploads/istockphoto-816752606-612x612.jpg");
+        String fid = null;
+
+        for (Map.Entry<String, String> entry : paramsMap.entrySet()) {
+            if ("form_build_id".equals(entry.getKey())) {
+                RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.properties.getProperty("Add_Media_Image"), "input[name=form_build_id]"));
+                System.out.println("build_id");
+            } else if ("form_token".equals(entry.getKey())) {
+                RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.properties.getProperty("Add_Media_Image"), "input[name=form_token]"));
+                System.out.println("form_token");
+            } else if ("field_media_image[0][fids]".equals(entry.getKey())) {
+                fid = APICaller.uploadImage(imageUrl, fileToUpload, CR.Getcookie());
+                RequestBody.put("field_media_image[0][fids]", fid);
+                System.out.println(fid);
+            } else {
+                RequestBody.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.properties.getProperty("Add_Media_Image"), RequestBody, CR.Getcookie());
+    }
+
 
     @Test()
     public void Check_User_Ability_To_Create_EHBLP() throws Exception {
