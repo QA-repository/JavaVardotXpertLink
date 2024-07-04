@@ -2,6 +2,8 @@ package src.test.tests;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
+import io.restassured.response.Response;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -10,10 +12,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 
 public class API_TestCases extends TestBases {
-    static ConfigurationReader CR=new ConfigurationReader();
+    static ConfigurationReader CR = new ConfigurationReader();
 
     public static void main(String[] args) throws Exception {
         API_TestCases taxonomyCreator = new API_TestCases();
@@ -62,7 +65,8 @@ public class API_TestCases extends TestBases {
         //taxonomyCreator.editTxonomyTerm(keys, values, "3688");
 
     }
-    public void addTaxonomyTerm (String[] keys, String[] values) throws Exception {
+
+    public void addTaxonomyTerm(String[] keys, String[] values) throws Exception {
         if (keys.length != values.length) {
             throw new IllegalArgumentException("Keys and values arrays must have the same length");
         }
@@ -71,18 +75,6 @@ public class API_TestCases extends TestBases {
             requestBody.put(keys[i], values[i]);
         }
         APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetTaxonomyPath(), requestBody, CR.Getcookie());
-    }
-
-    public void cloneTxonomyTerm(String NodeID) throws Exception {
-        Map<String, String> RequestBody = new LinkedHashMap();
-        String var10002 = CR.GetRun_ENV();
-        RequestBody.put("all_translations","1");
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(var10002 + CR.CloneNodePath().replace("XXXXX", NodeID), "input[name=form_build_id]"));
-        var10002 = CR.GetRun_ENV();
-        RequestBody.put("form_token", APICaller.PrepareFormData(var10002 + CR.CloneNodePath().replace("XXXXX", NodeID), "input[name=form_token]"));
-        RequestBody.put("form_id", "entity_clone_form");
-        RequestBody.put("op", "Clone");
-        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.CloneNodePath().replace("XXXXX", NodeID), RequestBody, CR.Getcookie());
     }
 
     public void deleteTaxonomyTerm(String NodeID) throws Exception {
@@ -97,6 +89,7 @@ public class API_TestCases extends TestBases {
         RequestBody.put("op", "Delete");
         APICaller.Content_Deleter(CR.GetRun_ENV(), CR.DeleteTaxonomyPath().replace("XXXXX", NodeID), CR.Getcookie(), RequestBody);
     }
+
     public void editTxonomyTerm(String[] keys, String[] values, String NodeID) throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap();
         if (keys.length != values.length) {
@@ -151,12 +144,13 @@ public class API_TestCases extends TestBases {
         RequestBody.put("field_yoast_seo[0][yoast_seo][status]", "0");
         RequestBody.put("revision_log[0][value]", "");
     }
-    @Test(priority = 2,groups = { "Sanity" })
+
+    @Test(priority = 2, groups = {"Sanity"})
     public void EHB_Add_Remote_Video() throws Exception {
         LinkedHashMap<String, String> RequestBody = new LinkedHashMap<>();
         RequestBody.put("name[0][value]", TestBases.generateRandomString(12));
-        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() +CR.GetEHB_Add_RemoteVideoPath(),"input[name=form_token]"));
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() +CR.GetEHB_Add_RemoteVideoPath(),"input[name=form_build_id]"));
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetEHB_Add_RemoteVideoPath(), "input[name=form_token]"));
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetEHB_Add_RemoteVideoPath(), "input[name=form_build_id]"));
         RequestBody.put("form_id", "media_remote_video_add_form");
         RequestBody.put("field_media_oembed_video[0][value]", "https://www.youtube.com/watch?v=Z4XxrLBL_CI");
         RequestBody.put("field_media_cover_image[0][fids]", "");
@@ -168,475 +162,427 @@ public class API_TestCases extends TestBases {
         RequestBody.put("status[value]", "1");
         RequestBody.put("advanced__active_tab", "edit-revision-information");
         RequestBody.put("op", "Save");
-        APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetEHB_Add_RemoteVideoPath(),RequestBody,CR.Getcookie());
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetEHB_Add_RemoteVideoPath(), RequestBody, CR.Getcookie());
 
     }
-    @Test(groups = { "Sanity" })
+
+    @Test(groups = {"Sanity"})
     public void EHB_Main_Search() throws Exception {
-        List<String> RequestHeader= new ArrayList<>();
-       String Response="";
+        List<String> RequestHeader = new ArrayList<>();
+        String Response = "";
 
-        RequestHeader.add(0,"search");
-        RequestHeader.add(1,"UNHCR");
+        RequestHeader.add(0, "search");
+        RequestHeader.add(1, "UNHCR");
 
-        RequestHeader.add(2,"sort_by");
-        RequestHeader.add(3,"search_api_relevance");
+        RequestHeader.add(2, "sort_by");
+        RequestHeader.add(3, "search_api_relevance");
 
-        Response= String.valueOf(APICaller.Public_GetAPI_Caller(CR.GetRun_ENV(),CR.GetEHB_SearchAPI(),RequestHeader).getBody().jsonPath());
+        Response = String.valueOf(APICaller.Public_GetAPI_Caller(CR.GetRun_ENV(), CR.GetEHB_SearchAPI(), RequestHeader).getBody().jsonPath());
 
     }
-    @Test(groups = { "Sanity" })
-    public void EHB_Create_New_User() throws Exception {
+
+
+//    @Test(priority = 2,groups = { "Sanity" },invocationCount=2,dependsOnMethods={"Check_User_Ability_To_Create_News","Check_User_Ability_To_Create_Publication"})
+//    public void Check_User_Ability_To_Delete_Content() throws Exception {
+//        Map<String, String> RequestBody = new LinkedHashMap<>();
+//        RequestBody.put("confirm", "1");
+//        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_build_id]"));
+//        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_token]"));
+//        String Formid=GoogleSheetsHelper.GetNodeID()
+//                .replace("[", "").replace("]", "").replaceAll("[0-9]", "").replace(",", "");
+//        RequestBody.put("form_id",GoogleSheetsHelper.prepareNode_For_deletion(Formid) );
+//        RequestBody.put("op", "Delete");
+//        APICaller.Content_Deleter(CR.GetRun_ENV(), CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), CR.Getcookie(), RequestBody);
+//    }
+
+
+    @Test(priority = 2, groups = {"Sanity"})
+    public void Check_User_Ability_To_Create_CCPM() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
+        RequestBody.put("status[value]", "1");
+        RequestBody.put("op", "Save");
+        RequestBody.put("changed", "1717412206");
+        RequestBody.put("field_year[0][value]", "2023");
+        RequestBody.put("field_survey_status[value]", "1");
+        RequestBody.put("field_level", "15036");
+        RequestBody.put("field_cluster", "15021");
+        RequestBody.put("field_cluster_country[0][value]", "JO");
+        RequestBody.put("field_city[0][value]", "Amman");
+        RequestBody.put("field_start_date[0][value][date]", "2024-06-03");
+        RequestBody.put("field_end_date[0][value][date]", "2024-06-04");
+        RequestBody.put("field_language", "en");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_name][0][value]", "moawih11");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_email][0][value]", "m.jaber@vardot.com");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_type_of_contract]", "15211");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_type_of_modality]", "15241");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_grade_of_the_post]", "15041");
+        RequestBody.put("field_cluster_coordinator_data[0][_weight]", "0");
+        RequestBody.put("field_cluster_coordinator_data[add_more][add_more_delta]", "");
+        RequestBody.put("field_im[0][subform][field_name][0][value]", "test");
+        RequestBody.put("field_im[0][subform][field_email][0][value]", "test@test.com");
+        RequestBody.put("field_im[0][subform][field_type_of_contract]", "15211");
+        RequestBody.put("field_im[0][subform][field_type_of_modality]", "15241");
+        RequestBody.put("field_im[0][subform][field_grade_of_the_post]", "15041");
+        RequestBody.put("field_im[0][_weight]", "0");
+        RequestBody.put("field_im[add_more][add_more_delta]", "");
+        RequestBody.put("field_others[add_more][add_more_delta]", "");
+        RequestBody.put("field_international_ngos[0][subform][field_partner_name][target_id][textfield]", "Acceso (15406)");
+        RequestBody.put("field_international_ngos[0][_weight]", "0");
+        RequestBody.put("field_international_ngos[add_more][add_more_delta]", "");
+        RequestBody.put("field_icrc_ifrc[0][subform][field_partner_name][target_id][textfield]", "British Red Cross (15186)");
+        RequestBody.put("field_icrc_ifrc[0][_weight]", "0");
+        RequestBody.put("field_icrc_ifrc[add_more][add_more_delta]", "");
+        RequestBody.put("field_un_organization[add_more][add_more_delta]", "");
+        RequestBody.put("field_donors[add_more][add_more_delta]", "");
+        RequestBody.put("field_national_local_authority[add_more][add_more_delta]", "");
+        RequestBody.put("field_national_local_ngo_cbo[add_more][add_more_delta]", "");
+        RequestBody.put("group_information[group_information__active_tab]", "edit-group-partners");
+     RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetCreateContent() ,"input[name=form_build_id]"));
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetCreateContent(), "input[name=form_token]"));
+        RequestBody.put("form_id", "node_ccpm_form");
+        RequestBody.put("revision_log[0][value]", "");
+        RequestBody.put("path[0][pathauto]", "1");
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetCreateContent(), RequestBody, CR.Getcookie());
 
-        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GETISG_DevLink() + CR.GetCreateUserPath(), "input[name=form_token]"));
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETISG_DevLink() + CR.GetCreateUserPath(), "input[name=form_build_id]"));
-        RequestBody.put("mail", TestBases.generateRandomString(12) + "@vardot.com");
-        RequestBody.put("name", TestBases.generateRandomString(8));
-        RequestBody.put("pass[pass1]", "Vardot@123");
-        RequestBody.put("pass[pass2]", "Vardot@123");
-        RequestBody.put("status", "1");
-        RequestBody.put("roles[editor]", "editor");
-        RequestBody.put("roles[hr_admin]", "hr_admin");
-        RequestBody.put("roles[content_admin]", "content_admin");
-        RequestBody.put("roles[site_admin]", "site_admin");
-        RequestBody.put("form_id", "user_register_form");
-        RequestBody.put("antibot_key", "lkbr5Ra-GtUD3vHWMeslxWu0azZr3V2paXoawPnU-CU");
-        RequestBody.put("path[0][alias]", "");
-        RequestBody.put("op", "Create new account");
-        APICaller.ContentCreationAPI(CR.GETISG_DevLink() + CR.GetCreateUserPath(), RequestBody, CR.Getcookie());
     }
-    @Test(groups = { "Sanity" })
-    public void ISG_Create_New_User() throws Exception {
+    @Test(priority = 1, groups = { "Sanity" })
+    public void Check_User_Ability_To_Submit_CCPM_Form() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
+        RequestBody.put("status[value]", "1");
+        RequestBody.put("op", "Save");
+        RequestBody.put("changed", "1720016745");
+        RequestBody.put("field_year[0][value]", "2000");
+        RequestBody.put("field_survey_status[value]", "1");
+        RequestBody.put("field_level", "15036");
+        RequestBody.put("field_cluster", "15021");
+        RequestBody.put("field_cluster_country[0][value]", "AL");
+        RequestBody.put("field_city[0][value]", "");
+        RequestBody.put("field_start_date[0][value][date]", "2024-07-04");
+        RequestBody.put("field_end_date[0][value][date]", "2024-07-04");
+        RequestBody.put("field_language", "en");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_name][0][value]", "moawih");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_email][0][value]", "m.jaber@vardot.com");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_type_of_contract]", "15211");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_type_of_modality]", "15241");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_grade_of_the_post]", "15041");
+        RequestBody.put("field_cluster_coordinator_data[0][_weight]", "0");
+        RequestBody.put("field_cluster_coordinator_data[add_more][add_more_delta]", "");
+        RequestBody.put("field_im[0][subform][field_name][0][value]", "test");
+        RequestBody.put("field_im[0][subform][field_email][0][value]", "test@test.com");
+        RequestBody.put("field_im[0][subform][field_type_of_contract]", "15211");
+        RequestBody.put("field_im[0][subform][field_type_of_modality]", "15241");
+        RequestBody.put("field_im[0][subform][field_grade_of_the_post]", "15041");
+        RequestBody.put("field_im[0][_weight]", "0");
+        RequestBody.put("field_im[add_more][add_more_delta]", "");
+        RequestBody.put("field_others[add_more][add_more_delta]", "");
+        RequestBody.put("field_international_ngos[0][subform][field_partner_name][target_id][textfield]", "Access Center for Human Rights (15411)");
+        RequestBody.put("field_international_ngos[0][_weight]", "0");
+        RequestBody.put("field_international_ngos[add_more][add_more_delta]", "");
+        RequestBody.put("field_icrc_ifrc[add_more][add_more_delta]", "");
+        RequestBody.put("field_un_organization[add_more][add_more_delta]", "");
+        RequestBody.put("field_donors[add_more][add_more_delta]", "");
+        RequestBody.put("field_national_local_authority[add_more][add_more_delta]", "");
+        RequestBody.put("field_national_local_ngo_cbo[add_more][add_more_delta]", "");
+        RequestBody.put("group_information[group_information__active_tab]", "edit-group-partners");
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetCreateContent() ,"input[name=form_build_id]"));
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetCreateContent(), "input[name=form_token]"));
+        RequestBody.put("form_id", "node_ccpm_form");
+        RequestBody.put("revision_log[0][value]", "");
+        RequestBody.put("path[0][pathauto]", "1");
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetCreateContent(), RequestBody, CR.Getcookie());
 
-        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GETISG_DevLink() + CR.GetCreateUserPath(), "input[name=form_token]"));
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GETISG_DevLink() + CR.GetCreateUserPath(), "input[name=form_build_id]"));
-        RequestBody.put("mail", TestBases.generateRandomString(12) + "@vardot.com");
-        RequestBody.put("name", TestBases.generateRandomString(8));
-        RequestBody.put("pass[pass1]", "Vardot@123");
-        RequestBody.put("pass[pass2]", "Vardot@123");
-        RequestBody.put("status", "1");
-        RequestBody.put("roles[editor]", "editor");
-        RequestBody.put("roles[hr_admin]", "hr_admin");
-        RequestBody.put("roles[content_admin]", "content_admin");
-        RequestBody.put("roles[site_admin]", "site_admin");
-        RequestBody.put("form_id", "user_register_form");
-        RequestBody.put("antibot_key", "lkbr5Ra-GtUD3vHWMeslxWu0azZr3V2paXoawPnU-CU");
-        RequestBody.put("path[0][alias]", "");
-        RequestBody.put("op", "Create new account");
-        APICaller.ContentCreationAPI(CR.GETISG_DevLink() + CR.GetCreateUserPath(), RequestBody, CR.Getcookie());
     }
 
-    @Test(groups = { "Sanity" })
-    public void Refworld_Create_New_User() throws Exception {
+    @Test(priority = 1, groups = {"Sanity"})
+    public void Check_User_Ability_To_Edit_CCPM() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
-        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() +CR.GetCreateUserPath(),"input[name=form_token]"));
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() +CR.GetCreateUserPath(),"input[name=form_build_id]"));
-        RequestBody.put("mail", TestBases.generateRandomString(12)+"@vardot.com");
-        RequestBody.put("name", TestBases.generateRandomString(8));
-        RequestBody.put("pass[pass1]", "Vardot@123");
-        RequestBody.put("pass[pass2]", "Vardot@123");
-        RequestBody.put("status", "1");
-        RequestBody.put("roles[editor]", "editor");
-        RequestBody.put("roles[content_admin]", "content_admin");
-        RequestBody.put("roles[site_admin]", "site_admin");
-        RequestBody.put("form_id", "user_register_form");
-        RequestBody.put("antibot_key", "BDDFx5Rwh8bN1jP3jKvCVzSRdBaF7dCzA4xmnQrKGXk");
-        RequestBody.put("path[0][alias]", "");
-        RequestBody.put("op", "Create new account");
-        RequestBody.put("changed", "1691304919");
-        APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetCreateUserPath(),RequestBody,CR.Getcookie());
-
-    }
-    @Test(groups = { "Sanity" })
-    public void Site_Main_Search() throws Exception {
-        List<String> RequestHeader= new ArrayList<>();
-        List<String> Response=new ArrayList<>();
-
-        RequestHeader.add(0,"rows");
-        RequestHeader.add(1,"6000");
-
-        RequestHeader.add(2,"e1");
-        RequestHeader.add(3,"1");
-
-       Response=APICaller.Public_GetAPI_Caller(CR.GetRun_ENV(),CR.GetMainSearchPath(),RequestHeader).getBody().jsonPath().getList("response.docs.id");
-        APICaller.GeneralResponseValidator(Response);
-    }
-
-
-    @Test(groups = { "Sanity" })
-    public void News_Search() throws Exception {
-        List<String> RequestHeader= new ArrayList<>();
-        List<String> Response;
-        RequestHeader.add(0,"q");
-        RequestHeader.add(1,"*jordan:*");
-        RequestHeader.add(2,"fq");
-        RequestHeader.add(3,"ss_type:(\"news\")");
-        RequestHeader.add(4,"fq");
-        RequestHeader.add(5,"ss_search_api_language:en");
-        RequestHeader.add(6,"fq");
-        RequestHeader.add(7,"sm_site_name:(\"Global site\")");
-        RequestHeader.add(8,"facet.field");
-        RequestHeader.add(9,"sm_site_name");
-        RequestHeader.add(10,"facet.field");
-        RequestHeader.add(11,"ss_news_category");
-        RequestHeader.add(12,"facet.field");
-        RequestHeader.add(13,"ss_type");
-        RequestHeader.add(14,"sm_name_1");
-        RequestHeader.add(15,"sm_region");
-        RequestHeader.add(16,"sm_countries");
-        RequestHeader.add(17,"facet.field");
-        RequestHeader.add(18,"ds_created");
-        RequestHeader.add(19,"rows");
-        RequestHeader.add(20,"5000");
-        RequestHeader.add(21,"facet.limit");
-        RequestHeader.add(22,"-1");
-        RequestHeader.add(23,"start");
-        RequestHeader.add(24,"0");
-        RequestHeader.add(25,"facet");
-        RequestHeader.add(26,"on");
-        RequestHeader.add(27,"hl");
-        RequestHeader.add(28,"on");
-        RequestHeader.add(29,"hl.fl");
-        RequestHeader.add(30,"tm_X3b_en_rendered_item");
-        RequestHeader.add(31,"hl.usePhraseHighlighter");
-        RequestHeader.add(32,"true");
-        RequestHeader.add(33,"wt");
-        RequestHeader.add(34,"json");
-        Response= APICaller.Public_GetAPI_Caller(CR.GetRun_ENV(),CR.GetNewsSearchPath(),RequestHeader).getBody().jsonPath().getList("response.docs.id");
-        APICaller.GeneralResponseValidator(Response);
+        RequestBody.put("status[value]", "1");
+        RequestBody.put("op", "Save");
+        RequestBody.put("changed", "1717412206");
+        RequestBody.put("field_year[0][value]", "2022");
+        RequestBody.put("field_survey_status[value]", "1");
+        RequestBody.put("field_level", "15036");
+        RequestBody.put("field_cluster", "15021");
+        RequestBody.put("field_cluster_country[0][value]", "JO");
+        RequestBody.put("field_city[0][value]", "Amman");
+        RequestBody.put("field_start_date[0][value][date]", "2024-06-03");
+        RequestBody.put("field_end_date[0][value][date]", "2024-06-04");
+        RequestBody.put("field_language", "en");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_name][0][value]", "moawih11");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_email][0][value]", "m.jaber@vardot.com");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_type_of_contract]", "15211");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_type_of_modality]", "15241");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_grade_of_the_post]", "15041");
+        RequestBody.put("field_cluster_coordinator_data[0][_weight]", "0");
+        RequestBody.put("field_cluster_coordinator_data[add_more][add_more_delta]", "");
+        RequestBody.put("field_im[0][subform][field_name][0][value]", "test");
+        RequestBody.put("field_im[0][subform][field_email][0][value]", "test@test.com");
+        RequestBody.put("field_im[0][subform][field_type_of_contract]", "15211");
+        RequestBody.put("field_im[0][subform][field_type_of_modality]", "15241");
+        RequestBody.put("field_im[0][subform][field_grade_of_the_post]", "15041");
+        RequestBody.put("field_im[0][_weight]", "0");
+        RequestBody.put("field_im[add_more][add_more_delta]", "");
+        RequestBody.put("field_others[add_more][add_more_delta]", "");
+        RequestBody.put("field_international_ngos[0][subform][field_partner_name][target_id][textfield]", "Acceso (15406)");
+        RequestBody.put("field_international_ngos[0][_weight]", "0");
+        RequestBody.put("field_international_ngos[add_more][add_more_delta]", "");
+        RequestBody.put("field_icrc_ifrc[0][subform][field_partner_name][target_id][textfield]", "British Red Cross (15186)");
+        RequestBody.put("field_icrc_ifrc[0][_weight]", "0");
+        RequestBody.put("field_icrc_ifrc[add_more][add_more_delta]", "");
+        RequestBody.put("field_un_organization[add_more][add_more_delta]", "");
+        RequestBody.put("field_donors[add_more][add_more_delta]", "");
+        RequestBody.put("field_national_local_authority[add_more][add_more_delta]", "");
+        RequestBody.put("field_national_local_ngo_cbo[add_more][add_more_delta]", "");
+        RequestBody.put("group_information[group_information__active_tab]", "edit-group-partners");
+        RequestBody.put("form_build_id", "form-Ug9ygwisdEreJY0dsWxHS6bu8oFeITLb8FZvVf9yvK4");
+        RequestBody.put("form_token", "_Xq4a5ipKmaXBCwmyFr91QOEzUpm3Vfj9XGCl2b59X0");
+        RequestBody.put("form_id", "node_ccpm_form");
+        RequestBody.put("revision_log[0][value]", "");
+        RequestBody.put("path[0][pathauto]", "1");
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetCreateContent(), RequestBody, CR.Getcookie());
 
     }
 
-    @Test(priority = 2,groups = { "Sanity" },invocationCount=2,dependsOnMethods={"Check_User_Ability_To_Create_News","Check_User_Ability_To_Create_Publication"})
-    public void Check_User_Ability_To_Delete_Content() throws Exception {
+    @Test(priority = 1, groups = {"Sanity"})
+    public void Check_User_Ability_To_Clone_CCPM() throws Exception {
+        Map<String, String> RequestBody = new LinkedHashMap<>();
+        RequestBody.put("status[value]", "1");
+        RequestBody.put("op", "Save");
+        RequestBody.put("changed", "1718103583");
+        RequestBody.put("field_year[0][value]", "2022");
+        RequestBody.put("field_survey_status[value]", "1");
+        RequestBody.put("field_level", "15036");
+        RequestBody.put("field_cluster", "15021");
+        RequestBody.put("field_cluster_country[0][value]", "JO");
+        RequestBody.put("field_city[0][value]", "Amman");
+        RequestBody.put("field_start_date[0][value][date]", "2024-06-03");
+        RequestBody.put("field_end_date[0][value][date]", "2024-06-04");
+        RequestBody.put("field_language", "en");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_name][0][value]", "moawih11");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_email][0][value]", "m.jaber@vardot.com");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_type_of_contract]", "15211");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_type_of_modality]", "15241");
+        RequestBody.put("field_cluster_coordinator_data[0][subform][field_grade_of_the_post]", "15041");
+        RequestBody.put("field_cluster_coordinator_data[0][_weight]", "0");
+        RequestBody.put("field_cluster_coordinator_data[add_more][add_more_delta]", "");
+        RequestBody.put("field_im[0][subform][field_name][0][value]", "test");
+        RequestBody.put("field_im[0][subform][field_email][0][value]", "test@test.com");
+        RequestBody.put("field_im[0][subform][field_type_of_contract]", "15211");
+        RequestBody.put("field_im[0][subform][field_type_of_modality]", "15241");
+        RequestBody.put("field_im[0][subform][field_grade_of_the_post]", "15041");
+        RequestBody.put("field_im[0][_weight]", "0");
+        RequestBody.put("field_im[add_more][add_more_delta]", "");
+        RequestBody.put("field_others[add_more][add_more_delta]", "");
+        RequestBody.put("field_international_ngos[add_more][add_more_delta]", "");
+        RequestBody.put("field_icrc_ifrc[add_more][add_more_delta]", "");
+        RequestBody.put("field_un_organization[add_more][add_more_delta]", "");
+        RequestBody.put("field_donors[add_more][add_more_delta]", "");
+        RequestBody.put("field_national_local_authority[add_more][add_more_delta]", "");
+        RequestBody.put("field_national_local_ngo_cbo[add_more][add_more_delta]", "");
+        RequestBody.put("field_upload_final_report[0][fids]", "");
+        RequestBody.put("group_information[group_information__active_tab]", "edit-group-general-information");
+        RequestBody.put("form_build_id", "form-eAGqXTdfZlzGv_7l4gv-cs9Ep0UpqTAIjfRb5pAIg4M");
+        RequestBody.put("form_token", "xYY9l3bxjeilFxZEcrcYY_vrboB2Tx1zCz9GYBqRqGU");
+        RequestBody.put("form_id", "node_ccpm_quick_node_clone_form");
+        RequestBody.put("revision_log[0][value]", "");
+        RequestBody.put("path[0][pathauto]", "1");
+
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetClone_CCPM_Path(), RequestBody, CR.Getcookie());
+
+    }
+
+    @Test(priority = 2, groups = {"Sanity"}, invocationCount = 2, dependsOnMethods = {"Check_User_Ability_To_Create_CCPM"})
+    public void Check_User_Delete_Content() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
         RequestBody.put("confirm", "1");
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_build_id]"));
-        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_token]"));
-        String Formid=GoogleSheetsHelper.GetNodeID()
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetDeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_build_id]"));
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetDeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), "input[name=form_token]"));
+        String Formid = GoogleSheetsHelper.GetNodeID()
                 .replace("[", "").replace("]", "").replaceAll("[0-9]", "").replace(",", "");
-        RequestBody.put("form_id",GoogleSheetsHelper.prepareNode_For_deletion(Formid) );
+        RequestBody.put("form_id", GoogleSheetsHelper.prepareNode_For_deletion(Formid));
         RequestBody.put("op", "Delete");
-        APICaller.Content_Deleter(CR.GetRun_ENV(), CR.DeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), CR.Getcookie(), RequestBody);
+        APICaller.Content_Deleter(CR.GetRun_ENV(), CR.GetDeleteNodePath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), CR.Getcookie(), RequestBody);
+
     }
 
-    @Test(priority = 1,groups = { "Sanity" })
-    public void Check_User_Ability_To_Create_Publication() throws Exception {
 
+    @Test()
+    public void Add_People() throws Exception {
         Map<String, String> RequestBody = new LinkedHashMap<>();
-        RequestBody.put("changed", "1691304919");
-        RequestBody.put("BLAB LABLA", "1691304919");
+        RequestBody.put("field_text_plain[0][value]", "test m");
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.AddPeoplePath() ,"input[name=form_build_id]"));
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.AddPeoplePath(), "input[name=form_token]"));
+        RequestBody.put("form_id", "user_register_form");
+        RequestBody.put("field_cluster", "");
+        RequestBody.put("field_country[0][value]", "");
+        RequestBody.put("mail", "");
+        RequestBody.put("name", "moawih_test");
+        RequestBody.put("pass[pass1]", "Admin@123");
+        RequestBody.put("pass[pass2]", "Admin@123");
+        RequestBody.put("status", "1");
+        RequestBody.put("roles[content_manager]", "content_manager");
+        RequestBody.put("op", "Create new account");
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.AddPeoplePath(), RequestBody, CR.Getcookie());
 
-        RequestBody.put("langcode[0][value]", "en");
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV()+ CR.GetCreatePublicationPath(),"input[name=form_build_id]"));
-       RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV()+ CR.GetCreatePublicationPath(),"input[name=form_token]"));
-        RequestBody.put("form_id", "node_publication_form");
-        RequestBody.put("ajax_responsive_preview", "");
-        RequestBody.put("title[0][value]", TestBases.generateRandomString(12));
-        RequestBody.put("field_citation[0][value]", "");
-        RequestBody.put("body[0][summary]", TestBases.generateRandomString(8));
-        RequestBody.put("body[0][value]", TestBases.generateRandomString(7));
-        RequestBody.put("body[0][format]", "full_html");
-        RequestBody.put("field_brief[0][value]", "");
-        RequestBody.put("field_date_format", "full-date");
-        RequestBody.put("field_layout_style", "publication-cover");
-        RequestBody.put("field_background_color", "no-bg");
-        RequestBody.put("field_description[0][value]", "");
-        RequestBody.put("field_byline[0][value]", "");
-        RequestBody.put("field_align", "_none");
-        RequestBody.put("field_media[media_library_selection]", "");
-        RequestBody.put("field_file_or_link", "file");
-        RequestBody.put("field_file[media_library_selection]", "");
-        RequestBody.put("field_button_style", "btn btn-secondary");
-        RequestBody.put("field_file_button[0][value]", "View report");
-        RequestBody.put("field_links[0][title]", "");
-        RequestBody.put("field_links[0][uri]", "");
-        RequestBody.put("field_links[0][options][attributes][class]", "");
-        RequestBody.put("field_links[0][_weight]", "0");
-        RequestBody.put("field_links[1][title]", "");
-        RequestBody.put("field_links[1][uri]", "");
-        RequestBody.put("field_links[1][options][attributes][class]", "");
-        RequestBody.put("field_links[1][_weight]", "1");
-        RequestBody.put("field_publication", "101");
-        RequestBody.put("field_event_category", "_none");
-        RequestBody.put("field_countries[0][target_id]", "");
-        RequestBody.put("field_countries[0][_weight]", "0");
-        RequestBody.put("field_tags[0][target_id]", "");
-        RequestBody.put("field_tags[0][_weight]", "0");
-        RequestBody.put("field_categories_list", "3");
-        RequestBody.put("field_related_publication[0][target_id]", "");
-        RequestBody.put("field_related_publication[0][_weight]", "0");
-        RequestBody.put("field_long_title[0][value]", "");
-        RequestBody.put("field_docid[0][value]", "");
-        RequestBody.put("field_relationid[0][value]", "");
-        RequestBody.put("field_cid[0][value]", "");
-        RequestBody.put("field_scid[0][value]", "");
-        RequestBody.put("field_tid[0][value]", "");
-        RequestBody.put("field_permalink[0][value]", "");
-        RequestBody.put("field_reference[0][value]", "");
-        RequestBody.put("field_coa[0][target_id]", "");
-        RequestBody.put("field_coa[0][_weight]", "0");
-        RequestBody.put("field_coi[0][target_id]", "");
-        RequestBody.put("field_coi[0][_weight]", "0");
-        RequestBody.put("field_cot[0][target_id]", "");
-        RequestBody.put("field_cot[0][_weight]", "0");
-        RequestBody.put("field_keywords[0][target_id]", "");
-        RequestBody.put("field_keywords[0][_weight]", "0");
-        RequestBody.put("field_categories[0][target_id]", "");
-        RequestBody.put("field_commentsint[0][value]", "");
-        RequestBody.put("field_commentsext[0][value]", "");
-        RequestBody.put("field_day[0][value]", "");
-        RequestBody.put("field_year[0][value]", "");
-        RequestBody.put("field_month[0][value]", "");
-        RequestBody.put("field_texis_tags[0][value]", "");
-        RequestBody.put("group_tabs[group_tabs__active_tab]", "edit-group-related-info");
-        RequestBody.put("field_yoast_seo[0][yoast_seo][focus_keyword]", "");
-        RequestBody.put("field_yoast_seo[0][yoast_seo][status]", "0");
-        RequestBody.put("field_boosted_keyword[0][value]", "");
-        RequestBody.put("field_boosted_keyword[0][boost]", "1");
-        RequestBody.put("revision_log[0][value]", "");
-        RequestBody.put("created[0][value][date]", "2023-09-12");
-        RequestBody.put("created[0][value][time]", "22:06:10");
-        RequestBody.put("publish_on[0][value][date]", "");
-        RequestBody.put("publish_on[0][value][time]", "");
-        RequestBody.put("unpublish_on[0][value][date]", "");
-        RequestBody.put("unpublish_on[0][value][time]", "");
-        RequestBody.put("field_meta_tags[0][basic][title]", "[node:title] | [site:name]");
-        RequestBody.put("field_meta_tags[0][basic][description]", "[node:field_brief]");
-        RequestBody.put("field_meta_tags[0][basic][abstract]", "[node:field_brief]");
-        RequestBody.put("field_meta_tags[0][basic][keywords]", "");
-        RequestBody.put("simple_sitemap[default][index]", "1");
-        RequestBody.put("simple_sitemap[default][priority]", "0.5");
-        RequestBody.put("simple_sitemap[default][changefreq]", "");
-        RequestBody.put("simple_sitemap[default][include_images]", "0");
-        RequestBody.put("path[0][pathauto]", "1");
-        RequestBody.put("moderation_state[0][state]", "draft");
+    }
+
+    @Test(priority = 2, groups = {"Sanity"})
+    public void Add_term_CCPM() throws Exception {
+        LinkedHashMap<String, String> RequestBody = new LinkedHashMap<>();
+        RequestBody.put("name[0][value]", "TISTING");
+        RequestBody.put("description[0][value]", "");
+        RequestBody.put("description[0][format]", "full_html");
+        RequestBody.put("form_build_id", "form-QRInbyb8t_CIJHK0c7EV_Yj2bufrCKV2QcMgr5_0xKA");
+        RequestBody.put("form_token", "gY6g-atVu7GmjINsG2rQZQpc6k4D1zK6ff2qyIzGcrY");
+        RequestBody.put("form_id", "taxonomy_term_type_of_resources_form");
+        RequestBody.put("parent[]", "0");
+        RequestBody.put("weight", "0");
+        RequestBody.put("revision_log_message[0][value]", "");
+        RequestBody.put("path[0][alias]", "");
+        RequestBody.put("advanced__active_tab", "edit-revision-information");
+        RequestBody.put("status[value]", "1");
+        RequestBody.put("op", "Save.");
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.add_term(), RequestBody, CR.Getcookie());
+
+    }
+
+    @Test(priority = 2, groups = {"Sanity"})
+    public void Edit_term_CCPM() throws Exception {
+        LinkedHashMap<String, String> RequestBody = new LinkedHashMap<>();
+        RequestBody.put("name[0][value]", "MOAWIH112233");
+        RequestBody.put("description[0][value]", "<p>TEST</p>");
+        RequestBody.put("description[0][format]", "full_html");
+        RequestBody.put("form_build_id", "form-v8AoU0jjG_kaIZnJBJoNpuLR4P5gEZ7PrqYYV5iuTx8");
+        RequestBody.put("form_token", "gY6g-atVu7GmjINsG2rQZQpc6k4D1zK6ff2qyIzGcrY");
+        RequestBody.put("form_id", "taxonomy_term_type_of_resources_form");
+        RequestBody.put("parent[]", "0");
+        RequestBody.put("weight", "0");
+        RequestBody.put("revision_log_message[0][value]", "");
+        RequestBody.put("path[0][alias]", "");
+        RequestBody.put("advanced__active_tab", "edit-revision-information");
+        RequestBody.put("status[value]", "1");
         RequestBody.put("op", "Save");
-        APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetCreatePublicationPath(),RequestBody,CR.Getcookie());
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.Edit_term(), RequestBody, CR.Getcookie());
 
     }
-    @Test(priority = 1,groups = { "Sanity" })
-    public void Check_User_Ability_To_Create_News() throws Exception {
-        Map<String, String> RequestBody = new LinkedHashMap<>();
 
+    @Test(priority = 2, groups = {"Sanity"})
+    public void DELETE_term_1CCPM() throws Exception {
+        LinkedHashMap<String, String> RequestBody = new LinkedHashMap<>();
+        String url = CR.GetRun_ENV() + CR.GetCCPM_DeleteTaxonomyPath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", ""));
+        String formToken = APICaller.PrepareFormData(url, "input[name=form_token]");
+        String formBuildId = APICaller.PrepareFormData(url, "input[name=form_build_id]");
+        RequestBody.put("confirm", "1");
+        RequestBody.put("form_build_id", formBuildId);
+        RequestBody.put("form_token", formToken);
+        RequestBody.put("form_id", "taxonomy_term_type_of_resources_delete_form");
+        RequestBody.put("op", "Delete");
+        APICaller.Content_Deleter(CR.GetRun_ENV(), CR.GetCCPM_DeleteTaxonomyPath().replace("XXXXX", GoogleSheetsHelper.GetNodeID().replace("[", "").replace("]", "").replaceAll("[^\\d.]", "")), CR.Getcookie(), RequestBody);
+    }
 
-        RequestBody.put("changed", "1695558430");
-        RequestBody.put("langcode[0][value]", "en");
-        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV()+ CR.GetCreateNewsPath(),"input[name=form_build_id]"));
-        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV()+ CR.GetCreateNewsPath(),"input[name=form_token]"));
+    @Test(priority = 1, groups = {"Sanity"})
+    public void Check_User_Ability_To_Perform_Search() throws Exception {
+        Map<String, String> requestBody = new LinkedHashMap<>();
+        requestBody.put("_wrapper_format", "drupal_ajax");
+        requestBody.put("search_api_fulltext", "Thematic Areas");
+        requestBody.put("view_name", "search_by");
+        requestBody.put("view_display_id", "page_1");
+        requestBody.put("view_args", "");
+        requestBody.put("view_path", "/search-by");
+        requestBody.put("view_base_path", "search-by");
+        requestBody.put("view_dom_id", "9825bce01e6ce0c7c59c98f3d05b56b5fd41019cbd9af1ef497679e503eade7e");
+        requestBody.put("pager_element", "0");
+        Response response = APICaller.Public_PostAPI_Caller(CR.GetRun_ENV(), CR.GetCCPM_SearchAPI(), requestBody, CR.Getcookie());
+        String responseBody = response.getBody().asString();
+        System.out.println("Response: " + responseBody);
+    }
 
-        RequestBody.put("form_id", "node_news_form");
-        RequestBody.put("ajax_responsive_preview", "");
-        RequestBody.put("title[0][value]",  TestBases.generateRandomString(9));
-        RequestBody.put("body[0][value]",  TestBases.generateRandomString(8));
-        RequestBody.put("body[0][format]", "full_html");
-        RequestBody.put("field_brief[0][value]", "");
-        RequestBody.put("field_layout_style", "without-media-news");
-        RequestBody.put("field_background_color", "white-smoke-bg");
-        RequestBody.put("field_description[0][value]", "");
-        RequestBody.put("field_align", "_none");
-        RequestBody.put("field_media[media_library_selection]", "");
-        RequestBody.put("field_byline[0][value]", "");
-        RequestBody.put("field_links[0][title]", "");
-        RequestBody.put("field_links[0][uri]", "");
-        RequestBody.put("field_links[0][options][attributes][class]", "");
-        RequestBody.put("field_links[0][_weight]", "0");
-        RequestBody.put("field_links[1][title]", "");
-        RequestBody.put("field_links[1][uri]", "");
-        RequestBody.put("field_links[1][options][attributes][class]", "");
-        RequestBody.put("field_links[1][_weight]", "1");
-        RequestBody.put("field_categories", "1140");
-        RequestBody.put("field_publication", "_none");
-        RequestBody.put("field_briefing_notes_byline[0][value]", "This is a summary of what was said by UNHCR spokesperson – to whom quoted text may be attributed – at today's press briefing at the Palais des Nations in Geneva.");
-        RequestBody.put("field_countries[0][target_id]", "");
-        RequestBody.put("field_countries[0][_weight]", "0");
-        RequestBody.put("field_tags[0][target_id]", "");
-        RequestBody.put("field_tags[0][_weight]", "0");
-        RequestBody.put("field_categories_list", "4");
-        RequestBody.put("field_related_news[0][target_id]", "");
-        RequestBody.put("field_related_news[0][_weight]", "0");
-        RequestBody.put("field_docid[0][value]", "");
-        RequestBody.put("field_relationid[0][value]", "");
-        RequestBody.put("field_cid[0][value]", "");
-        RequestBody.put("field_pagerelationid[0][value]", "");
-        RequestBody.put("field_scid[0][value]", "");
-        RequestBody.put("field_tid[0][value]", "");
-        RequestBody.put("field_permalink[0][value]", "");
-        RequestBody.put("field_reference[0][value]", "");
-        RequestBody.put("field_coa[0][target_id]", "");
-        RequestBody.put("field_coa[0][_weight]", "0");
-        RequestBody.put("field_coi[0][target_id]", "");
-        RequestBody.put("field_coi[0][_weight]", "0");
-        RequestBody.put("field_cot[0][target_id]", "");
-        RequestBody.put("field_cot[0][_weight]", "0");
-        RequestBody.put("field_keywords[0][target_id]", "");
-        RequestBody.put("field_keywords[0][_weight]", "0");
-        RequestBody.put("field_commentsint[0][value]", "");
-        RequestBody.put("field_texis_tags[0][value]", "");
-        RequestBody.put("group_tabs[group_tabs__active_tab]", "edit-group-related-info");
-        RequestBody.put("field_yoast_seo[0][yoast_seo][focus_keyword]", "");
-        RequestBody.put("field_yoast_seo[0][yoast_seo][status]", "0");
-        RequestBody.put("revision_log[0][value]", "");
-        RequestBody.put("created[0][value][date]", "2023-09-24");
-        RequestBody.put("created[0][value][time]", "14:27:10");
-        RequestBody.put("publish_on[0][value][date]", "");
-        RequestBody.put("publish_on[0][value][time]", "");
-        RequestBody.put("unpublish_on[0][value][date]", "");
-        RequestBody.put("unpublish_on[0][value][time]", "");
-        RequestBody.put("field_meta_tags[0][basic][title]", "[node:title] | [site:name]");
-        RequestBody.put("field_meta_tags[0][basic][description]", "[node:field_brief]");
-        RequestBody.put("field_meta_tags[0][basic][abstract]", "[node:field_brief]");
-        RequestBody.put("field_meta_tags[0][basic][keywords]", "");
-        RequestBody.put("field_meta_tags[0][advanced][geo_placename]", "");
-        RequestBody.put("field_meta_tags[0][advanced][geo_position]", "");
-        RequestBody.put("field_meta_tags[0][advanced][geo_region]", "");
-        RequestBody.put("field_meta_tags[0][advanced][icbm]", "");
-        RequestBody.put("field_meta_tags[0][advanced][canonical_url]", "[node:canonical-domain]");
-        RequestBody.put("field_meta_tags[0][advanced][content_language]", "");
-        RequestBody.put("field_meta_tags[0][advanced][shortlink]", "[current-page:url:unaliased]");
-        RequestBody.put("field_meta_tags[0][advanced][news_keywords]", "");
-        RequestBody.put("field_meta_tags[0][advanced][next]", "");
-        RequestBody.put("field_meta_tags[0][advanced][prev]", "");
-        RequestBody.put("field_meta_tags[0][advanced][standout]", "");
-        RequestBody.put("field_meta_tags[0][advanced][generator]", "Varbase");
-        RequestBody.put("field_meta_tags[0][advanced][image_src]", "");
-        RequestBody.put("field_meta_tags[0][advanced][original_source]", "");
-        RequestBody.put("field_meta_tags[0][advanced][rating]", "");
-        RequestBody.put("field_meta_tags[0][advanced][referrer]", "origin");
-        RequestBody.put("field_meta_tags[0][advanced][refresh]", "");
-        RequestBody.put("field_meta_tags[0][advanced][rights]", "©[current-date:html_year] [site:name]. All rights reserved.");
-        RequestBody.put("field_meta_tags[0][advanced][set_cookie]", "");
-        RequestBody.put("field_meta_tags[0][advanced][revisit_after]", "");
-        RequestBody.put("field_meta_tags[0][advanced][cache_control]", "");
-        RequestBody.put("field_meta_tags[0][advanced][hreflang_external]", "[node:remote_hreflangs]");
-        RequestBody.put("field_meta_tags[0][advanced][expires]", "");
-        RequestBody.put("field_meta_tags[0][advanced][pragma]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_determiner]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_site_name]", "[site:name]");
-        RequestBody.put("field_meta_tags[0][open_graph][og_type]", "website");
-        RequestBody.put("field_meta_tags[0][open_graph][og_url]", "[current-page:url:absolute]");
-        RequestBody.put("field_meta_tags[0][open_graph][og_title]", "[current-page:title] | [site:name]");
-        RequestBody.put("field_meta_tags[0][open_graph][og_description]", "[node:field_brief]");
-        RequestBody.put("field_meta_tags[0][open_graph][og_image]", "[node:share_smart_image]");
-        RequestBody.put("field_meta_tags[0][open_graph][og_video]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_image_url]", "[node:share_smart_image]");
-        RequestBody.put("field_meta_tags[0][open_graph][og_image_secure_url]", "[node:share_smart_image]");
-        RequestBody.put("field_meta_tags[0][open_graph][og_video_secure_url]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_image_type]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_video_type]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_image_width]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_video_width]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_image_height]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_video_height]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_image_alt]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_updated_time]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_video_duration]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_latitude]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_longitude]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_see_also]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_street_address]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_locality]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_region]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_postal_code]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_country_name]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_email]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_phone_number]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_fax_number]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_locale]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_locale_alternative]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][article_author]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][article_publisher]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][article_section]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][article_tag]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][article_published_time]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][article_modified_time]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][article_expiration_time]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][book_author]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][book_isbn]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][book_release_date]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][book_tag]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_audio]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_audio_secure_url]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][og_audio_type]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][profile_first_name]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][profile_last_name]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][profile_gender]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][profile_username]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][video_actor]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][video_actor_role]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][video_director]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][video_release_date]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][video_series]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][video_tag]", "");
-        RequestBody.put("field_meta_tags[0][open_graph][video_writer]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_type]", "summary_large_image");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_description]", "[node:field_brief]");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_site]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_title]", "[current-page:title] | [site:name]");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_site_id]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_creator]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_creator_id]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_donottrack]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_page_url]", "[current-page:url:absolute]");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_image]", "[node:share_smart_image]");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_image_alt]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_image_height]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_image_width]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_gallery_image0]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_gallery_image1]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_gallery_image2]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_gallery_image3]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_app_store_country]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_app_name_iphone]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_app_id_iphone]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_app_url_iphone]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_app_name_ipad]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_app_id_ipad]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_app_url_ipad]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_app_name_googleplay]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_app_id_googleplay]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_app_url_googleplay]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_player]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_player_width]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_player_height]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_player_stream]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_player_stream_content_type]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_label1]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_data1]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_label2]", "");
-        RequestBody.put("field_meta_tags[0][twitter_cards][twitter_cards_data2]", "");
-        RequestBody.put("field_meta_tags[0][schema_article][schema_article_type]", "NewsArticle");
-        RequestBody.put("field_meta_tags[0][schema_article][schema_article_headline]", "[node:title]");
-        RequestBody.put("field_meta_tags[0][schema_article][schema_article_name]", "[node:title]");
-        RequestBody.put("field_meta_tags[0][schema_article][schema_article_about]", "[node:field_topic:0:entity:name]");
-        RequestBody.put("field_meta_tags[0][schema_article][schema_article_description]", "[node:field_brief]");
-        RequestBody.put("field_meta_tags[0][schema_article][schema_article_image][@type]", "ImageObject");
-        RequestBody.put("field_meta_tags[0][schema_article][schema_article_image][representativeOfPage]", "True");
-        RequestBody.put("field_meta_tags[0][schema_article][schema_article_image][url]", "[node:share_smart_image]");
-        RequestBody.put("field_meta_tags[0][schema_article][schema_article_image][width]", "");
-        RequestBody.put("field_meta_tags[0][schema_article][schema_article_image][height]", "");
-        RequestBody.put("field_meta_tags[0][schema_article][schema_article_date_published]", "[node:created:html_datetime]");
-        RequestBody.put("field_meta_tags[0][schema_article][schema_article_date_modified]", "[node:changed:html_datetime]");
-
-        RequestBody.put("simple_sitemap[default][index]", "1");
-        RequestBody.put("simple_sitemap[default][priority]", "0.5");
-        RequestBody.put("simple_sitemap[default][changefreq]", "");
-        RequestBody.put("simple_sitemap[default][include_images]", "0");
-        RequestBody.put("path[0][pathauto]", "1");
-        RequestBody.put("moderation_state[0][state]", "draft");
+    @Test(priority = 2, groups = {"Sanity"})
+    public void CCPM_Add_Remote_Video() throws Exception {
+        LinkedHashMap<String, String> RequestBody = new LinkedHashMap<>();
+        String formToken = APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetCCPM_Add_RemoteVideoPath(), "input[name=form_token]");
+        String formBuildId = APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetCCPM_Add_RemoteVideoPath(), "input[name=form_build_id]");
+        RequestBody.put("field_media_oembed_video[0][value]", "https://youtu.be/LXb3EKWsInQ?si=ril8UGxeVU8iD2Ed");
+        RequestBody.put("form_build_id", formBuildId);
+        RequestBody.put("form_token", formToken);
+        RequestBody.put("form_id", "media_remote_video_add_form");
+        RequestBody.put("field_title[0][value]", "C:\\Users\\Vardot\\Downloads\\Example File\\Image_test.png");
+        RequestBody.put("field_cover_image[0][alt]", "image");
+        RequestBody.put("field_cover_image[0][fids]", "53381");
+        RequestBody.put("status[value]", "1");
+        RequestBody.put("advanced__active_tab", "edit-revision-information");
         RequestBody.put("op", "Save");
-        APICaller.ContentCreationAPI(CR.GetRun_ENV()+ CR.GetCreateNewsPath(),RequestBody,CR.Getcookie());
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetCCPM_Add_RemoteVideoPath(), RequestBody, CR.Getcookie());
+    }
+
+    @Test(priority = 2, groups = {"Sanity"})
+    public void Add_Entityqueues() throws Exception {
+        LinkedHashMap<String, String> RequestBody = new LinkedHashMap<>();
+        RequestBody.put("form_build_id", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetAdd_Entityqueues_Path() ,"input[name=form_build_id]"));
+        RequestBody.put("form_token", APICaller.PrepareFormData(CR.GetRun_ENV() + CR.GetAdd_Entityqueues_Path(), "input[name=form_token]"));
+        RequestBody.put("form_id", "entity_subqueue_home_page_ccpm_news_edit_form");
+        RequestBody.put("items[0][_weight]", "0");
+        RequestBody.put("items[1][_weight]", "1");
+        RequestBody.put("items[add_more][new_item][target_id]", "Lorem Ipsum (33031)");
+        RequestBody.put("_triggering_element_name", "items_add_more");
+        RequestBody.put("_triggering_element_value", "Add item");
+        RequestBody.put("_drupal_ajax", "1");
+        RequestBody.put("ajax_page_state[theme]", "gin");
+        RequestBody.put("ajax_page_state[theme_token]", "sdXzrA8QT5KBo0EdprSTh9h7L-DzOOrvxM30SbOKagA");
+        RequestBody.put("ajax_page_state[libraries]", "eJx9UltygzAMvJCDz9CTeIRRQMWvSoY8Tl85hHSStP1gVt5dy1hrGCIlV3MOPbC9Y1cZ0cCfUjflFZlSxVSfbU4Q2E92gxetoTwakc_J9DS6QgXtXhjvS3T1hDCLbfVB6iUoHYCzHUPuIdwoSqPRDhXPdYFgB14KhO6HOahjlv8t919RE-Mug6-04m33E1-hDzgwjO8so5ScRLdtWhsMJ1U_vxbkS3fMHDclaQWBrmhwcT7nmVAhlkCQPNrfSDfgEZZQzUjJ6rejA-_b-PfllJmuejUI-7wfEiXafFLJz5dWupgHZKiUkxMasCUcQbtTLKzhDi7qmaRxBvTVUhTz8hBe1x2Kh4IfLXGzCPI-olbfwhazAvcgeiWQqc_Aw-M1mJXwJCpUcHgumat9Y74BZXkL6Q");
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetAdd_Entityqueues_Path(), RequestBody, CR.Getcookie());
+    }
+
+    @Test(priority = 2, groups = {"Sanity"})
+    public void Add_Entityqueues1() throws Exception {
+        LinkedHashMap<String, String> RequestBody = new LinkedHashMap<>();
+
+
+        String url = CR.GetRun_ENV() + CR.GetAdd_Entityqueues_Path();
+        String formToken = APICaller.PrepareFormData(url, "input[name=form_token]");
+        String formBuildId = APICaller.PrepareFormData(url, "input[name=form_build_id]");
+        RequestBody.put("form_build_id", formBuildId);
+        RequestBody.put("form_token", formToken);
+        RequestBody.put("form_id", "entity_subqueue_home_page_ccpm_news_edit_form");
+        RequestBody.put("items[0][_weight]", "0");
+        RequestBody.put("items[1][_weight]", "1");
+        RequestBody.put("items[add_more][new_item][target_id]", "Lorem Ipsum (33031)");
+        RequestBody.put("_triggering_element_name", "items_add_more");
+        RequestBody.put("_triggering_element_value", "Add item");
+        RequestBody.put("_drupal_ajax", "1");
+        RequestBody.put("ajax_page_state[theme]", "gin");
+        RequestBody.put("ajax_page_state[theme_token]", "sdXzrA8QT5KBo0EdprSTh9h7L-DzOOrvxM30SbOKagA");
+        RequestBody.put("ajax_page_state[libraries]", "eJx9UltygzAMvJCDz9CTeIRRQMWvSoY8Tl85hHSStP1gVt5dy1hrGCIlV3MOPbC9Y1cZ0cCfUjflFZlSxVSfbU4Q2E92gxetoTwakc_J9DS6QgXtXhjvS3T1hDCLbfVB6iUoHYCzHUPuIdwoSqPRDhXPdYFgB14KhO6HOahjlv8t919RE-Mug6-04m33E1-hDzgwjO8so5ScRLdtWhsMJ1U_vxbkS3fMHDclaQWBrmhwcT7nmVAhlkCQPNrfSDfgEZZQzUjJ6rejA-_b-PfllJmuejUI-7wfEiXafFLJz5dWupgHZKiUkxMasCUcQbtTLKzhDi7qmaRxBvTVUhTz8hBe1x2Kh4IfLXGzCPI-olbfwhazAvcgeiWQqc_Aw-M1mJXwJCpUcHgumat9Y74BZXkL6Q");
+
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetAdd_Entityqueues_Path(), RequestBody, CR.Getcookie());
+    }
+    
+    @Test(priority = 1, groups = { "Sanity" })
+    public void Check_User_Ability_To_Add_Menu_Link() throws Exception {
+        Map<String, String> requestBody = new LinkedHashMap<>();
+        requestBody.put("title[0][value]", "moawih");
+        requestBody.put("link[0][uri]", "https://www.google.co.uk/");
+        requestBody.put("enabled[value]", "1");
+        requestBody.put("form_build_id", "form-me7qJSpof31qO44InbWOTS1ZytC7CupgDQltaslr_0I");
+        requestBody.put("form_token", "gHCmPxdJjmP-HUExByuBVLri1SBpyxth2s_2icAkIH4");
+        requestBody.put("form_id", "menu_link_content_menu_link_content_form");
+        requestBody.put("menu_parent", "footer:");
+        requestBody.put("weight[0][value]", "0");
+        requestBody.put("description[0][value]", "");
+        requestBody.put("op", "Save");
+        String response = APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetCreate_Menu_Link_Endpoint(), requestBody, CR.Getcookie());
 
     }
-    @Test(priority = 3,groups = { "Sanity" })
-    public void Check_User_Ability_To_Create_Event() throws Exception {
-        Map<String, String> RequestBody = new LinkedHashMap<>();
-
-        RequestBody.put("changed", "1695558430");
-        RequestBody.put("langcode[0][value]", "en");
-        // to be completed by hamza/ibrahim
+    @Test(priority = 1, groups = { "Sanity" })
+    public void addEntityqueue (String[] keys, String[] values) throws Exception {
+        if (keys.length != values.length) {
+            throw new IllegalArgumentException("Keys and values arrays must have the same length");
+        }
+        Map<String, String> requestBody = new LinkedHashMap<>();
+        for (int i = 0; i < keys.length; i++) {
+            requestBody.put(keys[i], values[i]);
+        }
+        APICaller.ContentCreationAPI(CR.GetRun_ENV() + CR.GetAdd_Entityqueues_Path(), requestBody, CR.Getcookie());
     }
- }
 
+}

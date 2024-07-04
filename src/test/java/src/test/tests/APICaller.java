@@ -9,8 +9,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.Assert;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStreamReader;
 import java.net.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -76,16 +77,16 @@ public class APICaller extends TestBases {
                 .collect(Collectors.toSet());
     }
 
-    public static void ContentCreationAPI(String URL, Map<String, String> RequestBody, String cookie) throws Exception {
-    String Nodetype = "";
+    public static String ContentCreationAPI(String URL, Map<String, String> RequestBody, String cookie) throws Exception {
+        String Nodetype = "";
         StringBuilder postData = new StringBuilder();
         for (Map.Entry<String, String> entry : RequestBody.entrySet()) {
             if (postData.length() != 0) postData.append('&');
             postData.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8.toString()));
             postData.append('=');
             postData.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
-        if(entry.getValue().contains("node_"))
-            Nodetype=entry.getValue();
+            if (entry.getValue().contains("node_"))
+                Nodetype = entry.getValue();
         }
         CookieManager cookieManager = new CookieManager();
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_NONE);
@@ -100,9 +101,9 @@ public class APICaller extends TestBases {
                 .build();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(URL))
-                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
+                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
                 .header("Content-Type", "application/x-www-form-urlencoded")
-                .header("Cookie",cookie )
+                .header("Cookie", cookie)
                 .POST(HttpRequest.BodyPublishers.ofString(postData.toString()))
                 .build();
         CompletableFuture<HttpResponse<String>> responseFuture = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
@@ -113,38 +114,40 @@ public class APICaller extends TestBases {
         System.out.println("res body: " + responseBody);
 
         // Assert.assertTrue(CheckContentCreationResponseCode(statusCode));
-       NodeWriter(responseBody,Nodetype);
+//        NodeWriter(responseBody, Nodetype);
 
+        return Nodetype;
     }
+
     public static void NodeWriter(String responseBody, String nodetype) throws GeneralSecurityException, IOException {
-        GoogleSheetsHelper GSH=new GoogleSheetsHelper();
-        List<Object> data =new ArrayList<>();
+        GoogleSheetsHelper GSH = new GoogleSheetsHelper();
+        List<Object> data = new ArrayList<>();
         data.add(Extract_Node_ID(responseBody));
         data.add(nodetype);
         GSH.writeDataInNextEmptyRow(data);
     }
-    public static int  TermNodeExtarctor(String A) {
-            String input = A;
+
+    public static int TermNodeExtarctor(String A) {
+        String input = A;
 
 
-
-            Pattern pattern = Pattern.compile("edit-terms-tid(\\d+)");
+        Pattern pattern = Pattern.compile("edit-terms-tid(\\d+)");
         int number = 0;
 
-            Matcher matcher = pattern.matcher(input);
+        Matcher matcher = pattern.matcher(input);
 
-            if (matcher.find()) {
-                String numberStr = matcher.group(1);
-                number = Integer.parseInt(numberStr);
-                System.out.println("Extracted number: " + number);
-            } else {
-                System.out.println("No number found in the input string.");
-            }
-
-            return number;
+        if (matcher.find()) {
+            String numberStr = matcher.group(1);
+            number = Integer.parseInt(numberStr);
+            System.out.println("Extracted number: " + number);
+        } else {
+            System.out.println("No number found in the input string.");
         }
 
-    public static String Extract_Node_ID(String responseBody){
+        return number;
+    }
+
+    public static String Extract_Node_ID(String responseBody) {
         Pattern pattern = Pattern.compile("/(\\d+)/");
 
         // Create a matcher for the input string
@@ -152,126 +155,143 @@ public class APICaller extends TestBases {
         String number = "";
         // Find and print the first match
         if (matcher.find()) {
-             number = matcher.group(1); // Number between the slashes
+            number = matcher.group(1); // Number between the slashes
         } else {
             System.out.println("Number not found.");
         }
         return number;
     }
-    public static Boolean CheckIfContentCreated(String responseBody){
+
+    public static Boolean CheckIfContentCreated(String responseBody) {
 
         return responseBody.contains("Redirecting to https://unhcr-staging.unhcr.info/node/");
 
     }
 
-    public static Boolean CheckContentCreationResponseCode(int statusCode){
-        return  statusCode==303;
+    public static Boolean CheckContentCreationResponseCode(int statusCode) {
+        return statusCode == 303;
 
     }
-public static void
-GeneralResponseValidator(List<String> Response_List) throws Exception {
-    Response_List.add("zhxeoo-unhcr-entity:node/:en");
+
+    public static void
+    GeneralResponseValidator(List<String> Response_List) throws Exception {
+        Response_List.add("zhxeoo-unhcr-entity:node/:en");
         PrintDuplicateLog(Response_List);
 
-        if(findDuplicates(Response_List).isEmpty()){
+        if (findDuplicates(Response_List).isEmpty()) {
             PrintDuplicateLog(Response_List);
 
-            System.out.println( "No duplicate Found");
+            System.out.println("No duplicate Found");
 
-        }
-        else {
-            System.out.println( "duplicate Found");
+        } else {
+            System.out.println("duplicate Found");
             PrintDuplicateLog(Response_List);
-            Exception exception= new Exception();
+            Exception exception = new Exception();
             Sendthereport();
-            throw new Exception(findDuplicates(Response_List).size()+" Duplicate found: "+findDuplicates(Response_List));
+            throw new Exception(findDuplicates(Response_List).size() + " Duplicate found: " + findDuplicates(Response_List));
         }
     }
 
     public static void PrintDuplicateLog(List<String> Response_List) throws IOException {
-            String DuplicationPath = System.getProperty("user.dir")+"/HDuplication-List"+System.currentTimeMillis()+".txt";
-            Files.write((findDuplicates(Response_List).size()+" Duplicate found: "+findDuplicates(Response_List)).getBytes(), Paths.get(DuplicationPath).toFile());
+        String DuplicationPath = System.getProperty("user.dir") + "/HDuplication-List" + System.currentTimeMillis() + ".txt";
+        Files.write((findDuplicates(Response_List).size() + " Duplicate found: " + findDuplicates(Response_List)).getBytes(), Paths.get(DuplicationPath).toFile());
 
-        }
+    }
+
     public static List<String> getLines(String input) {
         List<String> lines = new ArrayList<>();
-input=input.replace(":", "\"");
+        input = input.replace(":", "\"");
 
         String[] splitInput = input.split("\\n");
         for (String line : splitInput) {
-            line=line.replace(" ", "="+'"');
+            line = line.replace(" ", "=" + '"');
             line = line.replace(",=\"", ",");
 
-            lines.add('"'+line+'"');
+            lines.add('"' + line + '"');
         }
 
         return lines;
     }
 
-    public static String PrepareFormData(String PageURL,String cssQuery) {
+    public static String PrepareFormData(String PageURL, String cssQuery) throws IOException {
         RestAssured.baseURI = PageURL;
-        RequestSpecification request = RestAssured.given();
-        Response response;
-System.out.println(CR.Getcookie());
-        response = request.headers("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36").cookie(CR.Getcookie()).auth().basic("unicc", "5NJjoVm-RV8u9Qun4hnt").given().when().get(PageURL);
-        Document doc = Jsoup.parse(response.getBody().asString());
-        Element inputElement = doc.select(cssQuery).first();
-            if (inputElement != null) {
-System.out.println("@@@Found");
-                return inputElement.attr("value");
-            } else {
-                System.out.println("@@@ Not Found");
+        URL url = new URL(PageURL);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        String cookies = CR.Getcookie();
+        connection.setRequestProperty("Cookie", cookies);
 
-                return null; // Handle the case where the input element is not found
-            }
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuilder response = new StringBuilder();
+        String inputLine;
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        Document doc = Jsoup.parse(response.toString());
+        Element inputElement = doc.select(cssQuery).first();
+        if (inputElement != null) {
+            System.out.println("@@@Found");
+            return inputElement.attr("value");
+        } else {
+            System.out.println("@@@ Not Found");
+
+            return null;
         }
 
-
-        public static void Content_Deleter(String URL,String Path,String Cookie,Map<String, String> RequestBody) throws ExecutionException, InterruptedException, IOException, GeneralSecurityException {
-            StringBuilder postData = new StringBuilder();
-
-            for (Map.Entry<String, String> entry : RequestBody.entrySet()) {
-                if (postData.length() != 0) postData.append('&');
-                postData.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8.toString()));
-                postData.append('=');
-                postData.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
-            }
-            CookieManager cookieManager = new CookieManager();
-            cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-            HttpClient httpClient = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER)
-                    .cookieHandler(cookieManager)
-                    .authenticator(new Authenticator() {
-                        @Override
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication("unicc", "5NJjoVm-RV8u9Qun4hnt".toCharArray());
-                        }
-                    })
-                    .build();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(URL+Path))
-                    .header("Content-Type", "application/x-www-form-urlencoded")
-                    .header("Cookie",Cookie )
-                    .POST(HttpRequest.BodyPublishers.ofString(postData.toString()))
-                    .build();
-
-            CompletableFuture<HttpResponse<String>> responseFuture = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
-
-            HttpResponse<String> response = responseFuture.get();
-            int statusCode = response.statusCode();
-            System.out.println("Status Code: " + statusCode);
-
-            Assert.assertTrue(CheckContentCreationResponseCode(statusCode));
-GoogleSheetsHelper GSH= new GoogleSheetsHelper();
-            List<Object> data= new ArrayList<>();
-            data.add("");
-            data.add("");
-GSH.deleteDataInLastRow(data);
-
     }
 
+    public static void Content_Deleter(String URL, String Path, String Cookie, Map<String, String> RequestBody) throws ExecutionException, InterruptedException, IOException, GeneralSecurityException {
+        StringBuilder postData = new StringBuilder();
 
+        for (Map.Entry<String, String> entry : RequestBody.entrySet()) {
+            if (postData.length() != 0) postData.append('&');
+            postData.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8.toString()));
+            postData.append('=');
+            postData.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
+        }
+        CookieManager cookieManager = new CookieManager();
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        HttpClient httpClient = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER)
+                .cookieHandler(cookieManager)
+                .authenticator(new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication("unicc", "5NJjoVm-RV8u9Qun4hnt".toCharArray());
+                    }
+                })
+                .build();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(URL + Path))
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .header("Cookie", Cookie)
+                .POST(HttpRequest.BodyPublishers.ofString(postData.toString()))
+                .build();
+
+        CompletableFuture<HttpResponse<String>> responseFuture = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+
+        HttpResponse<String> response = responseFuture.get();
+        int statusCode = response.statusCode();
+        System.out.println("Status Code: " + statusCode);
+
+        Assert.assertTrue(CheckContentCreationResponseCode(statusCode));
+        GoogleSheetsHelper GSH = new GoogleSheetsHelper();
+        List<Object> data = new ArrayList<>();
+        data.add("");
+        data.add("");
+        GSH.deleteDataInLastRow(data);
 
     }
+    public static Response Public_PostAPI_Caller(String environment, String apiPath, Map<String, String> requestBody, String cookie) {
+        return io.restassured.RestAssured.given()
+                .baseUri(environment)
+                .basePath(apiPath)
+                .header("Cookie", cookie)
+                .formParams(requestBody)
+                .post();
+    }
+}
 
 
 
